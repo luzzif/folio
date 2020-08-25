@@ -1,8 +1,8 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { EmptyAccounts } from "../../components/accounts/empty";
 import { List } from "../../components/list";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Text } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
 import makeBlockie from "ethereum-blockies-base64";
 import { getShortenedEthereumAddress } from "../../utils";
@@ -11,6 +11,8 @@ import { faTrash, faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { removeAccount } from "../../actions/accounts";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Fab } from "../../components/fab";
+import Modal from "react-native-modal";
+import { Button } from "../../components/button";
 
 export const Accounts = ({ navigation }) => {
     const theme = useContext(ThemeContext);
@@ -38,16 +40,43 @@ export const Accounts = ({ navigation }) => {
             flexDirection: "row",
         },
         rightSpacer: {
-            marginRight: 12,
+            marginRight: 16,
+        },
+        confirmationModalRoot: {
+            backgroundColor: theme.background,
+            borderRadius: 12,
+            padding: 20,
+        },
+        confirmationModalText: {
+            color: theme.text,
+            textAlign: "center",
+            textAlignVertical: "center",
+            fontFamily: "Montserrat-Medium",
+            marginBottom: 24,
+        },
+        confirmationModalButtonsContainer: {
+            flexDirection: "row",
+            justifyContent: "center",
         },
     });
+
+    const [toBeDeletedAccount, setToBeDeletedAccount] = useState(null);
 
     const handleAddAccountPress = useCallback(() => {
         navigation.navigate("Account");
     }, [navigation]);
 
+    const handleConfirmationModalClose = useCallback(() => {
+        setToBeDeletedAccount(null);
+    }, []);
+
+    const handleAccountRemoval = useCallback(() => {
+        dispatch(removeAccount(toBeDeletedAccount));
+        setToBeDeletedAccount(null);
+    }, [dispatch, toBeDeletedAccount]);
+
     const getAccountRemoveHandler = (account) => () => {
-        dispatch(removeAccount(account));
+        setToBeDeletedAccount(account);
     };
 
     const getAccountEditHandler = (account) => () => {
@@ -79,7 +108,7 @@ export const Accounts = ({ navigation }) => {
                                     onPress={getAccountEditHandler(account)}
                                 >
                                     <FontAwesomeIcon
-                                        size={16}
+                                        size={20}
                                         color={theme.text}
                                         icon={faEdit}
                                     />
@@ -88,7 +117,7 @@ export const Accounts = ({ navigation }) => {
                                     onPress={getAccountRemoveHandler(account)}
                                 >
                                     <FontAwesomeIcon
-                                        size={16}
+                                        size={20}
                                         color={theme.error}
                                         icon={faTrash}
                                     />
@@ -107,6 +136,31 @@ export const Accounts = ({ navigation }) => {
                     onPress={handleAddAccountPress}
                 />
             </View>
+            <Modal
+                isVisible={!!toBeDeletedAccount}
+                onBackdropPress={handleConfirmationModalClose}
+                onBackButtonPress={handleConfirmationModalClose}
+                backdropColor={theme.shadow}
+                animationIn="fadeIn"
+                animationOut="fadeOut"
+                backdropTransitionOutTiming={0}
+            >
+                <View style={styles.confirmationModalRoot}>
+                    <Text style={styles.confirmationModalText}>
+                        Are you sure you want to delete the account?
+                    </Text>
+                    <View style={styles.confirmationModalButtonsContainer}>
+                        <View style={styles.rightSpacer}>
+                            <Button
+                                secondary
+                                title="Cancel"
+                                onPress={handleConfirmationModalClose}
+                            />
+                        </View>
+                        <Button title="Delete" onPress={handleAccountRemoval} />
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };

@@ -114,10 +114,6 @@ export const Portfolio = ({ navigation }) => {
         }
     }, [portfolio, symbols, prices, loadingPortfolio]);
 
-    const handleAddAccountPress = useCallback(() => {
-        navigation.navigate("Account");
-    }, [navigation]);
-
     const handleRefresh = useCallback(() => {
         dispatch(resetPortfolio());
         if (accounts && accounts.length > 0) {

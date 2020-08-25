@@ -36,9 +36,6 @@ export const Accounts = ({ navigation }) => {
             bottom: 24,
             right: 24,
         },
-        iconsContainer: {
-            flexDirection: "row",
-        },
         rightSpacer: {
             marginRight: 16,
         },
@@ -101,29 +98,27 @@ export const Accounts = ({ navigation }) => {
                                 style={styles.blockie}
                             />
                         ),
-                        tertiary: (
-                            <View style={styles.iconsContainer}>
-                                <TouchableOpacity
-                                    style={styles.rightSpacer}
-                                    onPress={getAccountEditHandler(account)}
-                                >
-                                    <FontAwesomeIcon
-                                        size={20}
-                                        color={theme.text}
-                                        icon={faEdit}
-                                    />
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={getAccountRemoveHandler(account)}
-                                >
-                                    <FontAwesomeIcon
-                                        size={20}
-                                        color={theme.error}
-                                        icon={faTrash}
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        ),
+                        actions: [
+                            <TouchableOpacity
+                                style={styles.rightSpacer}
+                                onPress={getAccountEditHandler(account)}
+                            >
+                                <FontAwesomeIcon
+                                    size={20}
+                                    color={theme.text}
+                                    icon={faEdit}
+                                />
+                            </TouchableOpacity>,
+                            <TouchableOpacity
+                                onPress={getAccountRemoveHandler(account)}
+                            >
+                                <FontAwesomeIcon
+                                    size={20}
+                                    color={theme.error}
+                                    icon={faTrash}
+                                />
+                            </TouchableOpacity>,
+                        ],
                     }))}
                 />
             ) : (

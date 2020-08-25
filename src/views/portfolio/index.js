@@ -24,10 +24,6 @@ export const Portfolio = ({ navigation }) => {
         bottomSpacedContainer: {
             marginBottom: 36,
         },
-        bottomSpacedContainerWithElevation: {
-            marginBottom: 36,
-            elevation: 10,
-        },
     });
 
     const dispatch = useDispatch();
@@ -132,7 +128,7 @@ export const Portfolio = ({ navigation }) => {
         <View style={styles.root}>
             {aggregatedPortfolio && aggregatedPortfolio.length > 0 ? (
                 <>
-                    <View style={styles.bottomSpacedContainerWithElevation}>
+                    <View style={styles.bottomSpacedContainer}>
                         <Header portfolio={aggregatedPortfolio} />
                     </View>
                     <List

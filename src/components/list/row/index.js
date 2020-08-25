@@ -2,8 +2,27 @@ import React, { useContext } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { ThemeContext } from "../../../contexts/theme";
 
-export const Row = ({ icon, primary, secondary, tertiary, quaternary }) => {
+export const Row = ({
+    icon,
+    primary,
+    secondary,
+    tertiary,
+    quaternary,
+    actions,
+}) => {
     const theme = useContext(ThemeContext);
+
+    const commonsMainText = {
+        fontFamily: "Montserrat-Medium",
+        fontSize: 16,
+        color: theme.text,
+    };
+
+    const commonsLightText = {
+        fontFamily: "Montserrat-Medium",
+        fontSize: 12,
+        color: theme.textLight,
+    };
 
     const styles = StyleSheet.create({
         root: {
@@ -16,6 +35,7 @@ export const Row = ({ icon, primary, secondary, tertiary, quaternary }) => {
         leftBlock: {
             flexDirection: "row",
             alignItems: "center",
+            flex: 1,
         },
         rightBlock: {
             alignItems: "flex-end",
@@ -23,15 +43,27 @@ export const Row = ({ icon, primary, secondary, tertiary, quaternary }) => {
         iconContainer: {
             marginRight: 16,
         },
-        mainText: {
-            fontFamily: "Montserrat-Medium",
-            fontSize: 16,
-            color: theme.text,
+        leftMainText: {
+            ...commonsMainText,
+            paddingRight: 20,
+            flex: 1,
         },
-        lightText: {
-            fontFamily: "Montserrat-Medium",
-            fontSize: 12,
-            color: theme.textLight,
+        leftLightText: {
+            ...commonsLightText,
+            paddingRight: 20,
+            flex: 1,
+        },
+        rightMainText: {
+            ...commonsMainText,
+        },
+        rightLightText: {
+            ...commonsLightText,
+        },
+        actionsContainer: {
+            flexDirection: "row",
+        },
+        rightSpacer: {
+            marginRight: 12,
         },
     });
 
@@ -40,12 +72,12 @@ export const Row = ({ icon, primary, secondary, tertiary, quaternary }) => {
             <View style={styles.leftBlock}>
                 {icon && <View style={styles.iconContainer}>{icon}</View>}
                 {(primary || secondary) && (
-                    <View>
+                    <>
                         {primary && (
                             <Text
                                 numberOfLines={1}
                                 ellipsizeMode="tail"
-                                style={styles.mainText}
+                                style={styles.leftMainText}
                             >
                                 {primary}
                             </Text>
@@ -54,22 +86,35 @@ export const Row = ({ icon, primary, secondary, tertiary, quaternary }) => {
                             <Text
                                 numberOfLines={1}
                                 ellipsizeMode="tail"
-                                style={styles.lightText}
+                                style={styles.leftLightText}
                             >
                                 {secondary}
                             </Text>
                         )}
-                    </View>
+                    </>
                 )}
             </View>
-            {(tertiary || quaternary) && (
+            {(!actions || actions.length === 0) && (tertiary || quaternary) && (
                 <View style={styles.rightBlock}>
                     {tertiary && (
-                        <Text style={styles.mainText}>{tertiary}</Text>
+                        <Text style={styles.rightMainText}>{tertiary}</Text>
                     )}
                     {quaternary && (
-                        <Text style={styles.lightText}>{quaternary}</Text>
+                        <Text style={styles.rightLightText}>{quaternary}</Text>
                     )}
+                </View>
+            )}
+            {actions && actions.length > 0 && !tertiary && !quaternary && (
+                <View style={styles.actionsContainer}>
+                    {actions.map((action, index) => (
+                        <View
+                            style={
+                                index < actions.length - 1 && styles.rightSpacer
+                            }
+                        >
+                            {action}
+                        </View>
+                    ))}
                 </View>
             )}
         </View>

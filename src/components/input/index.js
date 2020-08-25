@@ -9,7 +9,8 @@ export const Input = ({ label, required, ...rest }) => {
     const styles = StyleSheet.create({
         root: {
             justifyContent: "center",
-            paddingHorizontal: 16,
+            paddingHorizontal: 12,
+            height: 40,
             borderWidth: 1,
             borderColor: theme.border,
             borderRadius: 12,

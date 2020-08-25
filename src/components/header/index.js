@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import { View, Text, StyleSheet } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
 import BigNumber from "bignumber.js";
+import { CURRENCY_SYMBOLS } from "../../commons";
 
-export const Header = ({ portfolio }) => {
+export const Header = ({ portfolio, fiatCurrency }) => {
     const theme = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
@@ -44,7 +45,8 @@ export const Header = ({ portfolio }) => {
         <View style={styles.root}>
             <Text style={styles.totalBalanceText}>Total balance:</Text>
             <Text style={styles.totalBalance}>
-                ${totalBalance.decimalPlaces(3).toString()}
+                {totalBalance.decimalPlaces(3).toString()}{" "}
+                {CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]}
             </Text>
         </View>
     ) : null;
@@ -57,4 +59,5 @@ Header.propTypes = {
             symbol: PropTypes.string.isRequired,
         }).isRequired
     ).isRequired,
+    fiatCurrency: PropTypes.string.isRequired,
 };

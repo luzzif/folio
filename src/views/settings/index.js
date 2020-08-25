@@ -4,14 +4,16 @@ import { List } from "../../components/list";
 import { View, StyleSheet } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
 import { Switch } from "../../components/switch";
-import { toggleDarkMode } from "../../actions/settings";
+import { toggleDarkMode, changeFiatCurrency } from "../../actions/settings";
 import { version } from "../../../package.json";
+import { Chip } from "../../components/chip";
 
 export const Settings = () => {
     const theme = useContext(ThemeContext);
     const dispatch = useDispatch();
-    const { darkMode } = useSelector((state) => ({
+    const { darkMode, fiatCurrency } = useSelector((state) => ({
         darkMode: state.settings.darkMode,
+        fiatCurrency: state.settings.fiatCurrency,
     }));
 
     const styles = StyleSheet.create({
@@ -21,11 +23,20 @@ export const Settings = () => {
             backgroundColor: theme.background,
             paddingTop: 16,
         },
+        rightSpacer: {
+            marginRight: 16,
+        },
     });
 
     const handleDarkModeToggle = useCallback(() => {
         dispatch(toggleDarkMode());
     }, [dispatch]);
+
+    const getFiatCurrencyChangeHandler = (currency) => () => {
+        dispatch(changeFiatCurrency(currency));
+    };
+
+    console.log(fiatCurrency);
 
     return (
         <View style={styles.root}>
@@ -34,12 +45,28 @@ export const Settings = () => {
                     {
                         key: "darkMode",
                         primary: "Dark mode",
-                        tertiary: (
+                        actions: [
                             <Switch
                                 value={darkMode}
                                 onChange={handleDarkModeToggle}
-                            />
-                        ),
+                            />,
+                        ],
+                    },
+                    {
+                        key: "fiatCurrency",
+                        primary: "Conversion currency",
+                        actions: [
+                            <Chip
+                                text="$"
+                                active={fiatCurrency === "usd"}
+                                onPress={getFiatCurrencyChangeHandler("usd")}
+                            />,
+                            <Chip
+                                text="€"
+                                active={fiatCurrency === "eur"}
+                                onPress={getFiatCurrencyChangeHandler("eur")}
+                            />,
+                        ],
                     },
                     {
                         key: "version",

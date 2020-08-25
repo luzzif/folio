@@ -6,7 +6,7 @@ import BigNumber from "bignumber.js";
 import { Header } from "../../components/header";
 import { StyleSheet, View } from "react-native";
 import { EmptyPortfolio } from "../../components/portfolio/empty";
-import { PORTFOLIO_SOURCE } from "../../commons";
+import { PORTFOLIO_SOURCE, CURRENCY_SYMBOLS } from "../../commons";
 import { getEthereumPortfolio, resetPortfolio } from "../../actions/portfolio";
 import { List } from "../../components/list";
 import { CryptoIcon } from "../../components/crypto-icon";
@@ -27,14 +27,19 @@ export const Portfolio = ({ navigation }) => {
     });
 
     const dispatch = useDispatch();
-    const { portfolio, loadingPortfolio, prices, accounts } = useSelector(
-        (state) => ({
-            portfolio: state.portfolio.data,
-            loadingPortfolio: !!state.portfolio.loadings,
-            prices: state.prices.data,
-            accounts: state.accounts,
-        })
-    );
+    const {
+        portfolio,
+        loadingPortfolio,
+        prices,
+        accounts,
+        fiatCurrency,
+    } = useSelector((state) => ({
+        portfolio: state.portfolio.data,
+        loadingPortfolio: !!state.portfolio.loadings,
+        prices: state.prices.data,
+        accounts: state.accounts,
+        fiatCurrency: state.settings.fiatCurrency,
+    }));
 
     const [aggregatedPortfolio, setAggregatedPortfolio] = useState([]);
     const [symbols, setSymbols] = useState([]);
@@ -68,9 +73,9 @@ export const Portfolio = ({ navigation }) => {
     // portfolio, we can ask the current price for each one
     useEffect(() => {
         if (symbols && symbols.length > 0) {
-            dispatch(getPrices(symbols, "usd"));
+            dispatch(getPrices(symbols, fiatCurrency));
         }
-    }, [dispatch, symbols]);
+    }, [dispatch, fiatCurrency, symbols]);
 
     useEffect(() => {
         if (!loadingPortfolio && portfolio && portfolio.length > 0 && prices) {
@@ -129,7 +134,10 @@ export const Portfolio = ({ navigation }) => {
             {aggregatedPortfolio && aggregatedPortfolio.length > 0 ? (
                 <>
                     <View style={styles.bottomSpacedContainer}>
-                        <Header portfolio={aggregatedPortfolio} />
+                        <Header
+                            portfolio={aggregatedPortfolio}
+                            fiatCurrency={fiatCurrency}
+                        />
                     </View>
                     <List
                         header="Your assets"
@@ -138,9 +146,11 @@ export const Portfolio = ({ navigation }) => {
                             icon: <CryptoIcon icon={asset.icon} size={36} />,
                             primary: asset.symbol,
                             tertiary: asset.balance.decimalPlaces(3).toString(),
-                            quaternary: `$${asset.value
+                            quaternary: `${asset.value
                                 .decimalPlaces(3)
-                                .toString()}`,
+                                .toString()} ${
+                                CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
+                            }`,
                         }))}
                         onRefresh={handleRefresh}
                         refreshing={loadingPortfolio}

@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { List } from "../../components/list";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
 import { Switch } from "../../components/switch";
 import { toggleDarkMode } from "../../actions/settings";

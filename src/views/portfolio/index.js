@@ -140,6 +140,7 @@ export const Portfolio = ({ navigation }) => {
                         <Header portfolio={aggregatedPortfolio} />
                     </View>
                     <List
+                        header="Your assets"
                         items={aggregatedPortfolio.map((asset) => ({
                             key: asset.symbol,
                             icon: <CryptoIcon icon={asset.icon} size={36} />,
@@ -154,10 +155,7 @@ export const Portfolio = ({ navigation }) => {
                     />
                 </>
             ) : (
-                <EmptyPortfolio
-                    onAddAccountPress={handleAddAccountPress}
-                    loading={accounts && accounts.length > 0}
-                />
+                <EmptyPortfolio loading={accounts && accounts.length > 0} />
             )}
         </View>
     );

@@ -31,8 +31,8 @@ export const Accounts = ({ navigation }) => {
         },
         newAccountButtonContainer: {
             position: "absolute",
-            bottom: 16,
-            right: 16,
+            bottom: 24,
+            right: 24,
         },
         iconsContainer: {
             flexDirection: "row",
@@ -57,59 +57,56 @@ export const Accounts = ({ navigation }) => {
     return (
         <View style={styles.root}>
             {accounts && accounts.length > 0 ? (
-                <>
-                    <List
-                        items={accounts.map((account) => ({
-                            key: account.address,
-                            primary:
-                                account.name ||
-                                getShortenedEthereumAddress(account.address),
-                            icon: (
-                                <Image
-                                    source={{
-                                        uri: makeBlockie(account.address),
-                                    }}
-                                    style={styles.blockie}
-                                />
-                            ),
-                            tertiary: (
-                                <View style={styles.iconsContainer}>
-                                    <TouchableOpacity
-                                        style={styles.rightSpacer}
-                                        onPress={getAccountEditHandler(account)}
-                                    >
-                                        <FontAwesomeIcon
-                                            size={16}
-                                            color={theme.text}
-                                            icon={faEdit}
-                                        />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={getAccountRemoveHandler(
-                                            account
-                                        )}
-                                    >
-                                        <FontAwesomeIcon
-                                            size={16}
-                                            color={theme.error}
-                                            icon={faTrash}
-                                        />
-                                    </TouchableOpacity>
-                                </View>
-                            ),
-                        }))}
-                    />
-                    <View style={styles.newAccountButtonContainer}>
-                        <Fab
-                            title="Add account"
-                            faIcon={faPlus}
-                            onPress={handleAddAccountPress}
-                        />
-                    </View>
-                </>
+                <List
+                    header="Accounts"
+                    items={accounts.map((account) => ({
+                        key: account.address,
+                        primary:
+                            account.name ||
+                            getShortenedEthereumAddress(account.address),
+                        icon: (
+                            <Image
+                                source={{
+                                    uri: makeBlockie(account.address),
+                                }}
+                                style={styles.blockie}
+                            />
+                        ),
+                        tertiary: (
+                            <View style={styles.iconsContainer}>
+                                <TouchableOpacity
+                                    style={styles.rightSpacer}
+                                    onPress={getAccountEditHandler(account)}
+                                >
+                                    <FontAwesomeIcon
+                                        size={16}
+                                        color={theme.text}
+                                        icon={faEdit}
+                                    />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={getAccountRemoveHandler(account)}
+                                >
+                                    <FontAwesomeIcon
+                                        size={16}
+                                        color={theme.error}
+                                        icon={faTrash}
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        ),
+                    }))}
+                />
             ) : (
                 <EmptyAccounts onAddAccountPress={handleAddAccountPress} />
             )}
+            <View style={styles.newAccountButtonContainer}>
+                <Fab
+                    title="Add account"
+                    faIcon={faPlus}
+                    onPress={handleAddAccountPress}
+                />
+            </View>
         </View>
     );
 };

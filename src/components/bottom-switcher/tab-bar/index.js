@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { ThemeContext } from "../../../contexts/theme";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 const commonItemStyle = {
     fontFamily: "Montserrat-SemiBold",
@@ -20,7 +21,7 @@ export const TabBar = ({ state, descriptors, navigation }) => {
             justifyContent: "space-around",
             alignItems: "center",
             width: "100%",
-            height: 56,
+            height: 48,
             borderTopStartRadius: 12,
             borderTopEndRadius: 12,
             backgroundColor: theme.foreground,
@@ -34,11 +35,11 @@ export const TabBar = ({ state, descriptors, navigation }) => {
         },
         selectedItemIndicator: {
             position: "absolute",
-            height: 2,
+            height: 1,
             borderRadius: 2,
-            backgroundColor: theme.primary,
+            backgroundColor: theme.text,
             top: 0,
-            width: 24,
+            width: "40%",
         },
         fullSize: {
             flex: 1,
@@ -52,6 +53,10 @@ export const TabBar = ({ state, descriptors, navigation }) => {
             ...commonItemStyle,
             color: theme.text,
         },
+        icon: {
+            marginBottom: 4,
+            color: theme.text,
+        },
     });
 
     return (
@@ -60,6 +65,7 @@ export const TabBar = ({ state, descriptors, navigation }) => {
                 {state.routes.map((route, index) => {
                     const { options } = descriptors[route.key];
                     const label = options.title;
+                    const faIcon = options.faIcon;
 
                     const focused = state.index === index;
 
@@ -97,6 +103,13 @@ export const TabBar = ({ state, descriptors, navigation }) => {
                                 {focused && (
                                     <View
                                         style={styles.selectedItemIndicator}
+                                    />
+                                )}
+                                {faIcon && (
+                                    <FontAwesomeIcon
+                                        icon={faIcon}
+                                        style={styles.icon}
+                                        size={12}
                                     />
                                 )}
                                 <Text

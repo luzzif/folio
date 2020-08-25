@@ -13,7 +13,7 @@ export const BottomSwitcher = ({ items }) => {
                     <Tab.Screen
                         key={item.key}
                         name={item.key}
-                        options={{ title: item.title }}
+                        options={{ title: item.title, faIcon: item.faIcon }}
                         component={item.component}
                     />
                 ))}
@@ -28,6 +28,7 @@ BottomSwitcher.propTypes = {
             key: PropTypes.string.isRequired,
             title: PropTypes.string.isRequired,
             component: PropTypes.func.isRequired,
+            faIcon: PropTypes.object,
         }).isRequired
     ).isRequired,
 };

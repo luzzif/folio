@@ -19,11 +19,11 @@ export const List = ({ header, items, onRefresh, refreshing }) => {
             flexDirection: "row",
             justifyContent: "space-between",
             marginBottom: 8,
+            marginLeft: 16,
             alignItems: "center",
         },
         headerText: {
             fontFamily: "Montserrat-SemiBold",
-            fontSize: 16,
             marginLeft: 8,
             color: theme.text,
         },

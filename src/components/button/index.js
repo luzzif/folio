@@ -7,8 +7,8 @@ const commonContainerStyles = {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
 };
 
 const commonTextStyles = {

@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { ThemeContext } from "../../../contexts/theme";
-import illustration from "../../../images/empty-portfolio-illustration.png";
-import { Button } from "../../button";
 import Spinner from "react-native-spinkit";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 
-export const EmptyPortfolio = ({ onAddAccountPress, loading }) => {
+export const EmptyPortfolio = ({ loading }) => {
     const theme = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
@@ -16,11 +16,9 @@ export const EmptyPortfolio = ({ onAddAccountPress, loading }) => {
             alignItems: "center",
             flex: 1,
         },
-        illustration: {
-            width: 140,
-            height: 140,
+        icon: {
+            color: theme.text,
             marginBottom: 28,
-            resizeMode: "contain",
         },
         centeredTextContainer: {
             width: "50%",
@@ -40,17 +38,17 @@ export const EmptyPortfolio = ({ onAddAccountPress, loading }) => {
                 <Spinner type="Bounce" size={60} color={theme.primary} />
             ) : (
                 <>
-                    <Image source={illustration} style={styles.illustration} />
+                    <FontAwesomeIcon
+                        icon={faExclamationTriangle}
+                        style={styles.icon}
+                        size={80}
+                    />
                     <View style={styles.centeredTextContainer}>
                         <Text style={styles.contentText}>
-                            There's still nothing here. Add an account by
-                            pressing the button below.
+                            You need to add one or more accounts in the accounts
+                            section in order to start tracking your portfolio.
                         </Text>
                     </View>
-                    <Button
-                        title="Add an account"
-                        onPress={onAddAccountPress}
-                    />
                 </>
             )}
         </View>
@@ -58,6 +56,5 @@ export const EmptyPortfolio = ({ onAddAccountPress, loading }) => {
 };
 
 EmptyPortfolio.propTypes = {
-    onAddAccountPress: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
 };

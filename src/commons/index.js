@@ -4,6 +4,7 @@ export const PORTFOLIO_SOURCE = Object.freeze({
 });
 
 export const CURRENCY_SYMBOLS = Object.freeze({
+    BTC: "₿",
     EUR: "€",
     USD: "$",
 });

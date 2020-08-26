@@ -21,7 +21,6 @@ export const Settings = () => {
             width: "100%",
             height: "100%",
             backgroundColor: theme.background,
-            paddingTop: 16,
         },
         rightSpacer: {
             marginRight: 16,
@@ -35,8 +34,6 @@ export const Settings = () => {
     const getFiatCurrencyChangeHandler = (currency) => () => {
         dispatch(changeFiatCurrency(currency));
     };
-
-    console.log(fiatCurrency);
 
     return (
         <View style={styles.root}>
@@ -56,6 +53,11 @@ export const Settings = () => {
                         key: "fiatCurrency",
                         primary: "Conversion currency",
                         actions: [
+                            <Chip
+                                text="₿"
+                                active={fiatCurrency === "btc"}
+                                onPress={getFiatCurrencyChangeHandler("btc")}
+                            />,
                             <Chip
                                 text="$"
                                 active={fiatCurrency === "usd"}

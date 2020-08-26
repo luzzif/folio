@@ -1,16 +1,16 @@
 import React, { useCallback, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { getPrices } from "../../actions/prices";
-import BigNumber from "bignumber.js";
+import { Decimal } from "decimal.js";
 import { Header } from "../../components/header";
 import { StyleSheet, View } from "react-native";
-import { EmptyPortfolio } from "../../components/portfolio/empty";
-import { PORTFOLIO_SOURCE, CURRENCY_SYMBOLS } from "../../commons";
-import { getEthereumPortfolio, resetPortfolio } from "../../actions/portfolio";
+import { getPortfolio, resetPortfolio } from "../../actions/portfolio";
 import { List } from "../../components/list";
 import { CryptoIcon } from "../../components/crypto-icon";
 import { ThemeContext } from "../../contexts/theme";
+import { getCoinGeckoIds } from "../../actions/coingecko";
+import { CURRENCY_SYMBOLS } from "../../commons";
+import { formatDecimal } from "../../utils";
 
 export const Portfolio = ({ navigation }) => {
     const theme = useContext(ThemeContext);
@@ -19,10 +19,10 @@ export const Portfolio = ({ navigation }) => {
         root: {
             height: "100%",
             backgroundColor: theme.background,
-            paddingTop: 36,
         },
-        bottomSpacedContainer: {
-            marginBottom: 36,
+        headerContainer: {
+            paddingHorizontal: 16,
+            marginVertical: 20,
         },
     });
 
@@ -30,55 +30,51 @@ export const Portfolio = ({ navigation }) => {
     const {
         portfolio,
         loadingPortfolio,
-        prices,
         accounts,
         fiatCurrency,
+        coinGeckoIds,
     } = useSelector((state) => ({
         portfolio: state.portfolio.data,
         loadingPortfolio: !!state.portfolio.loadings,
-        prices: state.prices.data,
         accounts: state.accounts,
         fiatCurrency: state.settings.fiatCurrency,
+        coinGeckoIds: state.coinGecko.ids,
     }));
 
     const [aggregatedPortfolio, setAggregatedPortfolio] = useState([]);
     const [symbols, setSymbols] = useState([]);
 
     useEffect(() => {
-        dispatch(resetPortfolio());
-        if (accounts && accounts.length > 0) {
-            accounts.forEach((account) => {
-                switch (account.type) {
-                    case PORTFOLIO_SOURCE.ETHEREUM_WALLET: {
-                        dispatch(getEthereumPortfolio(account.address));
-                        break;
-                    }
-                }
-            });
+        dispatch(getCoinGeckoIds());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (!accounts || accounts.length === 0) {
+            dispatch(resetPortfolio());
         }
     }, [accounts, dispatch]);
 
     useEffect(() => {
-        setSymbols(
-            portfolio.reduce((uniqueSymbols, asset) => {
-                if (uniqueSymbols.indexOf(asset.symbol) < 0) {
-                    uniqueSymbols.push(asset.symbol);
-                }
-                return uniqueSymbols;
-            }, [])
-        );
+        if (coinGeckoIds) {
+            dispatch(getPortfolio(accounts, fiatCurrency, coinGeckoIds));
+        }
+    }, [accounts, coinGeckoIds, dispatch, fiatCurrency]);
+
+    useEffect(() => {
+        if (portfolio && portfolio.length > 0) {
+            setSymbols(
+                portfolio.reduce((uniqueSymbols, asset) => {
+                    if (uniqueSymbols.indexOf(asset.symbol) < 0) {
+                        uniqueSymbols.push(asset.symbol);
+                    }
+                    return uniqueSymbols;
+                }, [])
+            );
+        }
     }, [portfolio]);
 
-    // after having extracted the unique symbols from the
-    // portfolio, we can ask the current price for each one
     useEffect(() => {
-        if (symbols && symbols.length > 0) {
-            dispatch(getPrices(symbols, fiatCurrency));
-        }
-    }, [dispatch, fiatCurrency, symbols]);
-
-    useEffect(() => {
-        if (!loadingPortfolio && portfolio && portfolio.length > 0 && prices) {
+        if (!loadingPortfolio && portfolio && portfolio.length > 0) {
             setAggregatedPortfolio(
                 symbols
                     // sum the balance of every entry with the same symbol to
@@ -89,76 +85,56 @@ export const Portfolio = ({ navigation }) => {
                                 asset.symbol.toLowerCase() ===
                                 symbol.toLowerCase()
                         );
-                        const rawPrice = prices[symbol];
-                        if (!rawPrice) {
-                            return finalPortfolio;
-                        }
-                        const price = new BigNumber(rawPrice);
                         const totalBalance = assetsBySymbol.reduce(
                             (totalBalanceForSymbol, asset) =>
                                 totalBalanceForSymbol.plus(asset.balance),
-                            new BigNumber("0")
+                            new Decimal("0")
                         );
-                        const value = totalBalance.multipliedBy(price);
-                        if (!value.isLessThan("0.01")) {
-                            finalPortfolio.push({
-                                symbol,
-                                balance: totalBalance,
-                                price: price,
-                                value,
-                                icon: assetsBySymbol[0].icon,
-                            });
-                        }
+                        const { currentPrice, icon } = assetsBySymbol[0].info;
+                        const value = totalBalance.times(currentPrice);
+                        finalPortfolio.push({
+                            symbol,
+                            balance: totalBalance,
+                            price: currentPrice,
+                            value,
+                            icon: icon,
+                        });
                         return finalPortfolio;
                     }, [])
+                    .sort((a, b) => b.value.minus(a.value).toNumber())
             );
         }
-    }, [portfolio, symbols, prices, loadingPortfolio]);
+    }, [portfolio, symbols, loadingPortfolio]);
 
     const handleRefresh = useCallback(() => {
-        dispatch(resetPortfolio());
-        if (accounts && accounts.length > 0) {
-            accounts.forEach((account) => {
-                switch (account.type) {
-                    case PORTFOLIO_SOURCE.ETHEREUM_WALLET: {
-                        dispatch(getEthereumPortfolio(account.address));
-                        break;
-                    }
-                }
-            });
+        if (coinGeckoIds) {
+            dispatch(getPortfolio(accounts, fiatCurrency, coinGeckoIds));
         }
-    }, [accounts, dispatch]);
+    }, [accounts, coinGeckoIds, dispatch, fiatCurrency]);
 
     return (
         <View style={styles.root}>
-            {aggregatedPortfolio && aggregatedPortfolio.length > 0 ? (
-                <>
-                    <View style={styles.bottomSpacedContainer}>
-                        <Header
-                            portfolio={aggregatedPortfolio}
-                            fiatCurrency={fiatCurrency}
-                        />
-                    </View>
-                    <List
-                        header="Your assets"
-                        items={aggregatedPortfolio.map((asset) => ({
-                            key: asset.symbol,
-                            icon: <CryptoIcon icon={asset.icon} size={36} />,
-                            primary: asset.symbol,
-                            tertiary: asset.balance.decimalPlaces(3).toString(),
-                            quaternary: `${asset.value
-                                .decimalPlaces(3)
-                                .toString()} ${
-                                CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
-                            }`,
-                        }))}
-                        onRefresh={handleRefresh}
-                        refreshing={loadingPortfolio}
-                    />
-                </>
-            ) : (
-                <EmptyPortfolio loading={accounts && accounts.length > 0} />
-            )}
+            <View style={styles.headerContainer}>
+                <Header
+                    portfolio={aggregatedPortfolio}
+                    fiatCurrency={fiatCurrency}
+                    navigation={navigation}
+                />
+            </View>
+            <List
+                header="Your assets"
+                items={aggregatedPortfolio.map((asset) => ({
+                    key: asset.symbol,
+                    icon: <CryptoIcon icon={asset.icon} size={36} />,
+                    primary: asset.symbol,
+                    tertiary: formatDecimal(asset.balance, 3),
+                    quaternary: `${
+                        CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
+                    }${formatDecimal(asset.value, 2)}`,
+                }))}
+                onRefresh={handleRefresh}
+                refreshing={loadingPortfolio}
+            />
         </View>
     );
 };

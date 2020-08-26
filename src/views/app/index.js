@@ -4,6 +4,7 @@ import { StatusBar } from "react-native";
 import { StackSwitcher } from "../../components/stack-switcher";
 import { Account } from "../accounts/account";
 import { Home } from "../../components/home";
+import { CoinSplit } from "../../components/coin-split";
 import { useSelector } from "react-redux";
 
 const commonColors = {
@@ -71,6 +72,11 @@ export const App = () => {
                     {
                         name: "Account",
                         component: Account,
+                        allowClose: true,
+                    },
+                    {
+                        name: "Coin split",
+                        component: CoinSplit,
                         allowClose: true,
                     },
                 ]}

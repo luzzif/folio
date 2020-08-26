@@ -1,21 +1,23 @@
-export const bigNumberFromWei = (etherBigNumber, decimals) =>
-    etherBigNumber.dividedBy("1e" + decimals);
+export const decimalFromWei = (etherDecimal, decimals) =>
+    etherDecimal.dividedBy("1e" + decimals);
 
-export const getIconLink = async (symbol) => {
-    let response = await fetch("https://api.coingecko.com/api/v3/coins/list");
-    const coins = await response.json();
-    const lowerCaseSymbol = symbol.toLowerCase();
-    const matchingCoin = coins.find(
-        (coin) => coin.symbol.toLowerCase() === lowerCaseSymbol
-    );
-    if (!matchingCoin) {
-        return null;
-    }
-    response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${matchingCoin.id}?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false`
+export const getInfoFromCoinGecko = async (coinGeckoId, fiatCurrency) => {
+    const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/${coinGeckoId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
     );
     const coin = await response.json();
-    return coin.image.large;
+    const lowerCaseFiatCurrency = fiatCurrency.toLowerCase();
+    return {
+        icon: coin.image.large,
+        circulatingSupply: coin.market_data.circulating_supply,
+        currentPrice: coin.market_data.current_price[lowerCaseFiatCurrency],
+        priceChangePercentages: {
+            "24h": coin.market_data.price_change_percentage_24h,
+            "7d": coin.market_data.price_change_percentage_7d,
+            "14d": coin.market_data.price_change_percentage_14d,
+            "30d": coin.market_data.price_change_percentage_30d,
+        },
+    };
 };
 
 export const getShortenedEthereumAddress = (address) =>
@@ -23,3 +25,28 @@ export const getShortenedEthereumAddress = (address) =>
         address.length - 5,
         address.length - 1
     )}`;
+
+export const formatDecimal = (decimal, significantDecimalPlaces = 2) => {
+    const decimalPlaces = decimal.decimalPlaces();
+    if (decimalPlaces === 0) {
+        return decimal.decimalPlaces(significantDecimalPlaces).toString();
+    }
+    const [integers, decimals] = decimal.toFixed(decimalPlaces).split(".");
+    let adjustedDecimals = "";
+    let significantDecimalPlacesAdded = 0;
+    for (let i = 0; i < decimals.length; i++) {
+        const char = decimals.charAt(i);
+        if (significantDecimalPlacesAdded === 1 && char === "0") {
+            // handle cases like 0.0010001, stopping at the first 1
+            break;
+        }
+        adjustedDecimals += char;
+        if (
+            char !== "0" &&
+            ++significantDecimalPlacesAdded === significantDecimalPlaces
+        ) {
+            break;
+        }
+    }
+    return `${integers}.${adjustedDecimals}`;
+};

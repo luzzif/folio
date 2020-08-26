@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import { StyleSheet, View, Text } from "react-native";
 import { ThemeContext } from "../../../contexts/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 
-export const EmptyAccounts = ({ onAddAccountPress }) => {
+export const Empty = () => {
     const theme = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
@@ -45,8 +44,4 @@ export const EmptyAccounts = ({ onAddAccountPress }) => {
             </View>
         </View>
     );
-};
-
-EmptyAccounts.propTypes = {
-    onAddAccountPress: PropTypes.func.isRequired,
 };

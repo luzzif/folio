@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { Row } from "./row";
 import { ThemeContext } from "../../contexts/theme";
+import { Empty } from "./empty";
 
 export const List = ({ header, items, onRefresh, refreshing }) => {
     const theme = useContext(ThemeContext);
@@ -14,6 +15,11 @@ export const List = ({ header, items, onRefresh, refreshing }) => {
         },
         list: {
             paddingHorizontal: 16,
+            flex: 1,
+        },
+        listContentContainerStyle: {
+            flex: 1,
+            justifyContent: "center",
         },
         headerContainer: {
             flexDirection: "row",
@@ -44,11 +50,15 @@ export const List = ({ header, items, onRefresh, refreshing }) => {
             )}
             <FlatList
                 style={styles.list}
+                contentContainerStyle={
+                    items.length === 0 && styles.listContentContainerStyle
+                }
                 data={items}
                 keyExtractor={(item) => item.key}
                 renderItem={({ item }) => <Row {...item} />}
                 onRefresh={onRefresh}
                 refreshing={refreshing}
+                ListEmptyComponent={() => <Empty />}
             />
         </View>
     );

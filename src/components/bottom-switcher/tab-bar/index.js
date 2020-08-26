@@ -35,7 +35,7 @@ export const TabBar = ({ state, descriptors, navigation }) => {
         },
         selectedItemIndicator: {
             position: "absolute",
-            height: 1,
+            height: 2,
             borderRadius: 2,
             backgroundColor: theme.text,
             top: 0,
@@ -109,7 +109,7 @@ export const TabBar = ({ state, descriptors, navigation }) => {
                                     <FontAwesomeIcon
                                         icon={faIcon}
                                         style={styles.icon}
-                                        size={12}
+                                        size={16}
                                     />
                                 )}
                                 <Text

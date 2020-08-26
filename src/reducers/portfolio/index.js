@@ -16,16 +16,19 @@ export const portfolioReducer = (state = initialState, action) => {
             return { ...state, loadings: state.loadings + 1 };
         }
         case GET_PORTFOLIO_END: {
-            return { ...state, loadings: state.loadings - 1 };
+            return {
+                ...state,
+                loadings: state.loadings > 0 ? state.loadings - 1 : 0,
+            };
         }
         case GET_PORTFOLIO_SUCCESS: {
             return {
                 ...state,
-                data: [...state.data, ...action.portfolio],
+                data: action.portfolio,
             };
         }
         case RESET_PORTFOLIO: {
-            return { ...state, data: [] };
+            return { ...initialState };
         }
         default: {
             return state;

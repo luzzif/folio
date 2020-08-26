@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { EmptyAccounts } from "../../components/accounts/empty";
 import { List } from "../../components/list";
 import { View, StyleSheet, Image, Text } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
@@ -82,48 +81,44 @@ export const Accounts = ({ navigation }) => {
 
     return (
         <View style={styles.root}>
-            {accounts && accounts.length > 0 ? (
-                <List
-                    header="Accounts"
-                    items={accounts.map((account) => ({
-                        key: account.address,
-                        primary:
-                            account.name ||
-                            getShortenedEthereumAddress(account.address),
-                        icon: (
-                            <Image
-                                source={{
-                                    uri: makeBlockie(account.address),
-                                }}
-                                style={styles.blockie}
+            <List
+                header="Accounts"
+                items={accounts.map((account) => ({
+                    key: account.address,
+                    primary:
+                        account.name ||
+                        getShortenedEthereumAddress(account.address),
+                    icon: (
+                        <Image
+                            source={{
+                                uri: makeBlockie(account.address),
+                            }}
+                            style={styles.blockie}
+                        />
+                    ),
+                    actions: [
+                        <TouchableOpacity
+                            style={styles.rightSpacer}
+                            onPress={getAccountEditHandler(account)}
+                        >
+                            <FontAwesomeIcon
+                                size={20}
+                                color={theme.text}
+                                icon={faEdit}
                             />
-                        ),
-                        actions: [
-                            <TouchableOpacity
-                                style={styles.rightSpacer}
-                                onPress={getAccountEditHandler(account)}
-                            >
-                                <FontAwesomeIcon
-                                    size={20}
-                                    color={theme.text}
-                                    icon={faEdit}
-                                />
-                            </TouchableOpacity>,
-                            <TouchableOpacity
-                                onPress={getAccountRemoveHandler(account)}
-                            >
-                                <FontAwesomeIcon
-                                    size={20}
-                                    color={theme.error}
-                                    icon={faTrash}
-                                />
-                            </TouchableOpacity>,
-                        ],
-                    }))}
-                />
-            ) : (
-                <EmptyAccounts onAddAccountPress={handleAddAccountPress} />
-            )}
+                        </TouchableOpacity>,
+                        <TouchableOpacity
+                            onPress={getAccountRemoveHandler(account)}
+                        >
+                            <FontAwesomeIcon
+                                size={20}
+                                color={theme.error}
+                                icon={faTrash}
+                            />
+                        </TouchableOpacity>,
+                    ],
+                }))}
+            />
             <View style={styles.newAccountButtonContainer}>
                 <Fab
                     title="Add account"

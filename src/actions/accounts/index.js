@@ -1,24 +1,24 @@
-import { PORTFOLIO_SOURCE } from "../../commons";
-
 export const ADD_ACCOUNT = "ADD_ACCOUNT";
 export const UPDATE_ACCOUNT = "UPDATE_ACCOUNT";
 export const REMOVE_ACCOUNT = "REMOVE_ACCOUNT";
 
-export const addEthereumWalletAccount = (name, address) => ({
+export const addAccount = (name, type, fields) => ({
     type: ADD_ACCOUNT,
     account: {
-        type: PORTFOLIO_SOURCE.ETHEREUM_WALLET,
+        id: Date.now(),
+        type,
         name,
-        address,
+        fields,
     },
 });
 
-export const updateEthereumWalletAccount = (name, address) => ({
+export const updateAccount = (id, name, type, fields) => ({
     type: UPDATE_ACCOUNT,
     account: {
-        type: PORTFOLIO_SOURCE.ETHEREUM_WALLET,
+        id,
         name,
-        address,
+        type,
+        fields,
     },
 });
 

@@ -3,7 +3,6 @@ import {
     REMOVE_ACCOUNT,
     UPDATE_ACCOUNT,
 } from "../../actions/accounts";
-import { PORTFOLIO_SOURCE } from "../../commons";
 
 export const accountsReducer = (state = [], action) => {
     switch (action.type) {
@@ -15,7 +14,7 @@ export const accountsReducer = (state = [], action) => {
         }
         case UPDATE_ACCOUNT: {
             const updatedAccountIndex = state.findIndex(
-                getUpdatePredicate(action.account)
+                (account) => account.id === action.account.id
             );
             if (updatedAccountIndex >= 0) {
                 state[updatedAccountIndex] = action.account;
@@ -25,14 +24,6 @@ export const accountsReducer = (state = [], action) => {
         }
         default: {
             return state;
-        }
-    }
-};
-
-const getUpdatePredicate = (updatedAccount) => {
-    switch (updatedAccount.type) {
-        case PORTFOLIO_SOURCE.ETHEREUM_WALLET: {
-            return (account) => account.address === updatedAccount.address;
         }
     }
 };

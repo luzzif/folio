@@ -1,3 +1,8 @@
+import { PORTFOLIO_SOURCE } from "../commons";
+import ethLogo from "../../assets/images/eth.png";
+import lrcLogo from "../../assets/images/lrc.png";
+import binanceLogo from "../../assets/images/bnb.png";
+
 export const decimalFromWei = (etherDecimal, decimals) =>
     etherDecimal.dividedBy("1e" + decimals);
 
@@ -49,4 +54,21 @@ export const formatDecimal = (decimal, significantDecimalPlaces = 2) => {
         }
     }
     return `${integers}.${adjustedDecimals}`;
+};
+
+export const getImageByAccountType = (type) => {
+    switch (type) {
+        case PORTFOLIO_SOURCE.ETHEREUM_WALLET: {
+            return ethLogo;
+        }
+        case PORTFOLIO_SOURCE.LOOPRING: {
+            return lrcLogo;
+        }
+        case PORTFOLIO_SOURCE.BINANCE: {
+            return binanceLogo;
+        }
+        default: {
+            throw new Error(`unhandled field type ${type} given`);
+        }
+    }
 };

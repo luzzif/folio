@@ -72,6 +72,7 @@ List.propTypes = {
             secondary: PropTypes.node,
             tertiary: PropTypes.node,
             quaternary: PropTypes.node,
+            onPress: PropTypes.func,
         }).isRequired
     ).isRequired,
     onRefresh: PropTypes.func,

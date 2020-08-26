@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { ThemeContext } from "../../../contexts/theme";
 
 export const Row = ({
@@ -9,6 +9,7 @@ export const Row = ({
     tertiary,
     quaternary,
     actions,
+    onPress,
 }) => {
     const theme = useContext(ThemeContext);
 
@@ -68,55 +69,63 @@ export const Row = ({
     });
 
     return (
-        <View style={styles.root}>
-            <View style={styles.leftBlock}>
-                {icon && <View style={styles.iconContainer}>{icon}</View>}
-                {(primary || secondary) && (
-                    <>
-                        {primary && (
-                            <Text
-                                numberOfLines={1}
-                                ellipsizeMode="tail"
-                                style={styles.leftMainText}
+        <TouchableOpacity disabled={!onPress} onPress={onPress}>
+            <View style={styles.root}>
+                <View style={styles.leftBlock}>
+                    {icon && <View style={styles.iconContainer}>{icon}</View>}
+                    {(primary || secondary) && (
+                        <>
+                            {primary && (
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                    style={styles.leftMainText}
+                                >
+                                    {primary}
+                                </Text>
+                            )}
+                            {secondary && (
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                    style={styles.leftLightText}
+                                >
+                                    {secondary}
+                                </Text>
+                            )}
+                        </>
+                    )}
+                </View>
+                {(!actions || actions.length === 0) &&
+                    (tertiary || quaternary) && (
+                        <View style={styles.rightBlock}>
+                            {tertiary && (
+                                <Text style={styles.rightMainText}>
+                                    {tertiary}
+                                </Text>
+                            )}
+                            {quaternary && (
+                                <Text style={styles.rightLightText}>
+                                    {quaternary}
+                                </Text>
+                            )}
+                        </View>
+                    )}
+                {actions && actions.length > 0 && !tertiary && !quaternary && (
+                    <View style={styles.actionsContainer}>
+                        {actions.map((action, index) => (
+                            <View
+                                style={
+                                    index < actions.length - 1 &&
+                                    styles.rightSpacer
+                                }
                             >
-                                {primary}
-                            </Text>
-                        )}
-                        {secondary && (
-                            <Text
-                                numberOfLines={1}
-                                ellipsizeMode="tail"
-                                style={styles.leftLightText}
-                            >
-                                {secondary}
-                            </Text>
-                        )}
-                    </>
+                                {action}
+                            </View>
+                        ))}
+                    </View>
                 )}
             </View>
-            {(!actions || actions.length === 0) && (tertiary || quaternary) && (
-                <View style={styles.rightBlock}>
-                    {tertiary && (
-                        <Text style={styles.rightMainText}>{tertiary}</Text>
-                    )}
-                    {quaternary && (
-                        <Text style={styles.rightLightText}>{quaternary}</Text>
-                    )}
-                </View>
-            )}
-            {actions && actions.length > 0 && !tertiary && !quaternary && (
-                <View style={styles.actionsContainer}>
-                    {actions.map((action, index) => (
-                        <View
-                            style={
-                                index < actions.length - 1 && styles.rightSpacer
-                            }
-                        >
-                            {action}
-                        </View>
-                    ))}
-                </View>
-            )}
-        </View>
+        </TouchableOpacity>
     );
 };

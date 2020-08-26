@@ -3,8 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { List } from "../../components/list";
 import { View, StyleSheet, Image, Text } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
-import makeBlockie from "ethereum-blockies-base64";
-import { getShortenedEthereumAddress } from "../../utils";
+import {
+    getShortenedEthereumAddress,
+    getImageByAccountType,
+} from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrash, faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { removeAccount } from "../../actions/accounts";
@@ -12,6 +14,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Fab } from "../../components/fab";
 import Modal from "react-native-modal";
 import { Button } from "../../components/button";
+import { PORTFOLIO_SOURCE } from "../../commons";
 
 export const Accounts = ({ navigation }) => {
     const theme = useContext(ThemeContext);
@@ -25,7 +28,7 @@ export const Accounts = ({ navigation }) => {
             backgroundColor: theme.background,
             paddingTop: 16,
         },
-        blockie: {
+        icon: {
             width: 36,
             height: 36,
             borderRadius: 36,
@@ -38,38 +41,48 @@ export const Accounts = ({ navigation }) => {
         rightSpacer: {
             marginRight: 16,
         },
-        confirmationModalRoot: {
+        modalRoot: {
             backgroundColor: theme.background,
             borderRadius: 12,
-            padding: 20,
+            padding: 16,
         },
-        confirmationModalText: {
+        modalText: {
             color: theme.text,
             textAlign: "center",
             textAlignVertical: "center",
             fontFamily: "Montserrat-Medium",
             marginBottom: 24,
         },
-        confirmationModalButtonsContainer: {
+        accountTypeListContainer: {
+            height: 240,
+        },
+        modalButtonsContainer: {
             flexDirection: "row",
             justifyContent: "center",
         },
     });
 
     const [toBeDeletedAccount, setToBeDeletedAccount] = useState(null);
+    const [addingAccount, setAddingAccount] = useState(false);
 
     const handleAddAccountPress = useCallback(() => {
-        navigation.navigate("Account");
-    }, [navigation]);
+        setAddingAccount(true);
+    }, []);
 
-    const handleConfirmationModalClose = useCallback(() => {
+    const getAccountTypeSelectionPressHandler = (type) => (source) => {
+        navigation.navigate("Account", { type });
+        handleModalClose();
+    };
+
+    const handleModalClose = useCallback(() => {
         setToBeDeletedAccount(null);
+        setAddingAccount(false);
     }, []);
 
     const handleAccountRemoval = useCallback(() => {
         dispatch(removeAccount(toBeDeletedAccount));
-        setToBeDeletedAccount(null);
-    }, [dispatch, toBeDeletedAccount]);
+        handleModalClose();
+    }, [dispatch, handleModalClose, toBeDeletedAccount]);
 
     const getAccountRemoveHandler = (account) => () => {
         setToBeDeletedAccount(account);
@@ -82,18 +95,15 @@ export const Accounts = ({ navigation }) => {
     return (
         <View style={styles.root}>
             <List
-                header="Accounts"
                 items={accounts.map((account) => ({
-                    key: account.address,
+                    key: account.id,
                     primary:
                         account.name ||
                         getShortenedEthereumAddress(account.address),
                     icon: (
                         <Image
-                            source={{
-                                uri: makeBlockie(account.address),
-                            }}
-                            style={styles.blockie}
+                            source={getImageByAccountType(account.type)}
+                            style={styles.icon}
                         />
                     ),
                     actions: [
@@ -128,26 +138,51 @@ export const Accounts = ({ navigation }) => {
             </View>
             <Modal
                 isVisible={!!toBeDeletedAccount}
-                onBackdropPress={handleConfirmationModalClose}
-                onBackButtonPress={handleConfirmationModalClose}
+                onBackdropPress={handleModalClose}
+                onBackButtonPress={handleModalClose}
                 backdropColor={theme.shadow}
                 animationIn="fadeIn"
                 animationOut="fadeOut"
                 backdropTransitionOutTiming={0}
             >
-                <View style={styles.confirmationModalRoot}>
-                    <Text style={styles.confirmationModalText}>
+                <View style={styles.modalRoot}>
+                    <Text style={styles.modalText}>
                         Are you sure you want to delete the account?
                     </Text>
-                    <View style={styles.confirmationModalButtonsContainer}>
+                    <View style={styles.modalButtonsContainer}>
                         <View style={styles.rightSpacer}>
                             <Button
                                 secondary
                                 title="Cancel"
-                                onPress={handleConfirmationModalClose}
+                                onPress={handleModalClose}
                             />
                         </View>
                         <Button title="Delete" onPress={handleAccountRemoval} />
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                isVisible={!!addingAccount}
+                onBackdropPress={handleModalClose}
+                onBackButtonPress={handleModalClose}
+                backdropColor={theme.shadow}
+                animationIn="fadeIn"
+                animationOut="fadeOut"
+                backdropTransitionOutTiming={0}
+            >
+                <View style={styles.modalRoot}>
+                    <View style={styles.accountTypeListContainer}>
+                        <List
+                            items={Object.values(PORTFOLIO_SOURCE).map(
+                                (source) => ({
+                                    key: source,
+                                    primary: source,
+                                    onPress: getAccountTypeSelectionPressHandler(
+                                        source
+                                    ),
+                                })
+                            )}
+                        />
                     </View>
                 </View>
             </Modal>

@@ -24,7 +24,10 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                     }
                     if (!updating) {
                         return !accounts.find(
-                            (account) => account.address === value
+                            (account) =>
+                                account.type ===
+                                    PORTFOLIO_SOURCE.ETHEREUM_WALLET &&
+                                account.fields.address === value
                         );
                     }
                     return true;
@@ -39,13 +42,35 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                 name: "accountId",
                 label: "Account id",
                 required: true,
-                validate: (value) => /^\d+$/.test(value),
+                validate: (value, accounts, updating) => {
+                    if (!/^\d+$/.test(value)) {
+                        return false;
+                    }
+                    if (!updating) {
+                        return !accounts.find(
+                            (account) =>
+                                account.type === PORTFOLIO_SOURCE.LOOPRING &&
+                                account.fields.accountId === value
+                        );
+                    }
+                    return true;
+                },
             },
             {
                 type: SPECIFICATION_FIELD_TYPE.INPUT,
                 name: "apiKey",
                 label: "API key",
                 required: true,
+                validate: (value, accounts, updating) => {
+                    if (updating) {
+                        return true;
+                    }
+                    return !accounts.find(
+                        (account) =>
+                            account.type === PORTFOLIO_SOURCE.LOOPRING &&
+                            account.fields.apiKey === value
+                    );
+                },
             },
         ],
     },
@@ -56,12 +81,32 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                 name: "apiKey",
                 label: "API key",
                 required: true,
+                validate: (value, accounts, updating) => {
+                    if (updating) {
+                        return true;
+                    }
+                    return !accounts.find(
+                        (account) =>
+                            account.type === PORTFOLIO_SOURCE.BINANCE &&
+                            account.fields.apiKey === value
+                    );
+                },
             },
             {
                 type: SPECIFICATION_FIELD_TYPE.INPUT,
                 name: "apiSecret",
                 label: "API secret",
                 required: true,
+                validate: (value, accounts, updating) => {
+                    if (updating) {
+                        return true;
+                    }
+                    return !accounts.find(
+                        (account) =>
+                            account.type === PORTFOLIO_SOURCE.BINANCE &&
+                            account.fields.apiSecret === value
+                    );
+                },
             },
         ],
     },

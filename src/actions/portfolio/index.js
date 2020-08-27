@@ -24,7 +24,10 @@ export const getPortfolio = (
                 fiatCurrency,
                 coinGeckoIds
             );
-            portfolio.push(...portfolioPiece);
+
+            if (portfolioPiece) {
+                portfolio.push(...portfolioPiece);
+            }
         }
         for (const manualTransaction of manualTransactions) {
             const info = await getInfoFromCoinGecko(

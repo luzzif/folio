@@ -94,9 +94,15 @@ export const Header = ({ portfolio, fiatCurrency, navigation }) => {
         <View style={styles.root}>
             <View>
                 <Text style={styles.totalBalanceText}>Total balance:</Text>
-                <Text style={styles.totalBalance}>
+                <Text
+                    style={styles.totalBalance}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                >
                     {totalBalance.isZero()
                         ? "-"
+                        : totalBalance.gt(1000000000)
+                        ? "Too rich sir"
                         : `${
                               CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
                           }${formatDecimal(totalBalance, 2)}`}

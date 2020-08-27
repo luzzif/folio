@@ -1,4 +1,9 @@
 import Decimal from "decimal.js";
+import { PORTFOLIO_SOURCE } from "../commons";
+import ethLogo from "../../assets/images/eth.png";
+import lrcLogo from "../../assets/images/lrc.png";
+import qtumLogo from "../../assets/images/qtum.png";
+import binanceLogo from "../../assets/images/bnb.png";
 
 export const decimalFromWei = (etherDecimal, decimals) =>
     etherDecimal.dividedBy("1e" + decimals);
@@ -52,6 +57,32 @@ export const formatDecimal = (decimal, significantDecimalPlaces = 2) => {
     }
     return `${integers}.${adjustedDecimals}`;
 };
+
+export const getImageByAccountType = (type) => {
+    switch (type) {
+        case PORTFOLIO_SOURCE.ETHEREUM_WALLET: {
+            return ethLogo;
+        }
+        case PORTFOLIO_SOURCE.QUANTUM_WALLET: {
+            return qtumLogo;
+        }
+        case PORTFOLIO_SOURCE.LOOPRING: {
+            return lrcLogo;
+        }
+        case PORTFOLIO_SOURCE.BINANCE: {
+            return binanceLogo;
+        }
+        default: {
+            throw new Error(`unhandled field type ${type} given`);
+        }
+    }
+};
+
+export const getQtumFromSatoshis = (satoshis) =>
+    satoshis.dividedBy(100000000).toNumber();
+
+export const decimalFromSatoshis = (qtumDecimal, decimals) =>
+    qtumDecimal.dividedBy("1e" + decimals);
 
 export const isCoinDismissedBasedOnInfo = (info) =>
     !info.circulatingSupply || new Decimal(info.circulatingSupply).isZero();

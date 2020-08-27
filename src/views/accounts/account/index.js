@@ -69,7 +69,7 @@ export const Account = ({ navigation, route }) => {
         if (!newValue && field.required) {
             validValue = false;
         } else if (typeof field.validate === "function") {
-            validValue === field.validate(newValue, accounts, !!updatingId);
+            validValue = field.validate(newValue, accounts, !!updatingId);
         } else {
             validValue = true;
         }

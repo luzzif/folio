@@ -1,4 +1,7 @@
 import ethereumRegex from "ethereum-regex";
+import ethLogo from "../../assets/images/eth.png";
+import lrcLogo from "../../assets/images/lrc.png";
+import bnbLogo from "../../assets/images/bnb.png";
 
 const configuredEthereumRegex = ethereumRegex({ exact: true });
 
@@ -6,6 +9,12 @@ export const PORTFOLIO_SOURCE = Object.freeze({
     ETHEREUM_WALLET: "Ethereum wallet",
     LOOPRING: "Loopring DEX",
     BINANCE: "Binance",
+});
+
+export const PORTFOLIO_SOURCE_ICON = Object.freeze({
+    [PORTFOLIO_SOURCE.ETHEREUM_WALLET]: ethLogo,
+    [PORTFOLIO_SOURCE.LOOPRING]: lrcLogo,
+    [PORTFOLIO_SOURCE.BINANCE]: bnbLogo,
 });
 
 export const SPECIFICATION_FIELD_TYPE = Object.freeze({ INPUT: "input" });

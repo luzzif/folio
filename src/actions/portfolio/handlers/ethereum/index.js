@@ -1,4 +1,8 @@
-import { getInfoFromCoinGecko, decimalFromWei } from "../../../../utils";
+import {
+    getInfoFromCoinGecko,
+    decimalFromWei,
+    isCoinDismissedBasedOnInfo,
+} from "../../../../utils";
 import Decimal from "decimal.js";
 
 export const getEthereumPortfolio = async (
@@ -24,13 +28,15 @@ export const getEthereumPortfolio = async (
                 continue;
             }
             const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
-            if (new Decimal(info.circulatingSupply).isZero()) {
-                // the token was dismissed
-                continue;
+            if (isCoinDismissedBasedOnInfo(info)) {
+                return;
             }
             portfolio.push({
                 symbol,
-                balance: decimalFromWei(new Decimal(token.balance), decimals),
+                balance: decimalFromWei(
+                    new Decimal(token.balance),
+                    decimals
+                ).toFixed(),
                 info,
             });
         }

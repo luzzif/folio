@@ -3,18 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { List } from "../../components/list";
 import { View, StyleSheet, Image, Text } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
-import {
-    getShortenedEthereumAddress,
-    getImageByAccountType,
-} from "../../utils";
+import { getShortenedEthereumAddress } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrash, faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { removeAccount } from "../../actions/accounts";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Fab } from "../../components/fab";
-import Modal from "react-native-modal";
 import { Button } from "../../components/button";
-import { PORTFOLIO_SOURCE } from "../../commons";
+import { PORTFOLIO_SOURCE, PORTFOLIO_SOURCE_ICON } from "../../commons";
+import { Modal } from "../../components/modal";
 
 export const Accounts = ({ navigation }) => {
     const theme = useContext(ThemeContext);
@@ -102,13 +99,12 @@ export const Accounts = ({ navigation }) => {
                         getShortenedEthereumAddress(account.address),
                     icon: (
                         <Image
-                            source={getImageByAccountType(account.type)}
+                            source={PORTFOLIO_SOURCE_ICON[account.type]}
                             style={styles.icon}
                         />
                     ),
                     actions: [
                         <TouchableOpacity
-                            style={styles.rightSpacer}
                             onPress={getAccountEditHandler(account)}
                         >
                             <FontAwesomeIcon
@@ -130,60 +126,50 @@ export const Accounts = ({ navigation }) => {
                 }))}
             />
             <View style={styles.newAccountButtonContainer}>
-                <Fab
-                    title="Add account"
-                    faIcon={faPlus}
-                    onPress={handleAddAccountPress}
-                />
+                <Fab faIcon={faPlus} onPress={handleAddAccountPress} />
             </View>
             <Modal
-                isVisible={!!toBeDeletedAccount}
-                onBackdropPress={handleModalClose}
-                onBackButtonPress={handleModalClose}
-                backdropColor={theme.shadow}
-                animationIn="fadeIn"
-                animationOut="fadeOut"
-                backdropTransitionOutTiming={0}
+                title="Delete account"
+                open={!!toBeDeletedAccount}
+                onClose={handleModalClose}
             >
-                <View style={styles.modalRoot}>
-                    <Text style={styles.modalText}>
-                        Are you sure you want to delete the account?
-                    </Text>
-                    <View style={styles.modalButtonsContainer}>
-                        <View style={styles.rightSpacer}>
-                            <Button
-                                secondary
-                                title="Cancel"
-                                onPress={handleModalClose}
-                            />
-                        </View>
-                        <Button title="Delete" onPress={handleAccountRemoval} />
+                <Text style={styles.modalText}>
+                    Are you sure you want to delete the account?
+                </Text>
+                <View style={styles.modalButtonsContainer}>
+                    <View style={styles.rightSpacer}>
+                        <Button
+                            secondary
+                            title="Cancel"
+                            onPress={handleModalClose}
+                        />
                     </View>
+                    <Button title="Delete" onPress={handleAccountRemoval} />
                 </View>
             </Modal>
             <Modal
-                isVisible={!!addingAccount}
-                onBackdropPress={handleModalClose}
-                onBackButtonPress={handleModalClose}
-                backdropColor={theme.shadow}
-                animationIn="fadeIn"
-                animationOut="fadeOut"
-                backdropTransitionOutTiming={0}
+                title="Pick an option"
+                open={!!addingAccount}
+                onClose={handleModalClose}
             >
-                <View style={styles.modalRoot}>
-                    <View style={styles.accountTypeListContainer}>
-                        <List
-                            items={Object.values(PORTFOLIO_SOURCE).map(
-                                (source) => ({
-                                    key: source,
-                                    primary: source,
-                                    onPress: getAccountTypeSelectionPressHandler(
-                                        source
-                                    ),
-                                })
-                            )}
-                        />
-                    </View>
+                <View style={styles.accountTypeListContainer}>
+                    <List
+                        items={Object.values(PORTFOLIO_SOURCE).map(
+                            (source) => ({
+                                icon: (
+                                    <Image
+                                        source={PORTFOLIO_SOURCE_ICON[source]}
+                                        style={styles.icon}
+                                    />
+                                ),
+                                key: source,
+                                primary: source,
+                                onPress: getAccountTypeSelectionPressHandler(
+                                    source
+                                ),
+                            })
+                        )}
+                    />
                 </View>
             </Modal>
         </View>

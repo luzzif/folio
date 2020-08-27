@@ -6,6 +6,7 @@ import { Account } from "../accounts/account";
 import { Home } from "../../components/home";
 import { CoinSplit } from "../../components/coin-split";
 import { useSelector } from "react-redux";
+import { ManualTransaction } from "../manual-transaction";
 
 const commonColors = {
     error: "#c62828",
@@ -77,6 +78,11 @@ export const App = () => {
                     {
                         name: "Coin split",
                         component: CoinSplit,
+                        allowClose: true,
+                    },
+                    {
+                        name: "Manual transaction",
+                        component: ManualTransaction,
                         allowClose: true,
                     },
                 ]}

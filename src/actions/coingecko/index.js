@@ -17,6 +17,14 @@ export const getCoinGeckoIds = () => async (dispatch) => {
                 accumulator[rawCoin.symbol.toLowerCase()] = rawCoin.id;
                 return accumulator;
             }, {}),
+            assetOptions: rawCoins.map((rawCoin) => ({
+                value: rawCoin.id,
+                label: rawCoin.symbol.toUpperCase(),
+                listItemSpecification: {
+                    key: rawCoin.id,
+                    primary: rawCoin.symbol.toUpperCase(),
+                },
+            })),
         });
     } catch (error) {
         console.error("error getting coingecko coin ids");

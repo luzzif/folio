@@ -1,5 +1,8 @@
 import Decimal from "decimal.js";
-import { getInfoFromCoinGecko } from "../../../../utils";
+import {
+    getInfoFromCoinGecko,
+    isCoinDismissedBasedOnInfo,
+} from "../../../../utils";
 import hash from "hash.js";
 
 export const getBinancePortfolio = async (
@@ -39,9 +42,8 @@ export const getBinancePortfolio = async (
             continue;
         }
         const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
-        if (new Decimal(info.circulatingSupply).isZero()) {
-            // the token was dismissed
-            continue;
+        if (isCoinDismissedBasedOnInfo(info)) {
+            return;
         }
         portfolio.push({
             symbol: asset,

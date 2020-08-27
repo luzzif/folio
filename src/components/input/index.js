@@ -2,8 +2,16 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { TextInput, View, Text, StyleSheet } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-export const Input = ({ label, required, ...rest }) => {
+export const Input = ({
+    label,
+    required,
+    disabled,
+    value,
+    faIcon,
+    ...rest
+}) => {
     const theme = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
@@ -14,11 +22,14 @@ export const Input = ({ label, required, ...rest }) => {
             borderWidth: 1,
             borderColor: theme.border,
             borderRadius: 12,
+            flexDirection: "row",
+            alignItems: "center",
         },
         text: {
             fontFamily: "Montserrat-Medium",
             fontSize: 16,
             color: theme.text,
+            flex: 1,
         },
         label: {
             fontFamily: "Montserrat-Bold",
@@ -26,6 +37,11 @@ export const Input = ({ label, required, ...rest }) => {
             color: theme.text,
             marginBottom: 8,
             marginLeft: 16,
+        },
+        iconContainer: {
+            height: "100%",
+            justifyContent: "center",
+            paddingLeft: 16,
         },
     });
 
@@ -37,11 +53,25 @@ export const Input = ({ label, required, ...rest }) => {
                 </Text>
             )}
             <View style={styles.root}>
-                <TextInput
-                    style={styles.text}
-                    {...rest}
-                    placeholderTextColor={theme.placeholder}
-                />
+                {disabled ? (
+                    <Text style={styles.text}>{value}</Text>
+                ) : (
+                    <TextInput
+                        style={styles.text}
+                        {...rest}
+                        value={value}
+                        placeholderTextColor={theme.placeholder}
+                    />
+                )}
+                {faIcon && (
+                    <View style={styles.iconContainer}>
+                        <FontAwesomeIcon
+                            icon={faIcon}
+                            color={theme.text}
+                            size={20}
+                        />
+                    </View>
+                )}
             </View>
         </>
     );
@@ -50,4 +80,7 @@ export const Input = ({ label, required, ...rest }) => {
 Input.propTypes = {
     label: PropTypes.string,
     required: PropTypes.bool,
+    disabled: PropTypes.bool,
+    value: PropTypes.string,
+    faIcon: PropTypes.object,
 };

@@ -1,5 +1,9 @@
 import Decimal from "decimal.js";
-import { getInfoFromCoinGecko, decimalFromWei } from "../../../../utils";
+import {
+    getInfoFromCoinGecko,
+    decimalFromWei,
+    isCoinDismissedBasedOnInfo,
+} from "../../../../utils";
 
 export const getLoopringPortfolio = async (
     accountId,
@@ -33,13 +37,15 @@ export const getLoopringPortfolio = async (
             continue;
         }
         const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
-        if (new Decimal(info.circulatingSupply).isZero()) {
-            // the token was dismissed
-            continue;
+        if (isCoinDismissedBasedOnInfo(info)) {
+            return;
         }
         portfolio.push({
             symbol: tokenSymbol,
-            balance: decimalFromWei(new Decimal(totalAmount), tokenDecimals),
+            balance: decimalFromWei(
+                new Decimal(totalAmount),
+                tokenDecimals
+            ).toFixed(),
             info,
         });
     }

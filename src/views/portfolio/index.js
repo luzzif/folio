@@ -11,6 +11,8 @@ import { ThemeContext } from "../../contexts/theme";
 import { getCoinGeckoIds } from "../../actions/coingecko";
 import { CURRENCY_SYMBOLS } from "../../commons";
 import { formatDecimal } from "../../utils";
+import { Fab } from "../../components/fab";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export const Portfolio = ({ navigation }) => {
     const theme = useContext(ThemeContext);
@@ -24,6 +26,11 @@ export const Portfolio = ({ navigation }) => {
             paddingHorizontal: 16,
             marginVertical: 20,
         },
+        manualTransactionButtonContainer: {
+            position: "absolute",
+            bottom: 24,
+            right: 24,
+        },
     });
 
     const dispatch = useDispatch();
@@ -33,12 +40,14 @@ export const Portfolio = ({ navigation }) => {
         accounts,
         fiatCurrency,
         coinGeckoIds,
+        manualTransactions,
     } = useSelector((state) => ({
         portfolio: state.portfolio.data,
         loadingPortfolio: !!state.portfolio.loadings,
         accounts: state.accounts,
         fiatCurrency: state.settings.fiatCurrency,
         coinGeckoIds: state.coinGecko.ids,
+        manualTransactions: state.manualTransactions,
     }));
 
     const [aggregatedPortfolio, setAggregatedPortfolio] = useState([]);
@@ -56,9 +65,16 @@ export const Portfolio = ({ navigation }) => {
 
     useEffect(() => {
         if (coinGeckoIds) {
-            dispatch(getPortfolio(accounts, fiatCurrency, coinGeckoIds));
+            dispatch(
+                getPortfolio(
+                    accounts,
+                    manualTransactions,
+                    fiatCurrency,
+                    coinGeckoIds
+                )
+            );
         }
-    }, [accounts, coinGeckoIds, dispatch, fiatCurrency]);
+    }, [accounts, coinGeckoIds, dispatch, fiatCurrency, manualTransactions]);
 
     useEffect(() => {
         if (portfolio && portfolio.length > 0) {
@@ -112,6 +128,10 @@ export const Portfolio = ({ navigation }) => {
         }
     }, [accounts, coinGeckoIds, dispatch, fiatCurrency]);
 
+    const handleRhandleAddManualTransactionPressefresh = useCallback(() => {
+        navigation.navigate("Manual transaction");
+    }, [navigation]);
+
     return (
         <View style={styles.root}>
             <View style={styles.headerContainer}>
@@ -135,6 +155,12 @@ export const Portfolio = ({ navigation }) => {
                 onRefresh={handleRefresh}
                 refreshing={loadingPortfolio}
             />
+            <View style={styles.manualTransactionButtonContainer}>
+                <Fab
+                    faIcon={faPlus}
+                    onPress={handleRhandleAddManualTransactionPressefresh}
+                />
+            </View>
         </View>
     );
 };

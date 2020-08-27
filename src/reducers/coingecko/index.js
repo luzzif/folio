@@ -7,6 +7,7 @@ import {
 const initialState = {
     loadings: 0,
     ids: null,
+    assetOptions: [],
 };
 
 export const coinGeckoReducer = (state = initialState, action) => {
@@ -21,7 +22,11 @@ export const coinGeckoReducer = (state = initialState, action) => {
             };
         }
         case GET_COINGECKO_COIN_IDS_SUCCESS: {
-            return { ...state, ids: action.ids };
+            return {
+                ...state,
+                ids: action.ids,
+                assetOptions: action.assetOptions,
+            };
         }
         default: {
             return state;

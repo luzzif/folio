@@ -25,9 +25,7 @@ export const getPortfolio = (
                 coinGeckoIds
             );
 
-            if (portfolioPiece) {
-                portfolio.push(...portfolioPiece);
-            }
+            portfolio.push(...portfolioPiece);
         }
         for (const manualTransaction of manualTransactions) {
             const info = await getInfoFromCoinGecko(

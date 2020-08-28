@@ -33,7 +33,7 @@ export const Modal = ({ title, open, onClose, children }) => {
             animationOutTiming={300}
         >
             <View style={styles.root}>
-                {title && <Text style={styles.title}>Pick an option</Text>}
+                {title && <Text style={styles.title}>{title}</Text>}
                 {children}
             </View>
         </ReactNativeModal>

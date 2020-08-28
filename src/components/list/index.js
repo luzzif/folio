@@ -43,7 +43,7 @@ export const List = ({ header, items, onRefresh, refreshing }) => {
 
     return (
         <View style={styles.root}>
-            {header && (
+            {header && items.length > 0 && (
                 <View style={styles.headerContainer}>
                     <Text style={styles.headerText}>{header}</Text>
                 </View>

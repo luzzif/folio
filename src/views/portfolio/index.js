@@ -119,18 +119,31 @@ export const Portfolio = ({ navigation }) => {
                     }, [])
                     .sort((a, b) => b.value.minus(a.value).toNumber())
             );
+        } else {
+            setAggregatedPortfolio([]);
         }
     }, [portfolio, symbols, loadingPortfolio]);
 
     const handleRefresh = useCallback(() => {
         if (coinGeckoIds) {
-            dispatch(getPortfolio(accounts, fiatCurrency, coinGeckoIds));
+            dispatch(
+                getPortfolio(
+                    accounts,
+                    manualTransactions,
+                    fiatCurrency,
+                    coinGeckoIds
+                )
+            );
         }
-    }, [accounts, coinGeckoIds, dispatch, fiatCurrency]);
+    }, [accounts, coinGeckoIds, dispatch, fiatCurrency, manualTransactions]);
 
-    const handleRhandleAddManualTransactionPressefresh = useCallback(() => {
+    const handleAddManualTransactionPress = useCallback(() => {
         navigation.navigate("Manual transaction");
     }, [navigation]);
+
+    const getAssetPressHandler = (symbol) => () => {
+        navigation.navigate("Manual transactions", { symbol });
+    };
 
     return (
         <View style={styles.root}>
@@ -151,6 +164,7 @@ export const Portfolio = ({ navigation }) => {
                     quaternary: `${
                         CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
                     }${formatDecimal(asset.value, 2)}`,
+                    onPress: getAssetPressHandler(asset.symbol),
                 }))}
                 onRefresh={handleRefresh}
                 refreshing={loadingPortfolio}
@@ -158,7 +172,7 @@ export const Portfolio = ({ navigation }) => {
             <View style={styles.manualTransactionButtonContainer}>
                 <Fab
                     faIcon={faPlus}
-                    onPress={handleRhandleAddManualTransactionPressefresh}
+                    onPress={handleAddManualTransactionPress}
                 />
             </View>
         </View>

@@ -9,7 +9,7 @@ import { Button } from "../../components/button";
 import { addManualTransaction } from "../../actions/manual-transaction";
 import { CryptoIcon } from "../../components/crypto-icon";
 
-export const ManualTransaction = ({ navigation }) => {
+export const ManualTransaction = ({ navigation, route }) => {
     const theme = useContext(ThemeContext);
     const dispatch = useDispatch();
     const { markets, fiatCurrency } = useSelector((state) => ({
@@ -43,8 +43,12 @@ export const ManualTransaction = ({ navigation }) => {
 
     const [assetOptions, setAssetOptions] = useState([]);
     const [asset, setAsset] = useState(null);
-    const [buy, setBuy] = useState(true);
-    const [amount, setAmount] = useState(0);
+    const [buy, setBuy] = useState(
+        route.params && route.params.buy ? route.params.buy : true
+    );
+    const [amount, setAmount] = useState(
+        route.params && route.params.balance ? route.params.balance : 0
+    );
     const [amountError, setAmountError] = useState(false);
 
     useEffect(() => {
@@ -70,8 +74,18 @@ export const ManualTransaction = ({ navigation }) => {
                 return 0;
             });
         setAssetOptions(options);
-        setAsset(options[0]);
-    }, [markets]);
+        if (route.params) {
+            setAsset(
+                options.find(
+                    (option) =>
+                        option.label.toLowerCase() ===
+                        route.params.symbol.toLowerCase()
+                )
+            );
+        } else {
+            setAsset(options[0]);
+        }
+    }, [markets, route]);
 
     const handleBuyChange = useCallback(() => {
         setBuy(!buy);

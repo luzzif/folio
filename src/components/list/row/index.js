@@ -13,18 +13,6 @@ export const Row = ({
 }) => {
     const theme = useContext(ThemeContext);
 
-    const commonsMainText = {
-        fontFamily: "Montserrat-Medium",
-        fontSize: 16,
-        color: theme.text,
-    };
-
-    const commonsLightText = {
-        fontFamily: "Montserrat-Medium",
-        fontSize: 12,
-        color: theme.textLight,
-    };
-
     const styles = StyleSheet.create({
         root: {
             height: 60,
@@ -38,27 +26,24 @@ export const Row = ({
             alignItems: "center",
             flex: 1,
         },
+        primarySecondaryContainer: {
+            flex: 1,
+        },
         rightBlock: {
             alignItems: "flex-end",
         },
         iconContainer: {
             marginRight: 16,
         },
-        leftMainText: {
-            ...commonsMainText,
-            paddingRight: 20,
-            flex: 1,
+        mainText: {
+            fontFamily: "Montserrat-Medium",
+            fontSize: 16,
+            color: theme.text,
         },
-        leftLightText: {
-            ...commonsLightText,
-            paddingRight: 20,
-            flex: 1,
-        },
-        rightMainText: {
-            ...commonsMainText,
-        },
-        rightLightText: {
-            ...commonsLightText,
+        lightText: {
+            fontFamily: "Montserrat-Medium",
+            fontSize: 12,
+            color: theme.textLight,
         },
         actionsContainer: {
             flexDirection: "row",
@@ -74,12 +59,12 @@ export const Row = ({
                 <View style={styles.leftBlock}>
                     {icon && <View style={styles.iconContainer}>{icon}</View>}
                     {(primary || secondary) && (
-                        <>
+                        <View style={styles.primarySecondaryContainer}>
                             {primary && (
                                 <Text
                                     numberOfLines={1}
                                     ellipsizeMode="tail"
-                                    style={styles.leftMainText}
+                                    style={styles.mainText}
                                 >
                                     {primary}
                                 </Text>
@@ -88,24 +73,22 @@ export const Row = ({
                                 <Text
                                     numberOfLines={1}
                                     ellipsizeMode="tail"
-                                    style={styles.leftLightText}
+                                    style={styles.lightText}
                                 >
                                     {secondary}
                                 </Text>
                             )}
-                        </>
+                        </View>
                     )}
                 </View>
                 {(!actions || actions.length === 0) &&
                     (tertiary || quaternary) && (
                         <View style={styles.rightBlock}>
                             {tertiary && (
-                                <Text style={styles.rightMainText}>
-                                    {tertiary}
-                                </Text>
+                                <Text style={styles.mainText}>{tertiary}</Text>
                             )}
                             {quaternary && (
-                                <Text style={styles.rightLightText}>
+                                <Text style={styles.lightText}>
                                     {quaternary}
                                 </Text>
                             )}

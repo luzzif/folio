@@ -39,9 +39,8 @@ export const Accounts = ({ navigation }) => {
             marginRight: 16,
         },
         modalRoot: {
-            backgroundColor: theme.background,
-            borderRadius: 12,
-            padding: 16,
+            paddingHorizontal: 16,
+            paddingBottom: 16,
         },
         modalText: {
             color: theme.text,
@@ -92,6 +91,7 @@ export const Accounts = ({ navigation }) => {
     return (
         <View style={styles.root}>
             <List
+                header="Your accounts"
                 items={accounts.map((account) => ({
                     key: account.id,
                     primary:
@@ -133,18 +133,20 @@ export const Accounts = ({ navigation }) => {
                 open={!!toBeDeletedAccount}
                 onClose={handleModalClose}
             >
-                <Text style={styles.modalText}>
-                    Are you sure you want to delete the account?
-                </Text>
-                <View style={styles.modalButtonsContainer}>
-                    <View style={styles.rightSpacer}>
-                        <Button
-                            secondary
-                            title="Cancel"
-                            onPress={handleModalClose}
-                        />
+                <View style={styles.modalRoot}>
+                    <Text style={styles.modalText}>
+                        Are you sure you want to delete the account?
+                    </Text>
+                    <View style={styles.modalButtonsContainer}>
+                        <View style={styles.rightSpacer}>
+                            <Button
+                                secondary
+                                title="Cancel"
+                                onPress={handleModalClose}
+                            />
+                        </View>
+                        <Button title="Delete" onPress={handleAccountRemoval} />
                     </View>
-                    <Button title="Delete" onPress={handleAccountRemoval} />
                 </View>
             </Modal>
             <Modal

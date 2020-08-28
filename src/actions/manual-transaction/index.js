@@ -22,6 +22,7 @@ export const addManualTransaction = (
         dispatch({
             type: ADD_MANUAL_TRANSACTION,
             transaction: {
+                timestamp: Date.now(),
                 symbol,
                 balance: balance,
                 buy,

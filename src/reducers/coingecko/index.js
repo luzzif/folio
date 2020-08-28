@@ -1,31 +1,31 @@
 import {
-    GET_COINGECKO_COIN_IDS_END,
-    GET_COINGECKO_COIN_IDS_START,
-    GET_COINGECKO_COIN_IDS_SUCCESS,
+    GET_COINGECKO_BASE_DATA_END,
+    GET_COINGECKO_BASE_DATA_START,
+    GET_COINGECKO_BASE_DATA_SUCCESS,
 } from "../../actions/coingecko";
 
 const initialState = {
     loadings: 0,
     ids: null,
-    assetOptions: [],
+    markets: [],
 };
 
 export const coinGeckoReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_COINGECKO_COIN_IDS_START: {
+        case GET_COINGECKO_BASE_DATA_START: {
             return { ...state, loadings: state.loadings + 1 };
         }
-        case GET_COINGECKO_COIN_IDS_END: {
+        case GET_COINGECKO_BASE_DATA_END: {
             return {
                 ...state,
                 loadings: state.loadings > 0 ? state.loadings - 1 : 0,
             };
         }
-        case GET_COINGECKO_COIN_IDS_SUCCESS: {
+        case GET_COINGECKO_BASE_DATA_SUCCESS: {
             return {
                 ...state,
                 ids: action.ids,
-                assetOptions: action.assetOptions,
+                markets: action.markets,
             };
         }
         default: {

@@ -34,9 +34,7 @@ export const Empty = () => {
         <View style={styles.root}>
             <FontAwesomeIcon icon={faSadCry} style={styles.icon} size={80} />
             <View style={styles.centeredTextContainer}>
-                <Text style={styles.contentText}>
-                    There's still nothing here.
-                </Text>
+                <Text style={styles.contentText}>There's nothing here.</Text>
             </View>
         </View>
     );

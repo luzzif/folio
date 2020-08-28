@@ -4,10 +4,14 @@ import { Input } from "../input";
 import { TouchableOpacity, View, StyleSheet } from "react-native";
 import { Modal } from "../modal";
 import { List } from "../list";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faSearch } from "@fortawesome/free-solid-svg-icons";
 
-export const Select = ({ value, options, onChange, label }) => {
+export const Select = ({ value, options, onChange, label, searchable }) => {
     const styles = StyleSheet.create({
+        searchbarContainer: {
+            paddingHorizontal: 16,
+            marginBottom: 16,
+        },
         optionsListContainer: {
             height: 240,
         },
@@ -15,6 +19,8 @@ export const Select = ({ value, options, onChange, label }) => {
 
     const [modalOpen, setModalOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const [filteredOptions, setFilteredOptions] = useState(options);
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         if (value) {
@@ -25,17 +31,40 @@ export const Select = ({ value, options, onChange, label }) => {
         }
     }, [options, value]);
 
+    useEffect(() => {
+        if (searchQuery) {
+            const lowerCaseSearchQuery = searchQuery.toLowerCase();
+            setFilteredOptions(
+                options.filter(
+                    (option) =>
+                        option.label
+                            .toLowerCase()
+                            .includes(lowerCaseSearchQuery) ||
+                        option.value
+                            .toLowerCase()
+                            .includes(lowerCaseSearchQuery)
+                )
+            );
+        } else {
+            setFilteredOptions(options);
+        }
+    }, [options, searchQuery]);
+
     const handleInputPress = useCallback(() => {
         setModalOpen(true);
     }, []);
 
     const handleModalClose = useCallback(() => {
         setModalOpen(false);
+        setTimeout(() => {
+            // wait for the modal to close in order to avoid unpleasant ui effect
+            setSearchQuery("");
+        }, 300);
     }, []);
 
     const getOptionPressHandler = (newValue) => () => {
         onChange(newValue);
-        setModalOpen(false);
+        handleModalClose(false);
     };
 
     return (
@@ -53,9 +82,18 @@ export const Select = ({ value, options, onChange, label }) => {
                 open={!!modalOpen}
                 onClose={handleModalClose}
             >
+                {searchable && (
+                    <View style={styles.searchbarContainer}>
+                        <Input
+                            placeholder="Search..."
+                            faIcon={faSearch}
+                            onChangeText={setSearchQuery}
+                        />
+                    </View>
+                )}
                 <View style={styles.optionsListContainer}>
                     <List
-                        items={options.map((option) => ({
+                        items={filteredOptions.map((option) => ({
                             ...option.listItemSpecification,
                             onPress: getOptionPressHandler(option),
                         }))}

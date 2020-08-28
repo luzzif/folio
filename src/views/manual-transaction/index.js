@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useContext, useState, useCallback, useEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
 import { Select } from "../../components/select";
@@ -7,12 +7,13 @@ import { Switch } from "../../components/switch";
 import { Input } from "../../components/input";
 import { Button } from "../../components/button";
 import { addManualTransaction } from "../../actions/manual-transaction";
+import { CryptoIcon } from "../../components/crypto-icon";
 
 export const ManualTransaction = ({ navigation }) => {
     const theme = useContext(ThemeContext);
     const dispatch = useDispatch();
-    const { assetOptions, fiatCurrency } = useSelector((state) => ({
-        assetOptions: state.coinGecko.assetOptions,
+    const { markets, fiatCurrency } = useSelector((state) => ({
+        markets: state.coinGecko.markets,
         fiatCurrency: state.settings.fiatCurrency,
     }));
 
@@ -36,15 +37,41 @@ export const ManualTransaction = ({ navigation }) => {
             flex: 1,
             paddingRight: 16,
             fontFamily: "Montserrat-Medium",
+            color: theme.text,
         },
     });
 
-    const [asset, setAsset] = useState(
-        assetOptions && assetOptions.length > 0 ? assetOptions[0] : null
-    );
+    const [assetOptions, setAssetOptions] = useState([]);
+    const [asset, setAsset] = useState(null);
     const [buy, setBuy] = useState(true);
     const [amount, setAmount] = useState(0);
     const [amountError, setAmountError] = useState(false);
+
+    useEffect(() => {
+        const options = markets
+            .map((market) => ({
+                value: market.id,
+                label: market.symbol.toUpperCase(),
+                listItemSpecification: {
+                    key: market.id,
+                    icon: <CryptoIcon icon={market.image} size={36} />,
+                    primary: market.symbol.toUpperCase(),
+                },
+            }))
+            .sort((a, b) => {
+                const firstLabel = a.label.toLowerCase();
+                const secondLabel = b.label.toLowerCase();
+                if (firstLabel.firstname < secondLabel.firstname) {
+                    return -1;
+                }
+                if (firstLabel.firstname > secondLabel.firstname) {
+                    return 1;
+                }
+                return 0;
+            });
+        setAssetOptions(options);
+        setAsset(options[0]);
+    }, [markets]);
 
     const handleBuyChange = useCallback(() => {
         setBuy(!buy);
@@ -81,6 +108,7 @@ export const ManualTransaction = ({ navigation }) => {
                     value={asset}
                     onChange={setAsset}
                     options={assetOptions}
+                    searchable
                 />
             </View>
             <View style={styles.bottomSpacedContainer}>

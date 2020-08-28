@@ -29,6 +29,8 @@ export const Modal = ({ title, open, onClose, children }) => {
             animationIn="fadeIn"
             animationOut="fadeOut"
             backdropTransitionOutTiming={0}
+            animationInTiming={300}
+            animationOutTiming={300}
         >
             <View style={styles.root}>
                 {title && <Text style={styles.title}>Pick an option</Text>}

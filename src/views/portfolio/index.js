@@ -8,7 +8,7 @@ import { getPortfolio, resetPortfolio } from "../../actions/portfolio";
 import { List } from "../../components/list";
 import { CryptoIcon } from "../../components/crypto-icon";
 import { ThemeContext } from "../../contexts/theme";
-import { getCoinGeckoIds } from "../../actions/coingecko";
+import { getCoinGeckoBaseData } from "../../actions/coingecko";
 import { CURRENCY_SYMBOLS } from "../../commons";
 import { formatDecimal } from "../../utils";
 import { Fab } from "../../components/fab";
@@ -54,8 +54,8 @@ export const Portfolio = ({ navigation }) => {
     const [symbols, setSymbols] = useState([]);
 
     useEffect(() => {
-        dispatch(getCoinGeckoIds());
-    }, [dispatch]);
+        dispatch(getCoinGeckoBaseData(fiatCurrency));
+    }, [dispatch, fiatCurrency]);
 
     useEffect(() => {
         if (!accounts || accounts.length === 0) {

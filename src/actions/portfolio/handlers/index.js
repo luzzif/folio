@@ -1,5 +1,6 @@
 import { PORTFOLIO_SOURCE } from "../../../commons";
 import { getEthereumPortfolio } from "./ethereum";
+import { getQuantumPortfolio } from "./quantum";
 import { getLoopringPortfolio } from "./loopring";
 import { getBinancePortfolio } from "./binance";
 
@@ -11,6 +12,13 @@ export const getPortfolioByAccountType = async (
     switch (account.type) {
         case PORTFOLIO_SOURCE.ETHEREUM_WALLET: {
             return await getEthereumPortfolio(
+                account.fields.address,
+                fiatCurrency,
+                coinGeckoIds
+            );
+        }
+        case PORTFOLIO_SOURCE.QUANTUM_WALLET: {
+            return await getQuantumPortfolio(
                 account.fields.address,
                 fiatCurrency,
                 coinGeckoIds

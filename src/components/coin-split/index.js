@@ -45,6 +45,7 @@ export const CoinSplit = ({ route }) => {
                         .dividedBy(totalBalance)
                         .times(100);
                     return {
+                        key: data.symbol,
                         primary: data.symbol,
                         icon: (
                             <FontAwesomeIcon

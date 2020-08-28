@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Header } from "./header";
+import Animated, { Easing } from "react-native-reanimated";
 
 const Stack = createStackNavigator();
 
@@ -10,6 +11,20 @@ export const StackSwitcher = ({ items }) => {
         <Stack.Navigator
             screenOptions={{
                 header: (props) => <Header {...props} />,
+                transitionSpec: {
+                    open: {
+                        animation: "timing",
+                        config: {
+                            duration: 300,
+                        },
+                    },
+                    close: {
+                        animation: "timing",
+                        config: {
+                            duration: 300,
+                        },
+                    },
+                },
             }}
         >
             {items.map((item) => (
@@ -17,7 +32,9 @@ export const StackSwitcher = ({ items }) => {
                     key={item.name}
                     name={item.name}
                     component={item.component}
-                    options={{ allowClose: item.allowClose }}
+                    options={{
+                        allowClose: item.allowClose,
+                    }}
                 />
             ))}
         </Stack.Navigator>

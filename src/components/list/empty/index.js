@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { ThemeContext } from "../../../contexts/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
+import { faSadCry } from "@fortawesome/free-solid-svg-icons";
 
 export const Empty = () => {
     const theme = useContext(ThemeContext);
@@ -32,11 +32,7 @@ export const Empty = () => {
 
     return (
         <View style={styles.root}>
-            <FontAwesomeIcon
-                icon={faExclamationTriangle}
-                style={styles.icon}
-                size={80}
-            />
+            <FontAwesomeIcon icon={faSadCry} style={styles.icon} size={80} />
             <View style={styles.centeredTextContainer}>
                 <Text style={styles.contentText}>
                     There's still nothing here.

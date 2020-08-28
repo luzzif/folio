@@ -4,7 +4,7 @@ import { StyleSheet, View, Text } from "react-native";
 import { ThemeContext } from "../../../contexts/theme";
 import Spinner from "react-native-spinkit";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
+import { faSadCry } from "@fortawesome/free-solid-svg-icons";
 
 export const EmptyPortfolio = ({ loading }) => {
     const theme = useContext(ThemeContext);
@@ -39,7 +39,7 @@ export const EmptyPortfolio = ({ loading }) => {
             ) : (
                 <>
                     <FontAwesomeIcon
-                        icon={faExclamationTriangle}
+                        icon={faSadCry}
                         style={styles.icon}
                         size={80}
                     />

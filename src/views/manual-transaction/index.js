@@ -59,27 +59,15 @@ export const ManualTransaction = ({ navigation, route }) => {
     const [amountError, setAmountError] = useState(false);
 
     useEffect(() => {
-        const options = markets
-            .map((market) => ({
-                value: market.id,
-                label: market.symbol.toUpperCase(),
-                listItemSpecification: {
-                    key: market.id,
-                    icon: <CryptoIcon icon={market.image} size={36} />,
-                    primary: market.symbol.toUpperCase(),
-                },
-            }))
-            .sort((a, b) => {
-                const firstLabel = a.label.toLowerCase();
-                const secondLabel = b.label.toLowerCase();
-                if (firstLabel.firstname < secondLabel.firstname) {
-                    return -1;
-                }
-                if (firstLabel.firstname > secondLabel.firstname) {
-                    return 1;
-                }
-                return 0;
-            });
+        const options = markets.map((market) => ({
+            value: market.id,
+            label: market.symbol.toUpperCase(),
+            listItemSpecification: {
+                key: market.id,
+                icon: <CryptoIcon icon={market.image} size={36} />,
+                primary: market.symbol.toUpperCase(),
+            },
+        }));
         setAssetOptions(options);
         if (route.params) {
             setAsset(

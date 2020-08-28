@@ -38,6 +38,25 @@ export const addManualTransaction = (
     }
 };
 
+export const UPDATE_MANUAL_TRANSACTION = "UPDATE_MANUAL_TRANSACTION";
+
+export const updateManualTransaction = (
+    timestamp,
+    symbol,
+    balance,
+    buy,
+    coinGeckoId
+) => ({
+    type: UPDATE_MANUAL_TRANSACTION,
+    transaction: {
+        timestamp,
+        symbol,
+        balance,
+        buy,
+        coinGeckoId,
+    },
+});
+
 export const REMOVE_MANUAL_TRANSACTION = "REMOVE_MANUAL_TRANSACTION";
 
 export const removeManualTransaction = (transaction) => ({

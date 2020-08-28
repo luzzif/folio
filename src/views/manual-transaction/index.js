@@ -6,7 +6,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Switch } from "../../components/switch";
 import { Input } from "../../components/input";
 import { Button } from "../../components/button";
-import { addManualTransaction } from "../../actions/manual-transaction";
+import {
+    addManualTransaction,
+    updateManualTransaction,
+} from "../../actions/manual-transaction";
 import { CryptoIcon } from "../../components/crypto-icon";
 
 export const ManualTransaction = ({ navigation, route }) => {
@@ -106,17 +109,29 @@ export const ManualTransaction = ({ navigation, route }) => {
     }, []);
 
     const handleSavePress = useCallback(() => {
-        dispatch(
-            addManualTransaction(
-                asset.label,
-                buy,
-                amount,
-                asset.value,
-                fiatCurrency
-            )
-        );
+        if (route.params) {
+            dispatch(
+                updateManualTransaction(
+                    route.params.timestamp,
+                    route.params.symbol,
+                    amount,
+                    buy,
+                    route.params.coinGeckoId
+                )
+            );
+        } else {
+            dispatch(
+                addManualTransaction(
+                    asset.label,
+                    buy,
+                    amount,
+                    asset.value,
+                    fiatCurrency
+                )
+            );
+        }
         navigation.pop();
-    }, [amount, asset, buy, dispatch, fiatCurrency, navigation]);
+    }, [amount, asset, buy, dispatch, fiatCurrency, navigation, route]);
 
     return (
         <View style={styles.root}>

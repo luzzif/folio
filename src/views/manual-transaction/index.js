@@ -44,7 +44,11 @@ export const ManualTransaction = ({ navigation, route }) => {
     const [assetOptions, setAssetOptions] = useState([]);
     const [asset, setAsset] = useState(null);
     const [buy, setBuy] = useState(
-        route.params && route.params.buy ? route.params.buy : true
+        route.params &&
+            route.params.buy !== null &&
+            route.params.buy !== undefined
+            ? route.params.buy
+            : true
     );
     const [amount, setAmount] = useState(
         route.params && route.params.balance ? route.params.balance : 0

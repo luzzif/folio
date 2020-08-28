@@ -1,5 +1,7 @@
 import ethereumRegex from "ethereum-regex";
+
 import ethLogo from "../../assets/images/eth.png";
+import btcLogo from "../../assets/images/btc.png";
 import qtumLogo from "../../assets/images/qtum.png";
 import lrcLogo from "../../assets/images/lrc.png";
 import bnbLogo from "../../assets/images/bnb.png";
@@ -8,6 +10,7 @@ const configuredEthereumRegex = ethereumRegex({ exact: true });
 
 export const PORTFOLIO_SOURCE = Object.freeze({
     ETHEREUM_WALLET: "Ethereum wallet",
+    BITCOIN_WALLET: "Bitcoin wallet",
     QUANTUM_WALLET: "Quantum wallet (Qtum)",
     LOOPRING: "Loopring DEX",
     BINANCE: "Binance",
@@ -15,6 +18,7 @@ export const PORTFOLIO_SOURCE = Object.freeze({
 
 export const PORTFOLIO_SOURCE_ICON = Object.freeze({
     [PORTFOLIO_SOURCE.ETHEREUM_WALLET]: ethLogo,
+    [PORTFOLIO_SOURCE.BITCOIN_WALLET]: btcLogo,
     [PORTFOLIO_SOURCE.QUANTUM_WALLET]: qtumLogo,
     [PORTFOLIO_SOURCE.LOOPRING]: lrcLogo,
     [PORTFOLIO_SOURCE.BINANCE]: bnbLogo,
@@ -39,6 +43,31 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                             (account) =>
                                 account.type ===
                                     PORTFOLIO_SOURCE.ETHEREUM_WALLET &&
+                                account.fields.address === value
+                        );
+                    }
+                    return true;
+                },
+            },
+        ],
+    },
+    [PORTFOLIO_SOURCE.BITCOIN_WALLET]: {
+        fields: [
+            {
+                type: SPECIFICATION_FIELD_TYPE.INPUT,
+                name: "address",
+                label: "Bitcoin address",
+                required: true,
+                validate: (value, accounts, updating) => {
+                    // TODO: add validation
+                    // if (!configuredEthereumRegex.test(value)) {
+                    //     return false;
+                    // }
+                    if (!updating) {
+                        return !accounts.find(
+                            (account) =>
+                                account.type ===
+                                    PORTFOLIO_SOURCE.BITCOIN_WALLET &&
                                 account.fields.address === value
                         );
                     }

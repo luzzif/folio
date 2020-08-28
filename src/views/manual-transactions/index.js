@@ -105,7 +105,7 @@ export const ManualTransactions = ({ navigation, route }) => {
     return (
         <View style={styles.root}>
             <List
-                header="Registered transactions"
+                header={`Registered transactions (${route.params.symbol})`}
                 items={filteredManualTransactions.map((transaction) => ({
                     key: transaction.timestamp,
                     primary: transaction.buy ? "Buy" : "Sell",

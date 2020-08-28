@@ -8,7 +8,7 @@ const configuredEthereumRegex = ethereumRegex({ exact: true });
 
 export const PORTFOLIO_SOURCE = Object.freeze({
     ETHEREUM_WALLET: "Ethereum wallet",
-    QUANTUM_WALLET: "Quantum wallet",
+    QUANTUM_WALLET: "Quantum wallet (Qtum)",
     LOOPRING: "Loopring DEX",
     BINANCE: "Binance",
 });

@@ -1,6 +1,6 @@
 import {
     getInfoFromCoinGecko,
-    getQtumFromSatoshis,
+    getBtcFromSatoshis,
     decimalFromSatoshis,
 } from "../../../../utils";
 import Decimal from "decimal.js";
@@ -42,7 +42,7 @@ export const getQuantumPortfolio = async (
     }
     portfolio.push({
         symbol: "QTUM",
-        balance: getQtumFromSatoshis(new Decimal(balance)),
+        balance: getBtcFromSatoshis(new Decimal(balance).toFixed()),
         info: await getInfoFromCoinGecko(coinGeckoIds.qtum, fiatCurrency),
     });
     return portfolio;

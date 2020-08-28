@@ -38,7 +38,7 @@ export const getLoopringPortfolio = async (
         }
         const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
         if (isCoinDismissedBasedOnInfo(info)) {
-            return;
+            continue;
         }
         portfolio.push({
             symbol: tokenSymbol,

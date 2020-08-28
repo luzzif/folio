@@ -42,7 +42,7 @@ export const getQuantumPortfolio = async (
     }
     portfolio.push({
         symbol: "QTUM",
-        balance: getBtcFromSatoshis(new Decimal(balance).toFixed()),
+        balance: getBtcFromSatoshis(new Decimal(balance)),
         info: await getInfoFromCoinGecko(coinGeckoIds.qtum, fiatCurrency),
     });
     return portfolio;

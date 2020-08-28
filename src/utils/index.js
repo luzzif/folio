@@ -54,7 +54,7 @@ export const formatDecimal = (decimal, significantDecimalPlaces = 2) => {
 };
 
 export const getBtcFromSatoshis = (satoshis) =>
-    satoshis.dividedBy(100000000).toNumber();
+    satoshis.dividedBy(100000000).toString();
 
 export const decimalFromSatoshis = (qtumDecimal, decimals) =>
     qtumDecimal.dividedBy("1e" + decimals);

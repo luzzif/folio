@@ -25,7 +25,9 @@ export const Select = ({ value, options, onChange, label, searchable }) => {
 
     useEffect(() => {
         if (value) {
-            const selectedOption = options.find((option) => option === value);
+            const selectedOption = options.find(
+                (option) => option === value || option.value === value
+            );
             if (selectedOption) {
                 setInputValue(selectedOption.label || selectedOption.value);
             }
@@ -82,6 +84,7 @@ export const Select = ({ value, options, onChange, label, searchable }) => {
         handleModalClose(false);
     };
 
+    console.log(inputValue);
     return (
         <>
             <TouchableOpacity onPress={handleInputPress}>

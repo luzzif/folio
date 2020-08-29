@@ -24,6 +24,7 @@ export const Settings = () => {
             width: "100%",
             height: "100%",
             backgroundColor: theme.background,
+            paddingTop: 16,
         },
         rightSpacer: {
             marginRight: 16,
@@ -52,6 +53,7 @@ export const Settings = () => {
     return (
         <View style={styles.root}>
             <List
+                header="Settings"
                 items={[
                     {
                         key: "darkMode",

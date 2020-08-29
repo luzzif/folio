@@ -84,7 +84,6 @@ export const Select = ({ value, options, onChange, label, searchable }) => {
         handleModalClose(false);
     };
 
-    console.log(inputValue);
     return (
         <>
             <TouchableOpacity onPress={handleInputPress}>

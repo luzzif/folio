@@ -74,7 +74,7 @@ export const Select = ({ value, options, onChange, label, searchable }) => {
         setTimeout(() => {
             // wait for the modal to close in order to avoid unpleasant ui effect
             setSearchQuery("");
-        }, 300);
+        }, 500);
     }, []);
 
     const getOptionPressHandler = (newValue) => () => {

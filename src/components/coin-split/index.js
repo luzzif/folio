@@ -54,7 +54,7 @@ export const CoinSplit = ({ route }) => {
                                 color={randomColor({ seed: data.symbol })}
                             />
                         ),
-                        tertiary: `${formatDecimal(percentage, 2)}%`,
+                        tertiary: `${formatDecimal(percentage)}%`,
                     };
                 })}
             />

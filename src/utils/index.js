@@ -31,7 +31,7 @@ export const getShortenedEthereumAddress = (address) =>
 export const formatDecimal = (decimal, significantDecimalPlaces = 2) => {
     const decimalPlaces = decimal.decimalPlaces();
     if (decimalPlaces === 0) {
-        return decimal.toString();
+        return formatIntegerString(decimal.toString());
     }
     const [integers, decimals] = decimal.toFixed(decimalPlaces).split(".");
     let adjustedDecimals = "";
@@ -50,7 +50,21 @@ export const formatDecimal = (decimal, significantDecimalPlaces = 2) => {
             break;
         }
     }
-    return `${integers}.${adjustedDecimals}`;
+    return `${formatIntegerString(integers)}.${adjustedDecimals}`;
+};
+
+const formatIntegerString = (integer) => {
+    let adjustedInteger = "";
+    let j = 0;
+    for (let i = integer.length - 1; i >= 0; i--) {
+        const char = integer.charAt(j);
+        if ((i + 1) % 3 === 0) {
+            adjustedInteger += ",";
+        }
+        adjustedInteger += char;
+        j++;
+    }
+    return adjustedInteger;
 };
 
 export const getBtcFromSatoshis = (satoshis) => satoshis.dividedBy(100000000);

@@ -147,7 +147,7 @@ export const Header = ({
                         ? "-"
                         : `${
                               CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
-                          }${formatDecimal(totalBalance, 2)}`}
+                          }${formatDecimal(totalBalance)}`}
                 </Text>
                 <Text
                     style={

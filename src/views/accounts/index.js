@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { List } from "../../components/list";
 import { View, StyleSheet, Image, Text } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
-import { getShortenedEthereumAddress } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faTrash, faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { removeAccount } from "../../actions/accounts";

@@ -18,7 +18,7 @@ export const getBitcoinPortfolio = async (
     return [
         {
             symbol: "BTC",
-            balance: getBtcFromSatoshis(new Decimal(finalBalance)),
+            balance: getBtcFromSatoshis(new Decimal(finalBalance)).toFixed(),
             info: await getInfoFromCoinGecko(coinGeckoIds.btc, fiatCurrency),
         },
     ];

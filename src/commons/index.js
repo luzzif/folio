@@ -10,7 +10,7 @@ const configuredEthereumRegex = ethereumRegex({ exact: true });
 
 export const PORTFOLIO_SOURCE = Object.freeze({
     ETH_WALLET: "ETH wallet",
-    BTC_WALLET: "Bitcoin wallet",
+    BTC_WALLET: "BTC wallet",
     QTUM_WALLET: "QTUM wallet",
     NEO_WALLET: "NEO wallet",
     LOOPRING: "Loopring",
@@ -59,11 +59,13 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                 name: "address",
                 label: "Bitcoin address",
                 required: true,
-                validate: (value, accounts, updating) => {
-                    // TODO: add validation
-                    // if (!configuredEthereumRegex.test(value)) {
-                    //     return false;
-                    // }
+                validate: async (value, accounts, updating) => {
+                    const response = await fetch(
+                        `https://blockchain.info/rawaddr/${value}?limit=0`
+                    );
+                    if (!response.ok) {
+                        return false;
+                    }
                     if (!updating) {
                         return !accounts.find(
                             (account) =>

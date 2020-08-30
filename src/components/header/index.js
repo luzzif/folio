@@ -141,8 +141,6 @@ export const Header = ({
                 >
                     {totalBalance.isZero()
                         ? "-"
-                        : totalBalance.gt(1000000000)
-                        ? "Too rich sir"
                         : `${
                               CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
                           }${formatDecimal(totalBalance, 2)}`}

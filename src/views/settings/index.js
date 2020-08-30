@@ -8,7 +8,7 @@ import { toggleDarkMode, changeFiatCurrency } from "../../actions/settings";
 import { version } from "../../../package.json";
 import { Select } from "../../components/select";
 import { faDollarSign, faEuroSign } from "@fortawesome/free-solid-svg-icons";
-import { faBitcoin } from "@fortawesome/free-brands-svg-icons";
+import { faBitcoin, faEthereum } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 export const Settings = () => {
@@ -128,6 +128,26 @@ export const Settings = () => {
                                                 >
                                                     <FontAwesomeIcon
                                                         icon={faBitcoin}
+                                                        color={theme.background}
+                                                        size={20}
+                                                    />
+                                                </View>
+                                            ),
+                                        },
+                                    },
+                                    {
+                                        value: "eth",
+                                        label: "ETH",
+                                        listItemSpecification: {
+                                            primary: "ETH",
+                                            icon: (
+                                                <View
+                                                    style={
+                                                        styles.conversionCurrencyIconContainer
+                                                    }
+                                                >
+                                                    <FontAwesomeIcon
+                                                        icon={faEthereum}
                                                         color={theme.background}
                                                         size={20}
                                                     />

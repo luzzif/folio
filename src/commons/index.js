@@ -208,4 +208,5 @@ export const CURRENCY_SYMBOLS = Object.freeze({
     BTC: "₿",
     EUR: "€",
     USD: "$",
+    ETH: "Ξ",
 });

@@ -64,12 +64,12 @@ export const Account = ({ navigation, route }) => {
               }, {})
     );
 
-    const getFieldUpdateHandler = (field) => (newValue) => {
+    const getFieldUpdateHandler = (field) => async (newValue) => {
         let validValue = true;
         if (!newValue && field.required) {
             validValue = false;
         } else if (typeof field.validate === "function") {
-            validValue = field.validate(newValue, accounts, !!updatingId);
+            validValue = await field.validate(newValue, accounts, !!updatingId);
         } else {
             validValue = true;
         }

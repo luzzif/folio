@@ -16,7 +16,7 @@ export const Input = ({
 
     const styles = StyleSheet.create({
         root: {
-            justifyContent: "center",
+            justifyContent: "space-between",
             paddingHorizontal: 12,
             height: 40,
             borderWidth: 1,
@@ -26,6 +26,11 @@ export const Input = ({
             alignItems: "center",
         },
         text: {
+            fontFamily: "Montserrat-Medium",
+            fontSize: 16,
+            color: theme.text,
+        },
+        textInput: {
             fontFamily: "Montserrat-Medium",
             fontSize: 16,
             color: theme.text,
@@ -57,7 +62,7 @@ export const Input = ({
                     <Text style={styles.text}>{value}</Text>
                 ) : (
                     <TextInput
-                        style={styles.text}
+                        style={styles.textInput}
                         {...rest}
                         value={value}
                         placeholderTextColor={theme.placeholder}

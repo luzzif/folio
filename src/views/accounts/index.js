@@ -88,6 +88,9 @@ export const Accounts = ({ navigation }) => {
         navigation.navigate("Account", account);
     };
 
+    console.log(accounts);
+    console.log(PORTFOLIO_SOURCE_ICON);
+
     return (
         <View style={styles.root}>
             <List
@@ -156,8 +159,9 @@ export const Accounts = ({ navigation }) => {
             >
                 <View style={styles.accountTypeListContainer}>
                     <List
-                        items={Object.values(PORTFOLIO_SOURCE).map(
-                            (source) => ({
+                        items={Object.values(PORTFOLIO_SOURCE)
+                            .sort()
+                            .map((source) => ({
                                 icon: (
                                     <Image
                                         source={PORTFOLIO_SOURCE_ICON[source]}
@@ -169,8 +173,7 @@ export const Accounts = ({ navigation }) => {
                                 onPress: getAccountTypeSelectionPressHandler(
                                     source
                                 ),
-                            })
-                        )}
+                            }))}
                     />
                 </View>
             </Modal>

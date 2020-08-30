@@ -19,12 +19,15 @@ export const Select = ({ value, options, onChange, label, searchable }) => {
 
     const [modalOpen, setModalOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const [orderedOptions, setOrderedOptions] = useState([]);
     const [filteredOptions, setFilteredOptions] = useState(options);
     const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         if (value) {
-            const selectedOption = options.find((option) => option === value);
+            const selectedOption = options.find(
+                (option) => option === value || option.value === value
+            );
             if (selectedOption) {
                 setInputValue(selectedOption.label || selectedOption.value);
             }
@@ -32,23 +35,37 @@ export const Select = ({ value, options, onChange, label, searchable }) => {
     }, [options, value]);
 
     useEffect(() => {
+        if (options) {
+            setOrderedOptions(
+                options.sort((a, b) => {
+                    const firstLabel = a.label.toLowerCase();
+                    const secondLabel = b.label.toLowerCase();
+                    if (firstLabel < secondLabel) {
+                        return -1;
+                    }
+                    if (firstLabel > secondLabel) {
+                        return 1;
+                    }
+                    return 0;
+                })
+            );
+        } else {
+            setOrderedOptions([]);
+        }
+    }, [options, searchQuery]);
+
+    useEffect(() => {
         if (searchQuery) {
             const lowerCaseSearchQuery = searchQuery.toLowerCase();
             setFilteredOptions(
-                options.filter(
-                    (option) =>
-                        option.label
-                            .toLowerCase()
-                            .includes(lowerCaseSearchQuery) ||
-                        option.value
-                            .toLowerCase()
-                            .includes(lowerCaseSearchQuery)
+                orderedOptions.filter((option) =>
+                    option.label.toLowerCase().includes(lowerCaseSearchQuery)
                 )
             );
         } else {
-            setFilteredOptions(options);
+            setFilteredOptions(orderedOptions);
         }
-    }, [options, searchQuery]);
+    }, [orderedOptions, searchQuery]);
 
     const handleInputPress = useCallback(() => {
         setModalOpen(true);
@@ -59,7 +76,7 @@ export const Select = ({ value, options, onChange, label, searchable }) => {
         setTimeout(() => {
             // wait for the modal to close in order to avoid unpleasant ui effect
             setSearchQuery("");
-        }, 300);
+        }, 500);
     }, []);
 
     const getOptionPressHandler = (newValue) => () => {

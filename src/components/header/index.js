@@ -8,8 +8,18 @@ import { PieChart } from "react-native-svg-charts";
 import randomColor from "randomcolor";
 import { formatDecimal } from "../../utils";
 
-export const Header = ({ portfolio, fiatCurrency, navigation }) => {
+export const Header = ({
+    portfolio,
+    fiatCurrency,
+    percentageChangeTimeframe,
+    navigation,
+}) => {
     const theme = useContext(ThemeContext);
+
+    const commonPercentageChangeTextStyle = {
+        fontFamily: "Montserrat-Bold",
+        fontSize: 16,
+    };
 
     const styles = StyleSheet.create({
         root: {
@@ -32,11 +42,19 @@ export const Header = ({ portfolio, fiatCurrency, navigation }) => {
         totalBalance: {
             fontFamily: "Montserrat-Bold",
             color: theme.text,
-            fontSize: 36,
+            fontSize: 32,
         },
         pieChart: {
             width: 60,
             height: 60,
+        },
+        positiveText: {
+            ...commonPercentageChangeTextStyle,
+            color: theme.success,
+        },
+        negativeText: {
+            ...commonPercentageChangeTextStyle,
+            color: theme.error,
         },
     });
 
@@ -50,6 +68,9 @@ export const Header = ({ portfolio, fiatCurrency, navigation }) => {
 
     const [totalBalance, setTotalBalance] = useState(new Decimal("0"));
     const [pieData, setPieData] = useState([emptyPieDataItem]);
+    const [percentageChange, setPortfolioPercentageChange] = useState(
+        new Decimal("0")
+    );
 
     useEffect(() => {
         if (portfolio && portfolio.length > 0) {
@@ -59,8 +80,9 @@ export const Header = ({ portfolio, fiatCurrency, navigation }) => {
             } = portfolio.reduce(
                 (accumulator, asset) => {
                     const { value, symbol } = asset;
+                    const decimalValue = new Decimal(value);
                     accumulator.totalBalance = accumulator.totalBalance.plus(
-                        value
+                        decimalValue
                     );
                     accumulator.pieData.push({
                         key: symbol,
@@ -73,15 +95,33 @@ export const Header = ({ portfolio, fiatCurrency, navigation }) => {
                     });
                     return accumulator;
                 },
-                { totalBalance: new Decimal("0"), pieData: [] }
+                {
+                    totalBalance: new Decimal("0"),
+                    pieData: [],
+                }
             );
             setTotalBalance(newTotalBalance);
             setPieData(newPieData);
+            setPortfolioPercentageChange(
+                portfolio.reduce((accumulator, asset) => {
+                    const decimalPercentageChange = new Decimal(
+                        asset.priceChangePercentages[percentageChangeTimeframe]
+                    );
+                    const decimalValue = new Decimal(asset.value);
+                    return accumulator.plus(
+                        new Decimal(decimalPercentageChange).times(
+                            decimalValue.dividedBy(newTotalBalance)
+                        )
+                    );
+                }, new Decimal("0"))
+            );
         } else {
-            setTotalBalance(new Decimal("0"));
+            const decimalZero = new Decimal("0");
+            setTotalBalance(decimalZero);
             setPieData([emptyPieDataItem]);
+            setPortfolioPercentageChange(decimalZero);
         }
-    }, [portfolio, theme, emptyPieDataItem]);
+    }, [portfolio, theme, emptyPieDataItem, percentageChangeTimeframe]);
 
     const handlePieChartPress = useCallback(() => {
         navigation.navigate("Coin split", {
@@ -107,6 +147,19 @@ export const Header = ({ portfolio, fiatCurrency, navigation }) => {
                               CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
                           }${formatDecimal(totalBalance, 2)}`}
                 </Text>
+                <Text
+                    style={
+                        percentageChange.isPositive()
+                            ? styles.positiveText
+                            : styles.negativeText
+                    }
+                >
+                    {totalBalance.isZero()
+                        ? "-"
+                        : `${
+                              percentageChange.isPositive() ? "+" : ""
+                          }${formatDecimal(percentageChange)}%`}
+                </Text>
             </View>
             <TouchableOpacity
                 disabled={pieData.length > 0 && pieData[0] === emptyPieDataItem}
@@ -126,4 +179,5 @@ Header.propTypes = {
         }).isRequired
     ).isRequired,
     fiatCurrency: PropTypes.string.isRequired,
+    percentageChangeTimeframe: PropTypes.string.isRequired,
 };

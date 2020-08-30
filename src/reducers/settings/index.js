@@ -1,8 +1,13 @@
-import { TOGGLE_DARK_MODE, CHANGE_FIAT_CURRENCY } from "../../actions/settings";
+import {
+    TOGGLE_DARK_MODE,
+    CHANGE_FIAT_CURRENCY,
+    CHANGE_PERCENTAGE_CHANGE_TIMEFRAME,
+} from "../../actions/settings";
 
 export const initialState = {
     darkMode: false,
     fiatCurrency: "eur",
+    percentageChangeTimeframe: "1d",
 };
 
 export const settingsReducer = (state = initialState, action) => {
@@ -12,6 +17,9 @@ export const settingsReducer = (state = initialState, action) => {
         }
         case CHANGE_FIAT_CURRENCY: {
             return { ...state, fiatCurrency: action.currency };
+        }
+        case CHANGE_PERCENTAGE_CHANGE_TIMEFRAME: {
+            return { ...state, percentageChangeTimeframe: action.timeframe };
         }
         default: {
             return state;

@@ -13,13 +13,13 @@ export const getBitcoinPortfolio = async (
         throw new Error("invalid response");
     }
     const json = await response.json();
-    const portfolio = [];
-    const { final_balance } = json;
+    const { final_balance: finalBalance } = json;
 
-    portfolio.push({
-        symbol: "BTC",
-        balance: getBtcFromSatoshis(new Decimal(final_balance)),
-        info: await getInfoFromCoinGecko(coinGeckoIds.btc, fiatCurrency),
-    });
-    return portfolio;
+    return [
+        {
+            symbol: "BTC",
+            balance: getBtcFromSatoshis(new Decimal(finalBalance)),
+            info: await getInfoFromCoinGecko(coinGeckoIds.btc, fiatCurrency),
+        },
+    ];
 };

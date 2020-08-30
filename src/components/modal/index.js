@@ -9,7 +9,7 @@ export const Modal = ({ title, open, onClose, children }) => {
     const styles = StyleSheet.create({
         root: {
             backgroundColor: theme.background,
-            padding: 5,
+            padding: 4,
             borderRadius: 12,
         },
         title: {

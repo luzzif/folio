@@ -55,7 +55,6 @@ export const Accounts = ({ navigation }) => {
         modalButtonsContainer: {
             flexDirection: "row",
             justifyContent: "center",
-            padding: 5,
         },
     });
 

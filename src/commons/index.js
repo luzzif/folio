@@ -61,7 +61,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                 required: true,
                 validate: async (value, accounts, updating) => {
                     const response = await fetch(
-                        `https://blockchain.info/rawaddr/${value}?limit=0`
+                        `https://api.blockcypher.com/v1/btc/main/addrs/${value}/balance`
                     );
                     if (!response.ok) {
                         return false;

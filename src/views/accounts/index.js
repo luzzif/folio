@@ -94,9 +94,7 @@ export const Accounts = ({ navigation }) => {
                 header="Your accounts"
                 items={accounts.map((account) => ({
                     key: account.id,
-                    primary:
-                        account.name ||
-                        getShortenedEthereumAddress(account.address),
+                    primary: account.name || "Unnamed account",
                     icon: (
                         <Image
                             source={PORTFOLIO_SOURCE_ICON[account.type]}

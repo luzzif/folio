@@ -7,18 +7,18 @@ export const getBitcoinPortfolio = async (
     coinGeckoIds
 ) => {
     const response = await fetch(
-        `https://blockchain.info/rawaddr/${address}?limit=0`
+        `https://api.blockcypher.com/v1/btc/main/addrs/${address}/balance`
     );
     if (!response.ok) {
         throw new Error("invalid response");
     }
     const json = await response.json();
-    const { final_balance: finalBalance } = json;
-
+    const { balance } = json;
+    console.log(balance);
     return [
         {
             symbol: "BTC",
-            balance: getBtcFromSatoshis(new Decimal(finalBalance)).toFixed(),
+            balance: getBtcFromSatoshis(new Decimal(balance)).toFixed(),
             info: await getInfoFromCoinGecko(coinGeckoIds.btc, fiatCurrency),
         },
     ];

@@ -88,9 +88,6 @@ export const Accounts = ({ navigation }) => {
         navigation.navigate("Account", account);
     };
 
-    console.log(accounts);
-    console.log(PORTFOLIO_SOURCE_ICON);
-
     return (
         <View style={styles.root}>
             <List

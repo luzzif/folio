@@ -33,6 +33,7 @@ export const Input = ({
         textInput: {
             fontFamily: "Montserrat-Medium",
             fontSize: 16,
+            height: 48,
             color: theme.text,
             flex: 1,
         },

@@ -8,6 +8,7 @@ import { CoinSplit } from "../../components/coin-split";
 import { useSelector } from "react-redux";
 import { ManualTransaction } from "../manual-transaction";
 import { ManualTransactions } from "../manual-transactions";
+import SplashScreen from "react-native-splash-screen";
 
 const commonColors = {
     error: "#c62828",
@@ -54,6 +55,10 @@ export const App = () => {
     }));
 
     const [theme, setTheme] = useState(themes.light);
+
+    useEffect(() => {
+        SplashScreen.hide();
+    }, []);
 
     useEffect(() => {
         setTheme(darkMode ? themes.dark : themes.light);

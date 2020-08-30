@@ -58,7 +58,7 @@ const formatIntegerString = (integer) => {
     let j = 0;
     for (let i = integer.length - 1; i >= 0; i--) {
         const char = integer.charAt(j);
-        if ((i + 1) % 3 === 0) {
+        if ((i + 1) % 3 === 0 && j !== 0) {
             adjustedInteger += ",";
         }
         adjustedInteger += char;

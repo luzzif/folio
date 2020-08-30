@@ -27,7 +27,7 @@ export const Header = ({
             alignItems: "center",
             justifyContent: "space-between",
             borderBottomColor: theme.border,
-            elevation: 12,
+            elevation: 4,
             borderRadius: 12,
             backgroundColor: theme.foreground,
             paddingVertical: 16,

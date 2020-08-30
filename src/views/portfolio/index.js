@@ -31,7 +31,7 @@ export const Portfolio = ({ navigation }) => {
         },
         headerContainer: {
             paddingHorizontal: 16,
-            marginVertical: 20,
+            marginVertical: 12,
         },
         manualTransactionButtonContainer: {
             position: "absolute",
@@ -41,7 +41,7 @@ export const Portfolio = ({ navigation }) => {
         timeframeChooserContainer: {
             flexDirection: "row",
             justifyContent: "center",
-            marginBottom: 16,
+            marginBottom: 8,
         },
         rightSpacedContainer: {
             marginRight: 12,

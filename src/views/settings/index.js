@@ -24,7 +24,7 @@ export const Settings = () => {
             width: "100%",
             height: "100%",
             backgroundColor: theme.background,
-            paddingTop: 16,
+            paddingTop: 12,
         },
         rightSpacer: {
             marginRight: 16,

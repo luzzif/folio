@@ -22,7 +22,7 @@ export const Accounts = ({ navigation }) => {
             width: "100%",
             height: "100%",
             backgroundColor: theme.background,
-            paddingTop: 16,
+            paddingTop: 12,
         },
         icon: {
             width: 36,

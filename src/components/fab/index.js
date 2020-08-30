@@ -16,7 +16,7 @@ export const Fab = ({ faIcon, onPress }) => {
             height: 52,
             backgroundColor: theme.primary,
             color: theme.textInverted,
-            elevation: 12,
+            elevation: 8,
         },
     });
 

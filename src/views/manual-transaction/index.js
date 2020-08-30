@@ -25,7 +25,8 @@ export const ManualTransaction = ({ navigation, route }) => {
             width: "100%",
             height: "100%",
             backgroundColor: theme.background,
-            padding: 16,
+            paddingTop: 16,
+            paddingHorizontal: 12,
         },
         bottomSpacedContainer: {
             marginBottom: 24,

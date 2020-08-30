@@ -21,7 +21,7 @@ export const Header = ({ scene, navigation }) => {
             paddingHorizontal: 24,
             borderBottomLeftRadius: 12,
             borderBottomRightRadius: 12,
-            elevation: 12,
+            elevation: 4,
         },
         locationText: {
             fontFamily: "Montserrat-SemiBold",

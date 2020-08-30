@@ -25,7 +25,7 @@ export const TabBar = ({ state, descriptors, navigation }) => {
             borderTopStartRadius: 12,
             borderTopEndRadius: 12,
             backgroundColor: theme.foreground,
-            elevation: 12,
+            elevation: 4,
         },
         itemTextWrapper: {
             flex: 1,

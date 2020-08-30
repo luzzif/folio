@@ -101,7 +101,11 @@ export const Header = ({
                 }
             );
             setTotalBalance(newTotalBalance);
-            setPieData(newPieData);
+            if (newTotalBalance.isZero()) {
+                setPieData([emptyPieDataItem]);
+            } else {
+                setPieData(newPieData);
+            }
             setPortfolioPercentageChange(
                 portfolio.reduce((accumulator, asset) => {
                     const decimalPercentageChange = new Decimal(

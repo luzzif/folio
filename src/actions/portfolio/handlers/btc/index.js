@@ -14,7 +14,6 @@ export const getBitcoinPortfolio = async (
     }
     const json = await response.json();
     const { balance } = json;
-    console.log(balance);
     return [
         {
             symbol: "BTC",

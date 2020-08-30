@@ -9,7 +9,7 @@ export const getCoinGeckoBaseData = (fiatCurrency) => async (dispatch) => {
     dispatch({ type: GET_COINGECKO_BASE_DATA_START });
     try {
         let response = await fetch(
-            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${fiatCurrency}&per_page=200&page=1`
+            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${fiatCurrency}&per_page=500&page=1`
         );
         const markets = await response.json();
         response = await fetch("https://api.coingecko.com/api/v3/coins/list");

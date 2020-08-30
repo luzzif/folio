@@ -12,7 +12,7 @@ const commonContainerStyles = {
     borderWidth: 1,
 };
 
-export const Chip = ({ text, active, onPress }) => {
+export const Chip = ({ label, active, onPress }) => {
     const theme = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
@@ -31,13 +31,13 @@ export const Chip = ({ text, active, onPress }) => {
 
     return (
         <TouchableOpacity onPress={onPress} style={styles.root}>
-            <Text style={styles.title}>{text}</Text>
+            <Text style={styles.title}>{label}</Text>
         </TouchableOpacity>
     );
 };
 
 Chip.propTypes = {
-    text: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
     active: PropTypes.bool.isRequired,
     onPress: PropTypes.func.isRequired,
 };

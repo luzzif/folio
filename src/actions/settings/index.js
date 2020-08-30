@@ -10,3 +10,11 @@ export const changeFiatCurrency = (currency) => ({
     type: CHANGE_FIAT_CURRENCY,
     currency,
 });
+
+export const CHANGE_PERCENTAGE_CHANGE_TIMEFRAME =
+    "CHANGE_PERCENTAGE_CHANGE_TIMEFRAME";
+
+export const changePercentageChangeTimeframe = (timeframe) => ({
+    type: CHANGE_PERCENTAGE_CHANGE_TIMEFRAME,
+    timeframe,
+});

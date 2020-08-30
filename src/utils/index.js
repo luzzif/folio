@@ -14,10 +14,10 @@ export const getInfoFromCoinGecko = async (coinGeckoId, fiatCurrency) => {
         circulatingSupply: coin.market_data.circulating_supply,
         currentPrice: coin.market_data.current_price[lowerCaseFiatCurrency],
         priceChangePercentages: {
-            "24h": coin.market_data.price_change_percentage_24h,
-            "7d": coin.market_data.price_change_percentage_7d,
-            "14d": coin.market_data.price_change_percentage_14d,
-            "30d": coin.market_data.price_change_percentage_30d,
+            "1d": coin.market_data.price_change_percentage_24h,
+            "1w": coin.market_data.price_change_percentage_7d,
+            "2w": coin.market_data.price_change_percentage_14d,
+            "1m": coin.market_data.price_change_percentage_30d,
         },
     };
 };

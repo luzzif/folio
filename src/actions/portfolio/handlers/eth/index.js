@@ -18,6 +18,7 @@ export const getEthPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
     if (tokens && tokens.length > 0) {
         for (const token of json.tokens) {
             const { symbol, decimals } = token.tokenInfo;
+            if (!symbol) continue;
             const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
             if (!coinGeckoId) {
                 console.warn(`could not get coingecko id for symbol ${symbol}`);
@@ -35,6 +36,7 @@ export const getEthPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
                 ).toFixed(),
                 info,
             });
+
         }
     }
     portfolio.push({

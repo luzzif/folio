@@ -18,16 +18,21 @@ export const getEthPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
     if (tokens && tokens.length > 0) {
         for (const token of json.tokens) {
             const { symbol, decimals } = token.tokenInfo;
-            if (!symbol) continue;
+            if (!symbol) {
+                continue;
+            }
+
             const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
             if (!coinGeckoId) {
                 console.warn(`could not get coingecko id for symbol ${symbol}`);
                 continue;
             }
+
             const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
             if (isCoinDismissedBasedOnInfo(info)) {
                 continue;
             }
+
             portfolio.push({
                 symbol,
                 balance: decimalFromWei(
@@ -36,7 +41,6 @@ export const getEthPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
                 ).toFixed(),
                 info,
             });
-
         }
     }
     portfolio.push({

@@ -32,7 +32,7 @@ export const Empty = () => {
 
     return (
         <View style={styles.root}>
-            <FontAwesomeIcon icon={faSadCry} style={styles.icon} size={80} />
+            <FontAwesomeIcon icon={faSadCry} style={styles.icon} size={68} />
             <View style={styles.centeredTextContainer}>
                 <Text style={styles.contentText}>There's nothing here.</Text>
             </View>

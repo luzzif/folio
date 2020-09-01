@@ -3,22 +3,16 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
 import { ThemeContext } from "../../contexts/theme";
 
-const commonContainerStyles = {
-    display: "flex",
-    justifyContent: "center",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    borderWidth: 1,
-};
-
 export const Chip = ({ label, active, onPress }) => {
     const theme = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
         root: {
-            ...commonContainerStyles,
             justifyContent: "center",
+            paddingHorizontal: 8,
+            paddingVertical: 2,
+            borderRadius: 12,
+            borderWidth: 1,
             backgroundColor: active ? theme.primary : theme.background,
             borderColor: active ? theme.primary : theme.border,
         },

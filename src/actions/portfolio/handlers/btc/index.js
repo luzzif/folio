@@ -1,11 +1,7 @@
-import { getInfoFromCoinGecko, getBtcFromSatoshis } from "../../../../utils";
+import { getBtcFromSatoshis } from "../../../../utils";
 import Decimal from "decimal.js";
 
-export const getBitcoinPortfolio = async (
-    address,
-    fiatCurrency,
-    coinGeckoIds
-) => {
+export const getBitcoinPortfolio = async (address, coinGeckoIds) => {
     const response = await fetch(
         `https://api.blockcypher.com/v1/btc/main/addrs/${address}/balance`
     );
@@ -18,7 +14,7 @@ export const getBitcoinPortfolio = async (
         {
             symbol: "BTC",
             balance: getBtcFromSatoshis(new Decimal(balance)).toFixed(),
-            info: await getInfoFromCoinGecko(coinGeckoIds.btc, fiatCurrency),
+            coinGeckoId: coinGeckoIds.btc,
         },
     ];
 };

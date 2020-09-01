@@ -43,19 +43,17 @@ export const ManualTransactions = ({ navigation, route }) => {
             marginRight: 16,
         },
         modalRoot: {
-            paddingHorizontal: 16,
-            paddingBottom: 16,
+            paddingHorizontal: 20,
+            paddingBottom: 20,
         },
         modalText: {
             color: theme.text,
-            textAlign: "center",
-            textAlignVertical: "center",
             fontFamily: "Montserrat-Medium",
             marginBottom: 24,
         },
         modalButtonsContainer: {
             flexDirection: "row",
-            justifyContent: "center",
+            justifyContent: "flex-end",
         },
         successIconContainer: {
             ...commonIconContainerStyles,

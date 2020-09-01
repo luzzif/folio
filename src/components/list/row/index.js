@@ -15,7 +15,7 @@ export const Row = ({
 
     const styles = StyleSheet.create({
         root: {
-            height: 60,
+            height: 56,
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",

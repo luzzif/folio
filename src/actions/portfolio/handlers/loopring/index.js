@@ -1,16 +1,7 @@
 import Decimal from "decimal.js";
-import {
-    getInfoFromCoinGecko,
-    decimalFromWei,
-    isCoinDismissedBasedOnInfo,
-} from "../../../../utils";
+import { decimalFromWei } from "../../../../utils";
 
-export const getLoopringPortfolio = async (
-    accountId,
-    apiKey,
-    fiatCurrency,
-    coinGeckoIds
-) => {
+export const getLoopringPortfolio = async (accountId, apiKey, coinGeckoIds) => {
     let response = await fetch(
         "https://api.loopring.io/api/v2/exchange/tokens"
     );
@@ -29,15 +20,11 @@ export const getLoopringPortfolio = async (
         const { symbol: tokenSymbol, decimals: tokenDecimals } = tokens.find(
             (token) => token.tokenId === tokenId
         );
-        const coinGeckoId = coinGeckoIds[tokenSymbol.toLowerCase()];
-        if (!coinGeckoId) {
-            console.warn(
-                `could not get coingecko id for symbol ${tokenSymbol}`
-            );
+        if (!tokenSymbol) {
             continue;
         }
-        const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
-        if (isCoinDismissedBasedOnInfo(info)) {
+        const coinGeckoId = coinGeckoIds[tokenSymbol.toLowerCase()];
+        if (!coinGeckoId) {
             continue;
         }
         portfolio.push({
@@ -46,7 +33,7 @@ export const getLoopringPortfolio = async (
                 new Decimal(totalAmount),
                 tokenDecimals
             ).toFixed(),
-            info,
+            coinGeckoId,
         });
     }
     return portfolio;

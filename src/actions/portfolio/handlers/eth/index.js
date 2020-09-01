@@ -1,11 +1,7 @@
-import {
-    getInfoFromCoinGecko,
-    decimalFromWei,
-    isCoinDismissedBasedOnInfo,
-} from "../../../../utils";
+import { decimalFromWei } from "../../../../utils";
 import Decimal from "decimal.js";
 
-export const getEthPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
+export const getEthPortfolio = async (address, coinGeckoIds) => {
     const response = await fetch(
         `https://api.ethplorer.io/getAddressInfo/${address}?apiKey=freekey`
     );
@@ -18,14 +14,11 @@ export const getEthPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
     if (tokens && tokens.length > 0) {
         for (const token of json.tokens) {
             const { symbol, decimals } = token.tokenInfo;
-            if (!symbol) continue;
-            const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
-            if (!coinGeckoId) {
-                console.warn(`could not get coingecko id for symbol ${symbol}`);
+            if (!symbol) {
                 continue;
             }
-            const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
-            if (isCoinDismissedBasedOnInfo(info)) {
+            const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
+            if (!coinGeckoId) {
                 continue;
             }
             portfolio.push({
@@ -34,15 +27,14 @@ export const getEthPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
                     new Decimal(token.balance),
                     decimals
                 ).toFixed(),
-                info,
+                coinGeckoId,
             });
-
         }
     }
     portfolio.push({
         symbol: "ETH",
         balance: json.ETH.balance,
-        info: await getInfoFromCoinGecko(coinGeckoIds.eth, fiatCurrency),
+        coinGeckoId: coinGeckoIds.eth,
     });
     return portfolio;
 };

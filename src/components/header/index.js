@@ -33,6 +33,10 @@ export const Header = ({
             paddingVertical: 16,
             paddingHorizontal: 20,
         },
+        leftBlock: {
+            flex: 1,
+            paddingRight: 16,
+        },
         totalBalanceText: {
             fontFamily: "Montserrat-Medium",
             color: theme.text,
@@ -108,9 +112,12 @@ export const Header = ({
             }
             setPortfolioPercentageChange(
                 portfolio.reduce((accumulator, asset) => {
-                    const decimalPercentageChange = new Decimal(
-                        asset.priceChangePercentages[percentageChangeTimeframe]
-                    );
+                    const percentage =
+                        asset.priceChangePercentages[percentageChangeTimeframe];
+                    if (!percentage) {
+                        return accumulator;
+                    }
+                    const decimalPercentageChange = new Decimal(percentage);
                     const decimalValue = new Decimal(asset.value);
                     return accumulator.plus(
                         new Decimal(decimalPercentageChange).times(
@@ -136,7 +143,7 @@ export const Header = ({
 
     return (
         <View style={styles.root}>
-            <View>
+            <View style={styles.leftBlock}>
                 <Text style={styles.totalBalanceText}>Total balance:</Text>
                 <Text
                     style={styles.totalBalance}

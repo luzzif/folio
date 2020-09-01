@@ -1,11 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { Row } from "./row";
 import { ThemeContext } from "../../contexts/theme";
 import { Empty } from "./empty";
 
-export const List = ({ header, items, onRefresh, refreshing }) => {
+export const List = ({
+    header,
+    items,
+    onRefresh,
+    refreshing,
+    bottomSpacing,
+}) => {
     const theme = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
@@ -39,6 +45,9 @@ export const List = ({ header, items, onRefresh, refreshing }) => {
             marginRight: 8,
             color: theme.text,
         },
+        bottomSpacedListContainer: {
+            paddingBottom: bottomSpacing,
+        },
     });
 
     return (
@@ -50,9 +59,13 @@ export const List = ({ header, items, onRefresh, refreshing }) => {
             )}
             <FlatList
                 style={styles.list}
-                contentContainerStyle={
-                    items.length === 0 && styles.listContentContainerStyle
-                }
+                contentContainerStyle={{
+                    ...(items.length === 0
+                        ? styles.listContentContainerStyle
+                        : bottomSpacing
+                        ? styles.bottomSpacedListContainer
+                        : {}),
+                }}
                 data={items}
                 keyExtractor={(item) => item.key}
                 renderItem={({ item }) => <Row {...item} />}
@@ -77,4 +90,9 @@ List.propTypes = {
     ).isRequired,
     onRefresh: PropTypes.func,
     refreshing: PropTypes.bool,
+    bottomSpacing: PropTypes.number,
+};
+
+List.defaultProps = {
+    bottomSpacing: 0,
 };

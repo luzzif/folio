@@ -222,14 +222,16 @@ export const Portfolio = ({ navigation }) => {
                 />
             </View>
             <List
-                header="Your assets"
+                bottomSpacing={100}
                 items={aggregatedPortfolio.map((asset) => {
+                    const percentage =
+                        asset.priceChangePercentages[percentageChangeTimeframe];
                     const decimalPercentageChange = new Decimal(
-                        asset.priceChangePercentages[percentageChangeTimeframe]
+                        percentage || 0
                     );
                     return {
                         key: asset.symbol,
-                        icon: <CryptoIcon icon={asset.icon} size={36} />,
+                        icon: <CryptoIcon icon={asset.icon} size={32} />,
                         primary: asset.symbol,
                         secondary: formatDecimal(asset.balance, 3),
                         tertiary: `${
@@ -238,12 +240,17 @@ export const Portfolio = ({ navigation }) => {
                         quaternary: (
                             <Text
                                 style={
+                                    percentage &&
                                     decimalPercentageChange.isPositive()
                                         ? styles.positiveText
                                         : styles.negativeText
                                 }
                             >
-                                {formatDecimal(decimalPercentageChange)}%
+                                {percentage
+                                    ? `${formatDecimal(
+                                          decimalPercentageChange
+                                      )}%`
+                                    : "-"}
                             </Text>
                         ),
                         onPress: getAssetPressHandler(asset.symbol),

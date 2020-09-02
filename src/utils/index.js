@@ -68,3 +68,16 @@ export const getBtcFromSatoshis = (satoshis) => satoshis.dividedBy(100000000);
 
 export const decimalFromSatoshis = (qtumDecimal, decimals) =>
     qtumDecimal.dividedBy("1e" + decimals);
+
+export const normalizeXlmBalances = (balances) =>
+    balances.map((balance) => ({
+        balance: balance.balance,
+        symbol: balance.asset_code
+            ? balance.asset_code
+            : balance.asset_type === "native"
+            ? "XLM"
+            : null,
+    }));
+
+export const removeEmptyBalances = (portfolioPieces) =>
+    portfolioPieces.filter((portfolioPiece) => portfolioPiece.balance !== "0");

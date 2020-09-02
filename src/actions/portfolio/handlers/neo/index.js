@@ -11,6 +11,9 @@ export const getNeoPortfolio = async (address, coinGeckoIds) => {
     if (balance && balance.length > 0) {
         for (const asset of balance) {
             const { asset_symbol: symbol, amount } = asset;
+            if (!symbol) {
+                continue;
+            }
             const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
             if (!coinGeckoId) {
                 continue;

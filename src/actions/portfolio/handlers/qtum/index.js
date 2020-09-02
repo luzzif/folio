@@ -12,6 +12,9 @@ export const getQtumPortfolio = async (address, coinGeckoIds) => {
     if (qrc20Balances && qrc20Balances.length > 0) {
         for (const token of qrc20Balances) {
             const { symbol, decimals } = token;
+            if (!symbol) {
+                continue;
+            }
             const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
             if (!coinGeckoId) {
                 continue;

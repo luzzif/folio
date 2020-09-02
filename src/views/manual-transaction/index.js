@@ -40,7 +40,7 @@ export const ManualTransaction = ({ navigation, route }) => {
         buyLabel: {
             flex: 1,
             paddingRight: 16,
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             color: theme.text,
         },
     });

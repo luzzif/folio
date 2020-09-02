@@ -48,7 +48,7 @@ export const ManualTransactions = ({ navigation, route }) => {
         },
         modalText: {
             color: theme.text,
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             marginBottom: 24,
         },
         modalButtonsContainer: {

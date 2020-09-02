@@ -20,7 +20,7 @@ export const Portfolio = ({ navigation }) => {
     const theme = useContext(ThemeContext);
 
     const commonPercentageChangeTextStyle = {
-        fontFamily: "Montserrat-Bold",
+        fontFamily: "Nunito-Bold",
         fontSize: 12,
     };
 

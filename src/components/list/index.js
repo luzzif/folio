@@ -35,12 +35,12 @@ export const List = ({
             alignItems: "center",
         },
         headerText: {
-            fontFamily: "Montserrat-SemiBold",
+            fontFamily: "Nunito-Bold",
             marginLeft: 8,
             color: theme.text,
         },
         orderingText: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             fontSize: 12,
             marginRight: 8,
             color: theme.text,

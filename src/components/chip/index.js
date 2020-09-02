@@ -17,7 +17,7 @@ export const Chip = ({ label, active, onPress }) => {
             borderColor: active ? theme.primary : theme.border,
         },
         title: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             fontSize: 12,
             color: active ? theme.textInverted : theme.text,
         },

@@ -23,7 +23,7 @@ export const Empty = () => {
             marginBottom: 36,
         },
         contentText: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             textAlignVertical: "center",
             textAlign: "center",
             color: theme.text,

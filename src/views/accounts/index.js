@@ -44,7 +44,7 @@ export const Accounts = ({ navigation }) => {
         modalText: {
             color: theme.text,
             textAlignVertical: "center",
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             marginBottom: 24,
         },
         accountTypeListContainer: {

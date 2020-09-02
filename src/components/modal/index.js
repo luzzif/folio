@@ -13,7 +13,7 @@ export const Modal = ({ title, open, onClose, children }) => {
         },
         title: {
             color: theme.text,
-            fontFamily: "Montserrat-Bold",
+            fontFamily: "Nunito-Bold",
             paddingHorizontal: 24,
             paddingVertical: 16,
             fontSize: 16,

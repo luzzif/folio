@@ -36,12 +36,12 @@ export const Row = ({
             marginRight: 16,
         },
         mainText: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             fontSize: 16,
             color: theme.text,
         },
         lightText: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             fontSize: 12,
             color: theme.textLight,
         },

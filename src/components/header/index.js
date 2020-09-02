@@ -17,7 +17,7 @@ export const Header = ({
     const theme = useContext(ThemeContext);
 
     const commonPercentageChangeTextStyle = {
-        fontFamily: "Montserrat-Bold",
+        fontFamily: "Nunito-Bold",
         fontSize: 16,
     };
 
@@ -38,13 +38,13 @@ export const Header = ({
             paddingRight: 16,
         },
         totalBalanceText: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             color: theme.text,
             opacity: 0.6,
             fontSize: 12,
         },
         totalBalance: {
-            fontFamily: "Montserrat-Bold",
+            fontFamily: "Nunito-Bold",
             color: theme.text,
             fontSize: 32,
         },

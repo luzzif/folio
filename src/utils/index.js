@@ -1,5 +1,3 @@
-import Decimal from "decimal.js";
-
 export const decimalFromWei = (etherDecimal, decimals) =>
     etherDecimal.dividedBy("1e" + decimals);
 
@@ -11,7 +9,6 @@ export const getInfoFromCoinGecko = async (coinGeckoId, fiatCurrency) => {
     const lowerCaseFiatCurrency = fiatCurrency.toLowerCase();
     return {
         icon: coin.image.large,
-        circulatingSupply: coin.market_data.circulating_supply,
         currentPrice: coin.market_data.current_price[lowerCaseFiatCurrency],
         priceChangePercentages: {
             "1d": coin.market_data.price_change_percentage_24h,
@@ -71,6 +68,3 @@ export const getBtcFromSatoshis = (satoshis) => satoshis.dividedBy(100000000);
 
 export const decimalFromSatoshis = (qtumDecimal, decimals) =>
     qtumDecimal.dividedBy("1e" + decimals);
-
-export const isCoinDismissedBasedOnInfo = (info) =>
-    !info.circulatingSupply || new Decimal(info.circulatingSupply).isZero();

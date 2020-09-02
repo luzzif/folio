@@ -10,13 +10,12 @@ import {
     addManualTransaction,
     updateManualTransaction,
 } from "../../actions/manual-transaction";
-import { CryptoIcon } from "../../components/crypto-icon";
 
 export const ManualTransaction = ({ navigation, route }) => {
     const theme = useContext(ThemeContext);
     const dispatch = useDispatch();
-    const { markets, fiatCurrency } = useSelector((state) => ({
-        markets: state.coinGecko.markets,
+    const { wrappedIds } = useSelector((state) => ({
+        wrappedIds: state.coinGecko.wrappedIds,
         fiatCurrency: state.settings.fiatCurrency,
     }));
 
@@ -60,15 +59,18 @@ export const ManualTransaction = ({ navigation, route }) => {
     const [amountError, setAmountError] = useState(false);
 
     useEffect(() => {
-        const options = markets.map((market) => ({
-            value: market.id,
-            label: market.symbol.toUpperCase(),
-            listItemSpecification: {
-                key: market.id,
-                icon: <CryptoIcon icon={market.image} size={36} />,
-                primary: market.symbol.toUpperCase(),
-            },
-        }));
+        const options = wrappedIds.map((wrappedId) => {
+            const { id, symbol } = wrappedId;
+            const upperCaseSymbol = symbol.toUpperCase();
+            return {
+                value: id,
+                label: upperCaseSymbol,
+                listItemSpecification: {
+                    key: id,
+                    primary: upperCaseSymbol,
+                },
+            };
+        });
         setAssetOptions(options);
         if (route.params) {
             setAsset(
@@ -81,7 +83,7 @@ export const ManualTransaction = ({ navigation, route }) => {
         } else {
             setAsset(options[0]);
         }
-    }, [markets, route]);
+    }, [wrappedIds, route]);
 
     const handleBuyChange = useCallback(() => {
         setBuy(!buy);
@@ -110,17 +112,11 @@ export const ManualTransaction = ({ navigation, route }) => {
             );
         } else {
             dispatch(
-                addManualTransaction(
-                    asset.label,
-                    buy,
-                    amount,
-                    asset.value,
-                    fiatCurrency
-                )
+                addManualTransaction(asset.label, buy, amount, asset.value)
             );
         }
         navigation.pop();
-    }, [amount, asset, buy, dispatch, fiatCurrency, navigation, route]);
+    }, [amount, asset, buy, dispatch, navigation, route]);
 
     return (
         <View style={styles.root}>

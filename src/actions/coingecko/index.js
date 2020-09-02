@@ -5,14 +5,12 @@ export const GET_COINGECKO_BASE_DATA_END = "GET_COINGECKO_BASE_DATA_END";
 export const GET_COINGECKO_BASE_DATA_SUCCESS =
     "GET_COINGECKO_BASE_DATA_SUCCESS";
 
-export const getCoinGeckoBaseData = (fiatCurrency) => async (dispatch) => {
+export const getCoinGeckoBaseData = () => async (dispatch) => {
     dispatch({ type: GET_COINGECKO_BASE_DATA_START });
     try {
-        let response = await fetch(
-            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${fiatCurrency}&per_page=500&page=1`
+        const response = await fetch(
+            "https://api.coingecko.com/api/v3/coins/list"
         );
-        const markets = await response.json();
-        response = await fetch("https://api.coingecko.com/api/v3/coins/list");
         const rawIds = await response.json();
         dispatch({
             type: GET_COINGECKO_BASE_DATA_SUCCESS,
@@ -20,7 +18,7 @@ export const getCoinGeckoBaseData = (fiatCurrency) => async (dispatch) => {
                 ids[rawId.symbol.toLowerCase()] = rawId.id;
                 return ids;
             }, {}),
-            markets,
+            wrappedIds: rawIds.filter((wrappedId) => wrappedId.symbol),
         });
     } catch (error) {
         console.error("error getting coingecko base data");

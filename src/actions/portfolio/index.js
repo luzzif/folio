@@ -61,35 +61,26 @@ export const getPortfolio = (
         }, {});
         dispatch({
             type: GET_PORTFOLIO_SUCCESS,
-            portfolio: portfolio
-                .map((asset) => {
-                    const relatedMarketData =
-                        mappedMarketData[asset.coinGeckoId];
-                    return {
-                        ...asset,
-                        info: {
-                            icon: relatedMarketData.image,
-                            circulatingSupply:
-                                relatedMarketData.circulating_supply,
-                            currentPrice: relatedMarketData.current_price,
-                            priceChangePercentages: {
-                                "1d":
-                                    relatedMarketData.price_change_percentage_24h_in_currency,
-                                "1w":
-                                    relatedMarketData.price_change_percentage_7d_in_currency,
-                                "2w":
-                                    relatedMarketData.price_change_percentage_14d_in_currency,
-                                "1m":
-                                    relatedMarketData.price_change_percentage_30d_in_currency,
-                            },
+            portfolio: portfolio.map((asset) => {
+                const relatedMarketData = mappedMarketData[asset.coinGeckoId];
+                return {
+                    ...asset,
+                    info: {
+                        icon: relatedMarketData.image,
+                        currentPrice: relatedMarketData.current_price,
+                        priceChangePercentages: {
+                            "1d":
+                                relatedMarketData.price_change_percentage_24h_in_currency,
+                            "1w":
+                                relatedMarketData.price_change_percentage_7d_in_currency,
+                            "2w":
+                                relatedMarketData.price_change_percentage_14d_in_currency,
+                            "1m":
+                                relatedMarketData.price_change_percentage_30d_in_currency,
                         },
-                    };
-                })
-                .filter((asset) =>
-                    new Decimal(
-                        asset.info.circulatingSupply || "0"
-                    ).greaterThan("0")
-                ),
+                    },
+                };
+            }),
         });
     } catch (error) {
         console.error("error while getting the portfolio", error);

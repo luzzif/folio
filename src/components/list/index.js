@@ -5,7 +5,13 @@ import { Row } from "./row";
 import { ThemeContext } from "../../contexts/theme";
 import { Empty } from "./empty";
 
-export const List = ({ header, items, onRefresh, refreshing }) => {
+export const List = ({
+    header,
+    items,
+    onRefresh,
+    refreshing,
+    bottomSpacing,
+}) => {
     const theme = useContext(ThemeContext);
 
     const styles = StyleSheet.create({
@@ -29,15 +35,18 @@ export const List = ({ header, items, onRefresh, refreshing }) => {
             alignItems: "center",
         },
         headerText: {
-            fontFamily: "Montserrat-SemiBold",
+            fontFamily: "Nunito-Bold",
             marginLeft: 8,
             color: theme.text,
         },
         orderingText: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             fontSize: 12,
             marginRight: 8,
             color: theme.text,
+        },
+        bottomSpacedListContainer: {
+            paddingBottom: bottomSpacing,
         },
     });
 
@@ -50,9 +59,13 @@ export const List = ({ header, items, onRefresh, refreshing }) => {
             )}
             <FlatList
                 style={styles.list}
-                contentContainerStyle={
-                    items.length === 0 && styles.listContentContainerStyle
-                }
+                contentContainerStyle={{
+                    ...(items.length === 0
+                        ? styles.listContentContainerStyle
+                        : bottomSpacing
+                        ? styles.bottomSpacedListContainer
+                        : {}),
+                }}
                 data={items}
                 keyExtractor={(item) => item.key}
                 renderItem={({ item }) => <Row {...item} />}
@@ -77,4 +90,9 @@ List.propTypes = {
     ).isRequired,
     onRefresh: PropTypes.func,
     refreshing: PropTypes.bool,
+    bottomSpacing: PropTypes.number,
+};
+
+List.defaultProps = {
+    bottomSpacing: 0,
 };

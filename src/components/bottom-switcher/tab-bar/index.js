@@ -5,7 +5,7 @@ import { ThemeContext } from "../../../contexts/theme";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
 const commonItemStyle = {
-    fontFamily: "Montserrat-SemiBold",
+    fontFamily: "Nunito-Bold",
     fontSize: 12,
 };
 

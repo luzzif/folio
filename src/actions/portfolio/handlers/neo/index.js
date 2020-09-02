@@ -1,7 +1,4 @@
-import { getInfoFromCoinGecko } from "../../../../utils";
-import Decimal from "decimal.js";
-
-export const getNeoPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
+export const getNeoPortfolio = async (address, coinGeckoIds) => {
     const response = await fetch(
         `https://api.neoscan.io/api/main_net/v1/get_balance/${address}`
     );
@@ -14,20 +11,17 @@ export const getNeoPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
     if (balance && balance.length > 0) {
         for (const asset of balance) {
             const { asset_symbol: symbol, amount } = asset;
-            const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
-            if (!coinGeckoId) {
-                console.warn(`could not get coingecko id for symbol ${symbol}`);
+            if (!symbol) {
                 continue;
             }
-            const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
-            if (new Decimal(info.circulatingSupply).isZero()) {
-                // the token was dismissed
+            const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
+            if (!coinGeckoId) {
                 continue;
             }
             portfolio.push({
                 symbol,
                 balance: amount,
-                info,
+                coinGeckoId,
             });
         }
     }

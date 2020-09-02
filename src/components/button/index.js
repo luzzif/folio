@@ -12,7 +12,7 @@ const commonContainerStyles = {
 };
 
 const commonTextStyles = {
-    fontFamily: "Montserrat-SemiBold",
+    fontFamily: "Nunito-Bold",
     fontSize: 16,
 };
 

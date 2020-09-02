@@ -1,16 +1,7 @@
 import Decimal from "decimal.js";
-import {
-    getInfoFromCoinGecko,
-    isCoinDismissedBasedOnInfo,
-} from "../../../../utils";
 import hash from "hash.js";
 
-export const getBinancePortfolio = async (
-    apiKey,
-    apiSecret,
-    fiatCurrency,
-    coinGeckoIds
-) => {
+export const getBinancePortfolio = async (apiKey, apiSecret, coinGeckoIds) => {
     const params = `timestamp=${Date.now()}`;
     const signature = hash
         .hmac(hash.sha256, apiSecret)
@@ -36,19 +27,17 @@ export const getBinancePortfolio = async (
     const portfolio = [];
     for (const balance of balances) {
         const { asset, free, locked } = balance;
-        const coinGeckoId = coinGeckoIds[asset.toLowerCase()];
-        if (!coinGeckoId) {
-            console.warn(`could not get coingecko id for symbol ${asset}`);
+        if (!asset) {
             continue;
         }
-        const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
-        if (isCoinDismissedBasedOnInfo(info)) {
+        const coinGeckoId = coinGeckoIds[asset.toLowerCase()];
+        if (!coinGeckoId) {
             continue;
         }
         portfolio.push({
             symbol: asset,
             balance: new Decimal(free).plus(locked).toFixed(),
-            info,
+            coinGeckoId,
         });
     }
     return portfolio;

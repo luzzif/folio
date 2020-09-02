@@ -26,19 +26,19 @@ export const Input = ({
             alignItems: "center",
         },
         text: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             fontSize: 16,
             color: theme.text,
         },
         textInput: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             fontSize: 16,
             height: 48,
             color: theme.text,
             flex: 1,
         },
         label: {
-            fontFamily: "Montserrat-Bold",
+            fontFamily: "Nunito-Bold",
             fontSize: 12,
             color: theme.text,
             marginBottom: 8,

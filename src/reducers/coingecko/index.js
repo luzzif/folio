@@ -7,7 +7,7 @@ import {
 const initialState = {
     loadings: 0,
     ids: null,
-    markets: [],
+    wrappedIds: [],
 };
 
 export const coinGeckoReducer = (state = initialState, action) => {
@@ -25,7 +25,7 @@ export const coinGeckoReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ids: action.ids,
-                markets: action.markets,
+                wrappedIds: action.wrappedIds,
             };
         }
         default: {

@@ -23,7 +23,7 @@ export const Empty = () => {
             marginBottom: 36,
         },
         contentText: {
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             textAlignVertical: "center",
             textAlign: "center",
             color: theme.text,
@@ -32,7 +32,7 @@ export const Empty = () => {
 
     return (
         <View style={styles.root}>
-            <FontAwesomeIcon icon={faSadCry} style={styles.icon} size={80} />
+            <FontAwesomeIcon icon={faSadCry} style={styles.icon} size={68} />
             <View style={styles.centeredTextContainer}>
                 <Text style={styles.contentText}>There's nothing here.</Text>
             </View>

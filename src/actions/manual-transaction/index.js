@@ -1,5 +1,4 @@
 import { ToastAndroid } from "react-native";
-import { getInfoFromCoinGecko, isCoinDismissedBasedOnInfo } from "../../utils";
 
 export const ADD_MANUAL_TRANSACTION = "ADD_MANUAL_TRANSACTION";
 
@@ -7,18 +6,9 @@ export const addManualTransaction = (
     symbol,
     buy,
     balance,
-    coinGeckoId,
-    fiatCurrency
+    coinGeckoId
 ) => async (dispatch) => {
     try {
-        const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
-        if (isCoinDismissedBasedOnInfo(info)) {
-            ToastAndroid.show(
-                "The coin is not valid. Maybe it was dismissed?",
-                5000
-            );
-            return;
-        }
         dispatch({
             type: ADD_MANUAL_TRANSACTION,
             transaction: {

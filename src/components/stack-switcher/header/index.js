@@ -24,7 +24,7 @@ export const Header = ({ scene, navigation }) => {
             elevation: 4,
         },
         locationText: {
-            fontFamily: "Montserrat-SemiBold",
+            fontFamily: "Nunito-Bold",
             fontSize: 16,
             color: theme.text,
         },

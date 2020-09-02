@@ -1,11 +1,7 @@
-import {
-    getInfoFromCoinGecko,
-    getBtcFromSatoshis,
-    decimalFromSatoshis,
-} from "../../../../utils";
+import { getBtcFromSatoshis, decimalFromSatoshis } from "../../../../utils";
 import Decimal from "decimal.js";
 
-export const getQtumPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
+export const getQtumPortfolio = async (address, coinGeckoIds) => {
     const response = await fetch(`https://qtum.info/api/address/${address}`);
     if (!response.ok) {
         throw new Error("invalid response");
@@ -16,14 +12,11 @@ export const getQtumPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
     if (qrc20Balances && qrc20Balances.length > 0) {
         for (const token of qrc20Balances) {
             const { symbol, decimals } = token;
-            const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
-            if (!coinGeckoId) {
-                console.warn(`could not get coingecko id for symbol ${symbol}`);
+            if (!symbol) {
                 continue;
             }
-            const info = await getInfoFromCoinGecko(coinGeckoId, fiatCurrency);
-            if (new Decimal(info.circulatingSupply).isZero()) {
-                // the token was dismissed
+            const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
+            if (!coinGeckoId) {
                 continue;
             }
             portfolio.push({
@@ -32,14 +25,14 @@ export const getQtumPortfolio = async (address, fiatCurrency, coinGeckoIds) => {
                     new Decimal(token.balance),
                     decimals
                 ),
-                info,
+                coinGeckoId,
             });
         }
     }
     portfolio.push({
         symbol: "QTUM",
         balance: getBtcFromSatoshis(new Decimal(balance)).toFixed(),
-        info: await getInfoFromCoinGecko(coinGeckoIds.qtum, fiatCurrency),
+        coinGeckoId: coinGeckoIds.qtum,
     });
     return portfolio;
 };

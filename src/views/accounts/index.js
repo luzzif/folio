@@ -38,14 +38,13 @@ export const Accounts = ({ navigation }) => {
             marginRight: 16,
         },
         modalRoot: {
-            paddingHorizontal: 16,
-            paddingBottom: 16,
+            paddingHorizontal: 20,
+            paddingBottom: 20,
         },
         modalText: {
             color: theme.text,
-            textAlign: "center",
             textAlignVertical: "center",
-            fontFamily: "Montserrat-Medium",
+            fontFamily: "Nunito-Regular",
             marginBottom: 24,
         },
         accountTypeListContainer: {
@@ -53,7 +52,7 @@ export const Accounts = ({ navigation }) => {
         },
         modalButtonsContainer: {
             flexDirection: "row",
-            justifyContent: "center",
+            justifyContent: "flex-end",
         },
     });
 
@@ -90,6 +89,7 @@ export const Accounts = ({ navigation }) => {
     return (
         <View style={styles.root}>
             <List
+                bottomSpacing={100}
                 header="Your accounts"
                 items={accounts.map((account) => ({
                     key: account.id,

@@ -1,4 +1,4 @@
-import { normalizeXlmBalances } from "../../../../utils";
+import { normalizeXlmBalance } from "../../../../utils";
 import Decimal from "decimal.js";
 
 export const getXlmPortfolio = async (address, coinGeckoIds) => {
@@ -12,10 +12,8 @@ export const getXlmPortfolio = async (address, coinGeckoIds) => {
     const portfolio = [];
     const { balances } = json;
     if (balances && balances.length > 0) {
-        const normalizedBalances = normalizeXlmBalances(balances);
-
-        for (const normalizedBalance of normalizedBalances) {
-            const { balance, symbol } = normalizedBalance;
+        for (const xlmBalance of balances) {
+            const { balance, symbol } = normalizeXlmBalance(xlmBalance);
             if (!symbol) {
                 continue;
             }

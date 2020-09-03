@@ -2,7 +2,6 @@ import { ToastAndroid } from "react-native";
 import { Decimal } from "decimal.js";
 import fetch from "node-fetch";
 import { getPortfolioByAccountType } from "./handlers";
-import { removeEmptyBalances } from "../../utils";
 
 export const GET_PORTFOLIO_START = "GET_PORTFOLIO_START";
 export const GET_PORTFOLIO_END = "GET_PORTFOLIO_END";
@@ -23,7 +22,9 @@ export const getPortfolio = (
                 coinGeckoIds
             );
 
-            const nonEmptyPortfolioPiece = removeEmptyBalances(portfolioPiece);
+            const nonEmptyPortfolioPiece = portfolioPiece.filter(
+                (piece) => piece && piece.balance !== "0"
+            );
             portfolio.push(...nonEmptyPortfolioPiece);
         }
         for (const manualTransaction of manualTransactions) {

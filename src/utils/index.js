@@ -28,7 +28,7 @@ export const getShortenedEthereumAddress = (address) =>
 export const formatDecimal = (decimal, significantDecimalPlaces = 2) => {
     const decimalPlaces = decimal.decimalPlaces();
     if (decimalPlaces === 0) {
-        return formatIntegerString(decimal.toString());
+        return formatIntegerString(decimal.toFixed());
     }
     const [integers, decimals] = decimal.toFixed(decimalPlaces).split(".");
     let adjustedDecimals = "";
@@ -69,15 +69,11 @@ export const getBtcFromSatoshis = (satoshis) => satoshis.dividedBy(100000000);
 export const decimalFromSatoshis = (qtumDecimal, decimals) =>
     qtumDecimal.dividedBy("1e" + decimals);
 
-export const normalizeXlmBalances = (balances) =>
-    balances.map((balance) => ({
-        balance: balance.balance,
-        symbol: balance.asset_code
-            ? balance.asset_code
-            : balance.asset_type === "native"
-            ? "XLM"
-            : null,
-    }));
-
-export const removeEmptyBalances = (portfolioPieces) =>
-    portfolioPieces.filter((portfolioPiece) => portfolioPiece.balance !== "0");
+export const normalizeXlmBalance = (balance) => ({
+    balance: balance.balance,
+    symbol: balance.asset_code
+        ? balance.asset_code
+        : balance.asset_type === "native"
+        ? "XLM"
+        : null,
+});

@@ -85,7 +85,13 @@ export const Row = ({
                     (tertiary || quaternary) && (
                         <View style={styles.rightBlock}>
                             {tertiary && (
-                                <Text style={styles.mainText}>{tertiary}</Text>
+                                <Text
+                                    numberOfLines={1}
+                                    style={styles.mainText}
+                                    ellipsizeMode="tail"
+                                >
+                                    {tertiary}
+                                </Text>
                             )}
                             {quaternary && (
                                 <Text style={styles.lightText}>

@@ -1,7 +1,7 @@
 import { ToastAndroid } from "react-native";
-import { getPortfolioByAccountType } from "./handlers";
-import fetch from "node-fetch";
 import { Decimal } from "decimal.js";
+import fetch from "node-fetch";
+import { getPortfolioByAccountType } from "./handlers";
 
 export const GET_PORTFOLIO_START = "GET_PORTFOLIO_START";
 export const GET_PORTFOLIO_END = "GET_PORTFOLIO_END";
@@ -21,7 +21,11 @@ export const getPortfolio = (
                 account,
                 coinGeckoIds
             );
-            portfolio.push(...portfolioPiece);
+
+            const nonEmptyPortfolioPiece = portfolioPiece.filter(
+                (piece) => piece && piece.balance !== "0"
+            );
+            portfolio.push(...nonEmptyPortfolioPiece);
         }
         for (const manualTransaction of manualTransactions) {
             const decimalBalance = new Decimal(manualTransaction.balance);

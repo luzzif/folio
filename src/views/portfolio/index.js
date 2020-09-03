@@ -236,7 +236,11 @@ export const Portfolio = ({ navigation }) => {
                         secondary: formatDecimal(asset.balance, 3),
                         tertiary: `${
                             CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
-                        }${formatDecimal(asset.value)}`,
+                        }${
+                            asset.value.greaterThan(1000000000000)
+                                ? "1,000+ billions"
+                                : formatDecimal(asset.value)
+                        }`,
                         quaternary: (
                             <Text
                                 style={

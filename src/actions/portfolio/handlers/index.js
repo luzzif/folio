@@ -3,6 +3,7 @@ import { getEthPortfolio } from "./eth";
 import { getBitcoinPortfolio } from "./btc";
 import { getQtumPortfolio } from "./qtum";
 import { getNeoPortfolio } from "./neo";
+import { getXlmPortfolio } from "./xlm";
 import { getLoopringPortfolio } from "./loopring";
 import { getBinancePortfolio } from "./binance";
 
@@ -22,6 +23,9 @@ export const getPortfolioByAccountType = async (account, coinGeckoIds) => {
         }
         case PORTFOLIO_SOURCE.NEO_WALLET: {
             return await getNeoPortfolio(account.fields.address, coinGeckoIds);
+        }
+        case PORTFOLIO_SOURCE.XLM_WALLET: {
+            return await getXlmPortfolio(account.fields.address, coinGeckoIds);
         }
         case PORTFOLIO_SOURCE.LOOPRING: {
             return await getLoopringPortfolio(

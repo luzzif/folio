@@ -4,6 +4,7 @@ import qtumLogo from "../../assets/images/qtum.png";
 import lrcLogo from "../../assets/images/lrc.png";
 import bnbLogo from "../../assets/images/bnb.png";
 import neoLogo from "../../assets/images/neo.png";
+import xlmLogo from "../../assets/images/xlm.png";
 import ethereumRegex from "ethereum-regex";
 
 const configuredEthereumRegex = ethereumRegex({ exact: true });
@@ -13,6 +14,7 @@ export const PORTFOLIO_SOURCE = Object.freeze({
     BTC_WALLET: "BTC wallet",
     QTUM_WALLET: "QTUM wallet",
     NEO_WALLET: "NEO wallet",
+    XLM_WALLET: "XLM wallet",
     LOOPRING: "Loopring",
     BINANCE: "Binance",
 });
@@ -22,6 +24,7 @@ export const PORTFOLIO_SOURCE_ICON = Object.freeze({
     [PORTFOLIO_SOURCE.BTC_WALLET]: btcLogo,
     [PORTFOLIO_SOURCE.QTUM_WALLET]: qtumLogo,
     [PORTFOLIO_SOURCE.NEO_WALLET]: neoLogo,
+    [PORTFOLIO_SOURCE.XLM_WALLET]: xlmLogo,
     [PORTFOLIO_SOURCE.LOOPRING]: lrcLogo,
     [PORTFOLIO_SOURCE.BINANCE]: bnbLogo,
 });
@@ -119,6 +122,32 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                         return !accounts.find(
                             (account) =>
                                 account.type === PORTFOLIO_SOURCE.QTUM_WALLET &&
+                                account.fields.address === value
+                        );
+                    }
+                    return true;
+                },
+            },
+        ],
+    },
+    [PORTFOLIO_SOURCE.XLM_WALLET]: {
+        fields: [
+            {
+                type: SPECIFICATION_FIELD_TYPE.INPUT,
+                name: "address",
+                label: "XLM address",
+                required: true,
+                validate: async (value, accounts, updating) => {
+                    const response = await fetch(
+                        `https://horizon.stellar.org/accounts/${value}`
+                    );
+                    if (!response.ok) {
+                        return false;
+                    }
+                    if (!updating) {
+                        return !accounts.find(
+                            (account) =>
+                                account.type === PORTFOLIO_SOURCE.XLM_WALLET &&
                                 account.fields.address === value
                         );
                     }

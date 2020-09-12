@@ -1,4 +1,7 @@
-import { decimalFromWei } from "../../../../utils";
+import {
+    decimalFromWei,
+    getEthereumTokenDisambiguatedCoingeckoId,
+} from "../../../../utils";
 import Decimal from "decimal.js";
 
 export const getEthPortfolio = async (address, coinGeckoIds) => {
@@ -13,11 +16,13 @@ export const getEthPortfolio = async (address, coinGeckoIds) => {
     const { tokens } = json;
     if (tokens && tokens.length > 0) {
         for (const token of json.tokens) {
-            const { symbol, decimals } = token.tokenInfo;
+            const { address: tokenAddress, symbol, decimals } = token.tokenInfo;
             if (!symbol) {
                 continue;
             }
-            const coinGeckoId = coinGeckoIds[symbol.toLowerCase()];
+            const coinGeckoId = await getEthereumTokenDisambiguatedCoingeckoId(
+                tokenAddress
+            );
             if (!coinGeckoId) {
                 continue;
             }

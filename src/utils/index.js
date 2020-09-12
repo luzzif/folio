@@ -1,24 +1,6 @@
 export const decimalFromWei = (etherDecimal, decimals) =>
     etherDecimal.dividedBy("1e" + decimals);
 
-export const getInfoFromCoinGecko = async (coinGeckoId, fiatCurrency) => {
-    const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${coinGeckoId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`
-    );
-    const coin = await response.json();
-    const lowerCaseFiatCurrency = fiatCurrency.toLowerCase();
-    return {
-        icon: coin.image.large,
-        currentPrice: coin.market_data.current_price[lowerCaseFiatCurrency],
-        priceChangePercentages: {
-            "1d": coin.market_data.price_change_percentage_24h,
-            "1w": coin.market_data.price_change_percentage_7d,
-            "2w": coin.market_data.price_change_percentage_14d,
-            "1m": coin.market_data.price_change_percentage_30d,
-        },
-    };
-};
-
 export const getShortenedEthereumAddress = (address) =>
     `${address.substring(0, 5)}...${address.substring(
         address.length - 5,
@@ -77,3 +59,11 @@ export const normalizeXlmBalance = (balance) => ({
         ? "XLM"
         : null,
 });
+
+export const getEthereumTokenDisambiguatedCoingeckoId = async (address) => {
+    const response = await fetch(
+        `https://api.coingecko.com/api/v3/coins/ethereum/contract/${address}`
+    );
+    const { id } = await response.json();
+    return id;
+};

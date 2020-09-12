@@ -11,9 +11,9 @@ export const Fab = ({ faIcon, onPress }) => {
         root: {
             alignItems: "center",
             justifyContent: "center",
-            borderRadius: 12,
-            width: 52,
-            height: 52,
+            borderRadius: 28,
+            width: 56,
+            height: 56,
             backgroundColor: theme.primary,
             color: theme.textInverted,
             elevation: 8,

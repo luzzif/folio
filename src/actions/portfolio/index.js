@@ -72,6 +72,9 @@ export const getPortfolio = (
                     if (!relatedMarketData) {
                         return null;
                     }
+                    if (!relatedMarketData.low_24h) {
+                        return null;
+                    }
                     return {
                         ...asset,
                         info: {

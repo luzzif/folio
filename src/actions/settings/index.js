@@ -18,3 +18,10 @@ export const changePercentageChangeTimeframe = (timeframe) => ({
     type: CHANGE_PERCENTAGE_CHANGE_TIMEFRAME,
     timeframe,
 });
+
+export const IMPORT_SETTINGS = "IMPORT_SETTINGS";
+
+export const importSettings = (settings) => ({
+    type: IMPORT_SETTINGS,
+    settings,
+});

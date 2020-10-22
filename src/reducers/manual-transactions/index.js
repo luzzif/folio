@@ -2,6 +2,7 @@ import {
     ADD_MANUAL_TRANSACTION,
     REMOVE_MANUAL_TRANSACTION,
     UPDATE_MANUAL_TRANSACTION,
+    IMPORT_MANUAL_TRANSACTIONS,
 } from "../../actions/manual-transaction";
 
 export const manualTransactionsReducer = (state = [], action) => {
@@ -23,6 +24,9 @@ export const manualTransactionsReducer = (state = [], action) => {
             return state.filter(
                 (transaction) => transaction !== action.transaction
             );
+        }
+        case IMPORT_MANUAL_TRANSACTIONS: {
+            return action.transactions;
         }
         default: {
             return state;

@@ -53,3 +53,10 @@ export const removeManualTransaction = (transaction) => ({
     type: REMOVE_MANUAL_TRANSACTION,
     transaction,
 });
+
+export const IMPORT_MANUAL_TRANSACTIONS = "IMPORT_MANUAL_TRANSACTIONS";
+
+export const importManualTransactions = (transactions) => ({
+    type: IMPORT_MANUAL_TRANSACTIONS,
+    transactions,
+});

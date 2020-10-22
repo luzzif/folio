@@ -2,6 +2,7 @@ import {
     ADD_ACCOUNT,
     REMOVE_ACCOUNT,
     UPDATE_ACCOUNT,
+    IMPORT_ACCOUNTS,
 } from "../../actions/accounts";
 
 export const accountsReducer = (state = [], action) => {
@@ -21,6 +22,9 @@ export const accountsReducer = (state = [], action) => {
                 return [...state];
             }
             return state;
+        }
+        case IMPORT_ACCOUNTS: {
+            return action.accounts;
         }
         default: {
             return state;

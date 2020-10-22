@@ -1,15 +1,24 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
+import { ToastAndroid } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { List } from "../../components/list";
 import { View, StyleSheet } from "react-native";
 import { ThemeContext } from "../../contexts/theme";
 import { Switch } from "../../components/switch";
-import { toggleDarkMode, changeFiatCurrency } from "../../actions/settings";
+import {
+    toggleDarkMode,
+    changeFiatCurrency,
+    importSettings,
+} from "../../actions/settings";
+import { importManualTransactions } from "../../actions/manual-transaction";
+import { importAccounts } from "../../actions/accounts";
 import { version } from "../../../package.json";
 import { Select } from "../../components/select";
+import { Button } from "../../components/button";
 import { faDollarSign, faEuroSign } from "@fortawesome/free-solid-svg-icons";
 import { faBitcoin, faEthereum } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import Clipboard from "@react-native-community/clipboard";
 
 export const Settings = () => {
     const theme = useContext(ThemeContext);
@@ -17,6 +26,12 @@ export const Settings = () => {
     const { darkMode, fiatCurrency } = useSelector((state) => ({
         darkMode: state.settings.darkMode,
         fiatCurrency: state.settings.fiatCurrency,
+    }));
+
+    const { accounts, manualTransactions, settings } = useSelector((state) => ({
+        accounts: state.accounts,
+        manualTransactions: state.manualTransactions,
+        settings: state.settings,
     }));
 
     const styles = StyleSheet.create({
@@ -49,6 +64,41 @@ export const Settings = () => {
         },
         [dispatch]
     );
+
+    const handlePortfolioImport = async () => {
+        let portfolio;
+        try {
+            portfolio = JSON.parse(await Clipboard.getString());
+        } catch (error) {
+            ToastAndroid.show("Portfolio state not valid", ToastAndroid.SHORT);
+            return;
+        }
+
+        if (
+            !portfolio.accounts ||
+            !portfolio.settings ||
+            !portfolio.manualTransactions
+        ) {
+            ToastAndroid.show("Portfolio state not valid", ToastAndroid.SHORT);
+            return;
+        }
+
+        dispatch(importAccounts(portfolio.accounts));
+        dispatch(importSettings(portfolio.settings));
+        dispatch(importManualTransactions(portfolio.manualTransactions));
+
+        ToastAndroid.show("Portfolio imported", ToastAndroid.SHORT);
+    };
+
+    const handlePortfolioExport = () => {
+        Clipboard.setString(
+            JSON.stringify({ accounts, manualTransactions, settings })
+        );
+        ToastAndroid.show(
+            "Portfolio state copied to clipboard",
+            ToastAndroid.SHORT
+        );
+    };
 
     return (
         <View style={styles.root}>
@@ -156,6 +206,26 @@ export const Settings = () => {
                                         },
                                     },
                                 ]}
+                            />,
+                        ],
+                    },
+                    {
+                        key: "export",
+                        primary: "Export the portfolio",
+                        actions: [
+                            <Button
+                                title="Export"
+                                onPress={handlePortfolioExport}
+                            />,
+                        ],
+                    },
+                    {
+                        key: "import",
+                        primary: "Import the portfolio",
+                        actions: [
+                            <Button
+                                title="Import"
+                                onPress={handlePortfolioImport}
                             />,
                         ],
                     },

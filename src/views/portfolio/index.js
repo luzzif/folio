@@ -185,8 +185,6 @@ export const Portfolio = ({ navigation }) => {
     };
 
     const filterHandler = () => {
-        console.log("AGGREGATED", aggregatedPortfolio);
-
         const manualTransactionsSymbols = manualTransactions.map(
             (transaction) => transaction.symbol.toLowerCase()
         );

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext } from "react";
 import { ToastAndroid } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { List } from "../../components/list";
@@ -20,12 +20,13 @@ import { faBitcoin, faEthereum } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import Clipboard from "@react-native-community/clipboard";
 
-export const Settings = () => {
+export const Settings = ({ navigation }) => {
     const theme = useContext(ThemeContext);
     const dispatch = useDispatch();
-    const { darkMode, fiatCurrency } = useSelector((state) => ({
+    const { darkMode, fiatCurrency, isPinEnabled } = useSelector((state) => ({
         darkMode: state.settings.darkMode,
         fiatCurrency: state.settings.fiatCurrency,
+        isPinEnabled: state.pinConfig.isEnabled,
     }));
 
     const { accounts, manualTransactions, settings } = useSelector((state) => ({
@@ -98,6 +99,12 @@ export const Settings = () => {
             "Portfolio state copied to clipboard",
             ToastAndroid.SHORT
         );
+    };
+
+    const handlePinCreation = () => {
+        navigation.navigate("Pin lock", {
+            action: isPinEnabled ? "disable" : "capture",
+        });
     };
 
     return (
@@ -226,6 +233,16 @@ export const Settings = () => {
                             <Button
                                 title="Import"
                                 onPress={handlePortfolioImport}
+                            />,
+                        ],
+                    },
+                    {
+                        key: "pin",
+                        primary: "Pin lock",
+                        actions: [
+                            <Button
+                                title={isPinEnabled ? "Disable" : "Enable"}
+                                onPress={handlePinCreation}
                             />,
                         ],
                     },

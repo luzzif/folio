@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { StatusBar, AppState } from "react-native";
+import SplashScreen from "react-native-splash-screen";
+import { useSelector, useDispatch } from "react-redux";
+
 import { ThemeProvider } from "../../contexts/theme";
-import { StatusBar } from "react-native";
+import { triggerPinVerify } from "../../actions/pin";
 import { StackSwitcher } from "../../components/stack-switcher";
 import { Account } from "../accounts/account";
 import { Home } from "../../components/home";
 import { CoinSplit } from "../../components/coin-split";
-import { useSelector } from "react-redux";
+import { PinPicker } from "../../components/pin-picker";
 import { ManualTransaction } from "../manual-transaction";
 import { ManualTransactions } from "../manual-transactions";
-import SplashScreen from "react-native-splash-screen";
+import { PinLock } from "../pin-lock";
 
 const commonColors = {
     error: "#c62828",
@@ -50,54 +54,95 @@ const themes = {
 };
 
 export const App = () => {
-    const { darkMode } = useSelector((state) => ({
+    const {
+        darkMode,
+        isPinVerified,
+        isPinEnabled,
+        isPinVerifying,
+    } = useSelector((state) => ({
         darkMode: state.settings.darkMode,
+        existingPin: state.pinConfig.pin,
+        isPinVerified: state.pinConfig.isVerified,
+        isPinEnabled: state.pinConfig.isEnabled,
+        isPinVerifying: state.pinConfig.isVerifying,
     }));
 
+    const dispatch = useDispatch();
+    const appState = useRef(AppState.currentState);
     const [theme, setTheme] = useState(themes.light);
 
     useEffect(() => {
+        AppState.addEventListener('change', handleAppStateChange);
+
+        return () => {
+            AppState.removeEventListener('change', handleAppStateChange);
+        };
+    }, []);
+
+    useEffect(() => {
         SplashScreen.hide();
+        dispatch(triggerPinVerify());
     }, []);
 
     useEffect(() => {
         setTheme(darkMode ? themes.dark : themes.light);
     }, [darkMode]);
 
+    const handleAppStateChange = (nextAppState) => {
+        if (
+            appState.current.match(/inactive|background/) &&
+            nextAppState === 'active'
+        ) {
+            dispatch(triggerPinVerify());
+        }
+
+        appState.current = nextAppState;
+    };
+
     return (
         <ThemeProvider value={theme}>
-            <StatusBar
-                backgroundColor={theme.foreground}
-                barStyle={`${darkMode ? "light" : "dark"}-content`}
-            />
-            <StackSwitcher
-                items={[
-                    {
-                        name: "Dashboard",
-                        component: Home,
-                    },
-                    {
-                        name: "Account",
-                        component: Account,
-                        allowClose: true,
-                    },
-                    {
-                        name: "Coin split",
-                        component: CoinSplit,
-                        allowClose: true,
-                    },
-                    {
-                        name: "Manual transaction",
-                        component: ManualTransaction,
-                        allowClose: true,
-                    },
-                    {
-                        name: "Manual transactions",
-                        component: ManualTransactions,
-                        allowClose: true,
-                    },
-                ]}
-            />
+            {isPinEnabled && isPinVerifying && !isPinVerified ?
+                <PinPicker status={"verify"} />
+                :
+                <>
+                    <StatusBar
+                        backgroundColor={theme.foreground}
+                        barStyle={`${darkMode ? "light" : "dark"}-content`}
+                    />
+                    <StackSwitcher
+                        items={[
+                            {
+                                name: "Dashboard",
+                                component: Home,
+                            },
+                            {
+                                name: "Account",
+                                component: Account,
+                                allowClose: true,
+                            },
+                            {
+                                name: "Coin split",
+                                component: CoinSplit,
+                                allowClose: true,
+                            },
+                            {
+                                name: "Manual transaction",
+                                component: ManualTransaction,
+                                allowClose: true,
+                            },
+                            {
+                                name: "Manual transactions",
+                                component: ManualTransactions,
+                                allowClose: true,
+                            },
+                            {
+                                name: "Pin lock",
+                                component: PinLock,
+                                allowClose: true,
+                            },
+                        ]}
+                    />
+                </>}
         </ThemeProvider>
     );
 };

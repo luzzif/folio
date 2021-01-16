@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { createStackNavigator } from "@react-navigation/stack";
+
 import { Header } from "./header";
 
 const Stack = createStackNavigator();

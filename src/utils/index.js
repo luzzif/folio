@@ -1,3 +1,5 @@
+import hash from "hash.js";
+
 export const decimalFromWei = (etherDecimal, decimals) =>
     etherDecimal.dividedBy("1e" + decimals);
 
@@ -56,8 +58,8 @@ export const normalizeXlmBalance = (balance) => ({
     symbol: balance.asset_code
         ? balance.asset_code
         : balance.asset_type === "native"
-        ? "XLM"
-        : null,
+            ? "XLM"
+            : null,
 });
 
 export const getEthereumTokenDisambiguatedCoingeckoId = async (address) => {
@@ -67,3 +69,10 @@ export const getEthereumTokenDisambiguatedCoingeckoId = async (address) => {
     const { id } = await response.json();
     return id;
 };
+
+export const sha256 = (data) => {
+    return hash
+        .sha256()
+        .update(data)
+        .digest("hex");
+}

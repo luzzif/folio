@@ -1,3 +1,5 @@
+import { validateEthAddress } from "react-native-blockchain-address-validator/validators/eth";
+
 import ethLogo from "../../assets/images/eth.png";
 import btcLogo from "../../assets/images/btc.png";
 import qtumLogo from "../../assets/images/qtum.png";
@@ -5,9 +7,6 @@ import lrcLogo from "../../assets/images/lrc.png";
 import bnbLogo from "../../assets/images/bnb.png";
 import neoLogo from "../../assets/images/neo.png";
 import xlmLogo from "../../assets/images/xlm.png";
-import ethereumRegex from "ethereum-regex";
-
-const configuredEthereumRegex = ethereumRegex({ exact: true });
 
 export const PORTFOLIO_SOURCE = Object.freeze({
     ETH_WALLET: "ETH wallet",
@@ -40,7 +39,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                 label: "ETH address",
                 required: true,
                 validate: async (value, accounts, updating) => {
-                    if (!configuredEthereumRegex.test(value)) {
+                    if (!validateEthAddress(value)) {
                         return false;
                     }
                     if (!updating) {

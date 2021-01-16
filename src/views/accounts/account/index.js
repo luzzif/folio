@@ -63,19 +63,37 @@ export const Account = ({ navigation, route }) => {
                   return values;
               }, {})
     );
+    const [isValidating, setIsValidating] = useState(false);
 
     const getFieldUpdateHandler = (field) => async (newValue) => {
+        setFields({
+            ...fields,
+            [field.name]: { value: newValue, valid: false },
+        });
+    };
+
+    const validateField = async (field) => {
+        setIsValidating(true);
+
         let validValue = true;
-        if (!newValue && field.required) {
+        if (!fields[field.name].value && field.required) {
             validValue = false;
         } else if (typeof field.validate === "function") {
-            validValue = await field.validate(newValue, accounts, !!updatingId);
+            validValue = await field.validate(
+                fields[field.name].value,
+                accounts,
+                !!updatingId
+            );
         } else {
             validValue = true;
         }
+
         setFields({
             ...fields,
-            [field.name]: { value: newValue, valid: validValue },
+            [field.name]: {
+                value: fields[field.name].value,
+                valid: validValue,
+            },
         });
     };
 
@@ -87,6 +105,9 @@ export const Account = ({ navigation, route }) => {
                         label={field.label}
                         value={fields[field.name].value}
                         onChangeText={getFieldUpdateHandler(field)}
+                        onBlur={() => validateField(field)}
+                        validate={isValidating}
+                        valid={fields[field.name].valid}
                         required={field.required}
                     />
                 );
@@ -117,7 +138,12 @@ export const Account = ({ navigation, route }) => {
         <View style={styles.root}>
             <View style={styles.content}>
                 <View style={styles.bottomSpacedContainer}>
-                    <Input label="Name" value={name} onChangeText={setName} />
+                    <Input
+                        label="Name"
+                        value={name}
+                        validate={false}
+                        onChangeText={setName}
+                    />
                 </View>
                 {specification.fields.map((field) => (
                     <View key={field.name} style={styles.bottomSpacedContainer}>

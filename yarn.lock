@@ -2363,11 +2363,6 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
-ethereum-regex@^1.1.13:
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/ethereum-regex/-/ethereum-regex-1.1.13.tgz#d33fed7f153d5858adf84fdcf05e8d5c20aa675c"
-  integrity sha512-Ey1UmHGkC5zgm5Wcw9ZxkaCszKC93FYqAYHc18tvIT0pPxaUnBOc+MxJBZI+9pZ/1BKMCqNx6L5mvw4J15nYIA==
-
 event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
@@ -4436,6 +4431,11 @@ react-native-animatable@1.3.3:
   integrity sha512-2ckIxZQAsvWn25Ho+DK3d1mXIgj7tITkrS4pYDvx96WyOttSvzzFeQnM2od0+FUMzILbdHDsDEqZvnz1DYNQ1w==
   dependencies:
     prop-types "^15.7.2"
+
+react-native-blockchain-address-validator@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-blockchain-address-validator/-/react-native-blockchain-address-validator-0.1.0.tgz#b169bd17e9120993516bef1fd91ffc742a44d414"
+  integrity sha512-VQGEvBcMDr0kOxry6Y5XEqqA5U8guqulMRfTms72f78RVfa2/1S67OoBT8pomBGluCBXJxGlz9mC5W0LhBAszg==
 
 react-native-gesture-handler@^1.7.0:
   version "1.7.0"

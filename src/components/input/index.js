@@ -10,6 +10,8 @@ export const Input = ({
     disabled,
     value,
     faIcon,
+    validate,
+    valid,
     ...rest
 }) => {
     const theme = useContext(ThemeContext);
@@ -20,7 +22,7 @@ export const Input = ({
             paddingHorizontal: 12,
             height: 40,
             borderWidth: 1,
-            borderColor: theme.border,
+            borderColor: validate ? (valid ? "green" : "red") : theme.border,
             borderRadius: 12,
             flexDirection: "row",
             alignItems: "center",

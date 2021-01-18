@@ -72,16 +72,15 @@ export const App = () => {
     const [theme, setTheme] = useState(themes.light);
 
     useEffect(() => {
-        AppState.addEventListener('change', handleAppStateChange);
+        AppState.addEventListener("change", handleAppStateChange);
 
         return () => {
-            AppState.removeEventListener('change', handleAppStateChange);
+            AppState.removeEventListener("change", handleAppStateChange);
         };
     }, []);
 
     useEffect(() => {
         SplashScreen.hide();
-        dispatch(triggerPinVerify());
     }, []);
 
     useEffect(() => {
@@ -90,8 +89,8 @@ export const App = () => {
 
     const handleAppStateChange = (nextAppState) => {
         if (
-            appState.current.match(/inactive|background/) &&
-            nextAppState === 'active'
+            appState.current.match(/active/) &&
+            nextAppState === "background"
         ) {
             dispatch(triggerPinVerify());
         }

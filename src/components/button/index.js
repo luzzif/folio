@@ -58,7 +58,7 @@ export const Button = ({ title, onPress, disabled, secondary }) => {
 };
 
 Button.propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     onPress: PropTypes.func,
     disabled: PropTypes.bool,
     secondary: PropTypes.bool,

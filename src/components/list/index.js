@@ -81,6 +81,7 @@ List.propTypes = {
     header: PropTypes.string,
     items: PropTypes.arrayOf(
         PropTypes.shape({
+            icon: PropTypes.node,
             primary: PropTypes.node,
             secondary: PropTypes.node,
             tertiary: PropTypes.node,

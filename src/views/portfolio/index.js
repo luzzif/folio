@@ -77,7 +77,6 @@ export const Portfolio = ({ navigation }) => {
 
     const [aggregatedPortfolio, setAggregatedPortfolio] = useState([]);
     const [symbols, setSymbols] = useState([]);
-    const [filter, setFilter] = useState("all");
 
     useEffect(() => {
         dispatch(getCoinGeckoBaseData(fiatCurrency));
@@ -184,66 +183,6 @@ export const Portfolio = ({ navigation }) => {
         dispatch(changePercentageChangeTimeframe(timeframe));
     };
 
-    const filterHandler = () => {
-        const manualTransactionsSymbols = manualTransactions.map(
-            (transaction) => transaction.symbol.toLowerCase()
-        );
-
-        let filteredPortfolio = [];
-
-        if (filter === "manual") {
-            filteredPortfolio = aggregatedPortfolio.filter((transaction) =>
-                manualTransactionsSymbols.includes(
-                    transaction.symbol.toLowerCase()
-                )
-            );
-        }
-
-        if (filter === "accounts") {
-            filteredPortfolio = aggregatedPortfolio.filter(
-                (transaction) =>
-                    !manualTransactionsSymbols.includes(
-                        transaction.symbol.toLowerCase()
-                    )
-            );
-        }
-
-        if (filter === "all") {
-            filteredPortfolio = aggregatedPortfolio;
-        }
-
-        return filteredPortfolio.map((asset) => {
-            const percentage =
-                asset.priceChangePercentages[percentageChangeTimeframe];
-            const decimalPercentageChange = new Decimal(percentage || 0);
-            return {
-                key: asset.symbol,
-                icon: <CryptoIcon icon={asset.icon} size={32} />,
-                primary: asset.symbol,
-                secondary: formatDecimal(asset.balance, 3),
-                tertiary: `${CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]}${
-                    asset.value.greaterThan(1000000000000)
-                        ? "1,000+ billions"
-                        : formatDecimal(asset.value)
-                }`,
-                quaternary: (
-                    <Text
-                        style={
-                            percentage && decimalPercentageChange.isPositive()
-                                ? styles.positiveText
-                                : styles.negativeText
-                        }
-                    >
-                        {percentage
-                            ? `${formatDecimal(decimalPercentageChange)}%`
-                            : "-"}
-                    </Text>
-                ),
-                onPress: getAssetPressHandler(asset.symbol),
-            };
-        });
-    };
-
     return (
         <View style={styles.root}>
             <View style={styles.headerContainer}>
@@ -282,32 +221,45 @@ export const Portfolio = ({ navigation }) => {
                     onPress={getPercentageChangeTimeframeHandler("1m")}
                 />
             </View>
-            <View style={styles.timeframeChooserContainer}>
-                <View style={styles.rightSpacedContainer}>
-                    <Chip
-                        label="Manual transactions"
-                        active={filter === "manual"}
-                        onPress={() => setFilter("manual")}
-                    />
-                </View>
-                <View style={styles.rightSpacedContainer}>
-                    <Chip
-                        label="Accounts"
-                        active={filter === "accounts"}
-                        onPress={() => setFilter("accounts")}
-                    />
-                </View>
-                <View style={styles.rightSpacedContainer}>
-                    <Chip
-                        label="All"
-                        active={filter === "all"}
-                        onPress={() => setFilter("all")}
-                    />
-                </View>
-            </View>
             <List
                 bottomSpacing={100}
-                items={filterHandler()}
+                items={aggregatedPortfolio.map((asset) => {
+                    const percentage =
+                        asset.priceChangePercentages[percentageChangeTimeframe];
+                    const decimalPercentageChange = new Decimal(
+                        percentage || 0
+                    );
+                    return {
+                        key: asset.symbol,
+                        icon: <CryptoIcon icon={asset.icon} size={32} />,
+                        primary: asset.symbol,
+                        secondary: formatDecimal(asset.balance, 3),
+                        tertiary: `${
+                            CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
+                        }${
+                            asset.value.greaterThan(1000000000000)
+                                ? "1,000+ billions"
+                                : formatDecimal(asset.value)
+                        }`,
+                        quaternary: (
+                            <Text
+                                style={
+                                    percentage &&
+                                    decimalPercentageChange.isPositive()
+                                        ? styles.positiveText
+                                        : styles.negativeText
+                                }
+                            >
+                                {percentage
+                                    ? `${formatDecimal(
+                                          decimalPercentageChange
+                                      )}%`
+                                    : "-"}
+                            </Text>
+                        ),
+                        onPress: getAssetPressHandler(asset.symbol),
+                    };
+                })}
                 onRefresh={handleRefresh}
                 refreshing={loadingPortfolio}
             />

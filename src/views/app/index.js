@@ -77,22 +77,19 @@ export const App = () => {
         return () => {
             AppState.removeEventListener("change", handleAppStateChange);
         };
-    }, []);
+    });
 
     useEffect(() => {
         SplashScreen.hide();
         dispatch(triggerPinVerify());
-    }, []);
+    }, [dispatch]);
 
     useEffect(() => {
         setTheme(darkMode ? themes.dark : themes.light);
     }, [darkMode]);
 
     const handleAppStateChange = (nextAppState) => {
-        if (
-            appState.current.match(/active/) &&
-            nextAppState === "background"
-        ) {
+        if (appState.current.match(/active/) && nextAppState === "background") {
             dispatch(triggerPinVerify());
         }
 
@@ -101,9 +98,9 @@ export const App = () => {
 
     return (
         <ThemeProvider value={theme}>
-            {isPinEnabled && isPinVerifying && !isPinVerified ?
+            {isPinEnabled && isPinVerifying && !isPinVerified ? (
                 <PinPicker status={"verify"} />
-                :
+            ) : (
                 <>
                     <StatusBar
                         backgroundColor={theme.foreground}
@@ -142,7 +139,8 @@ export const App = () => {
                             },
                         ]}
                     />
-                </>}
+                </>
+            )}
         </ThemeProvider>
     );
 };

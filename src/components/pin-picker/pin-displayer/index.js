@@ -19,12 +19,12 @@ export const PinDisplayer = ({ length, maximumLength }) => {
         dot: {
             marginRight: 4,
             marginLeft: 4,
-        }
+        },
     });
 
     return (
         <View style={styles.root}>
-            {Array.from({ length }, (_, key) =>
+            {Array.from({ length }, (_, key) => (
                 <FontAwesomeIcon
                     key={key}
                     size={12}
@@ -32,8 +32,8 @@ export const PinDisplayer = ({ length, maximumLength }) => {
                     color={theme.text}
                     style={styles.dot}
                 />
-            )}
-            {Array.from({ length: maximumLength - length }, (_, key) =>
+            ))}
+            {Array.from({ length: maximumLength - length }, (_, key) => (
                 <FontAwesomeIcon
                     key={key}
                     size={12}
@@ -41,7 +41,7 @@ export const PinDisplayer = ({ length, maximumLength }) => {
                     color={theme.text}
                     style={styles.dot}
                 />
-            )}
+            ))}
         </View>
     );
 };

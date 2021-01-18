@@ -28,10 +28,7 @@ export const PinLock = ({ navigation, route }) => {
 
     return (
         <View style={styles.root}>
-            <PinPicker
-                status={action}
-                onCapture={() => navigation.pop()}
-            />
+            <PinPicker status={action} onCapture={() => navigation.pop()} />
         </View>
     );
 };

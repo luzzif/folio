@@ -1,14 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheck, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-import { ThemeContext } from "../../../contexts/theme";
-
 export const ActionButton = ({ onPress, disabled, role }) => {
-    const theme = useContext(ThemeContext);
-
     const styles = StyleSheet.create({
         container: {
             alignItems: "center",
@@ -27,18 +23,12 @@ export const ActionButton = ({ onPress, disabled, role }) => {
             onPress={onPress}
             style={styles.container}
         >
-            {role === "confirm" &&
-                <FontAwesomeIcon
-                    icon={faCheck}
-                    color={"green"}
-                />
-            }
-            {role === "delete" &&
-                <FontAwesomeIcon
-                    icon={faArrowLeft}
-                    color={"red"}
-                />
-            }
+            {role === "confirm" && (
+                <FontAwesomeIcon icon={faCheck} color={"green"} />
+            )}
+            {role === "delete" && (
+                <FontAwesomeIcon icon={faArrowLeft} color={"red"} />
+            )}
         </TouchableOpacity>
     );
 };

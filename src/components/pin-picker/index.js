@@ -99,6 +99,8 @@ export const PinPicker = ({
                     break;
                 }
 
+                setPin("");
+
                 ToastAndroid.show(
                     "Incorrect pin",
                     ToastAndroid.SHORT
@@ -133,7 +135,6 @@ export const PinPicker = ({
                     "Incorrect pin",
                     ToastAndroid.SHORT
                 );
-
                 break;
             }
         }

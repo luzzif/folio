@@ -81,6 +81,7 @@ export const App = () => {
 
     useEffect(() => {
         SplashScreen.hide();
+        dispatch(triggerPinVerify());
     }, []);
 
     useEffect(() => {

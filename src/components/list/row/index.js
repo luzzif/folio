@@ -104,6 +104,7 @@ export const Row = ({
                     <View style={styles.actionsContainer}>
                         {actions.map((action, index) => (
                             <View
+                                key={index}
                                 style={
                                     index < actions.length - 1 &&
                                     styles.rightSpacer

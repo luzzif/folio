@@ -16,7 +16,6 @@ export const ManualTransaction = ({ navigation, route }) => {
     const dispatch = useDispatch();
     const { wrappedIds } = useSelector((state) => ({
         wrappedIds: state.coinGecko.wrappedIds,
-        fiatCurrency: state.settings.fiatCurrency,
     }));
 
     const styles = StyleSheet.create({

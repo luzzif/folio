@@ -1,23 +1,21 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { PieChart } from "react-native-svg-charts";
 import PropTypes from "prop-types";
-import { ThemeContext } from "../../contexts/theme";
+import { useTheme } from "@react-navigation/native";
 import { List } from "../list";
 import { Decimal } from "decimal.js";
 import randomColor from "randomcolor";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { formatDecimal } from "../../utils";
+import { AppTitle } from "../app-title";
 
-export const CoinSplit = ({ route }) => {
-    const theme = useContext(ThemeContext);
+export const CoinSplit = ({ navigation, route }) => {
+    const { colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {
             height: "100%",
             backgroundColor: theme.background,
-            paddingTop: 24,
         },
         pieChart: {
             width: 200,
@@ -27,14 +25,25 @@ export const CoinSplit = ({ route }) => {
             width: "100%",
             alignItems: "center",
             marginBottom: 32,
+            marginTop: 16,
+        },
+        legendCircle: {
+            width: 28,
+            height: 28,
+            borderRadius: 14,
         },
     });
 
     const [pieData] = useState(route.params.pieData);
     const [totalBalance] = useState(route.params.totalBalance);
 
+    const handleClose = useCallback(() => {
+        navigation.pop();
+    }, [navigation]);
+
     return (
         <View style={styles.root}>
+            <AppTitle title="Coin split" closeable onClose={handleClose} />
             <View style={styles.pieChartContainer}>
                 <PieChart style={styles.pieChart} data={pieData} />
             </View>
@@ -48,10 +57,13 @@ export const CoinSplit = ({ route }) => {
                         key: data.symbol,
                         primary: data.symbol,
                         icon: (
-                            <FontAwesomeIcon
-                                icon={faCircle}
-                                size={28}
-                                color={randomColor({ seed: data.symbol })}
+                            <View
+                                style={{
+                                    ...styles.legendCircle,
+                                    backgroundColor: randomColor({
+                                        seed: data.symbol,
+                                    }),
+                                }}
                             />
                         ),
                         tertiary: `${formatDecimal(percentage)}%`,

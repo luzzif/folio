@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, TouchableOpacity } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCheck, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 export const ActionButton = ({ onPress, disabled, role }) => {
     const styles = StyleSheet.create({
@@ -23,12 +21,8 @@ export const ActionButton = ({ onPress, disabled, role }) => {
             onPress={onPress}
             style={styles.container}
         >
-            {role === "confirm" && (
-                <FontAwesomeIcon icon={faCheck} color={"green"} />
-            )}
-            {role === "delete" && (
-                <FontAwesomeIcon icon={faArrowLeft} color={"red"} />
-            )}
+            {role === "confirm" && <Text>Confirm</Text>}
+            {role === "delete" && <Text>Delete</Text>}
         </TouchableOpacity>
     );
 };

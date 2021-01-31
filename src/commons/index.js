@@ -1,37 +1,27 @@
 import { validateEthAddress } from "react-native-blockchain-address-validator/validators/eth";
 
-import ethLogo from "../../assets/images/eth.png";
-import btcLogo from "../../assets/images/btc.png";
-import qtumLogo from "../../assets/images/qtum.png";
-import lrcLogo from "../../assets/images/lrc.png";
-import bnbLogo from "../../assets/images/bnb.png";
-import neoLogo from "../../assets/images/neo.png";
-import xlmLogo from "../../assets/images/xlm.png";
+export const WALLET_PORFOLIO_SOURCE = Object.freeze({
+    ETH: "ETH",
+    BTC: "BTC",
+    QTUM: "QTUM",
+    NEO: "NEO",
+    XLM: "XLM",
+});
 
-export const PORTFOLIO_SOURCE = Object.freeze({
-    ETH_WALLET: "ETH wallet",
-    BTC_WALLET: "BTC wallet",
-    QTUM_WALLET: "QTUM wallet",
-    NEO_WALLET: "NEO wallet",
-    XLM_WALLET: "XLM wallet",
+export const EXCHANGE_PORFOLIO_SOURCE = Object.freeze({
     LOOPRING: "Loopring",
     BINANCE: "Binance",
 });
 
-export const PORTFOLIO_SOURCE_ICON = Object.freeze({
-    [PORTFOLIO_SOURCE.ETH_WALLET]: ethLogo,
-    [PORTFOLIO_SOURCE.BTC_WALLET]: btcLogo,
-    [PORTFOLIO_SOURCE.QTUM_WALLET]: qtumLogo,
-    [PORTFOLIO_SOURCE.NEO_WALLET]: neoLogo,
-    [PORTFOLIO_SOURCE.XLM_WALLET]: xlmLogo,
-    [PORTFOLIO_SOURCE.LOOPRING]: lrcLogo,
-    [PORTFOLIO_SOURCE.BINANCE]: bnbLogo,
+export const PORTFOLIO_SOURCE = Object.freeze({
+    ...WALLET_PORFOLIO_SOURCE,
+    ...EXCHANGE_PORFOLIO_SOURCE,
 });
 
 export const SPECIFICATION_FIELD_TYPE = Object.freeze({ INPUT: "input" });
 
 export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
-    [PORTFOLIO_SOURCE.ETH_WALLET]: {
+    [PORTFOLIO_SOURCE.ETH]: {
         fields: [
             {
                 type: SPECIFICATION_FIELD_TYPE.INPUT,
@@ -45,7 +35,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                     if (!updating) {
                         return !accounts.find(
                             (account) =>
-                                account.type === PORTFOLIO_SOURCE.ETH_WALLET &&
+                                account.type === PORTFOLIO_SOURCE.ETH &&
                                 account.fields.address === value
                         );
                     }
@@ -54,7 +44,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
             },
         ],
     },
-    [PORTFOLIO_SOURCE.BTC_WALLET]: {
+    [PORTFOLIO_SOURCE.BTC]: {
         fields: [
             {
                 type: SPECIFICATION_FIELD_TYPE.INPUT,
@@ -71,7 +61,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                     if (!updating) {
                         return !accounts.find(
                             (account) =>
-                                account.type === PORTFOLIO_SOURCE.BTC_WALLET &&
+                                account.type === PORTFOLIO_SOURCE.BTC &&
                                 account.fields.address === value
                         );
                     }
@@ -80,7 +70,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
             },
         ],
     },
-    [PORTFOLIO_SOURCE.QTUM_WALLET]: {
+    [PORTFOLIO_SOURCE.QTUM]: {
         fields: [
             {
                 type: SPECIFICATION_FIELD_TYPE.INPUT,
@@ -94,7 +84,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                     if (!updating) {
                         return !accounts.find(
                             (account) =>
-                                account.type === PORTFOLIO_SOURCE.QTUM_WALLET &&
+                                account.type === PORTFOLIO_SOURCE.QTUM &&
                                 account.fields.address === value
                         );
                     }
@@ -103,7 +93,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
             },
         ],
     },
-    [PORTFOLIO_SOURCE.NEO_WALLET]: {
+    [PORTFOLIO_SOURCE.NEO]: {
         fields: [
             {
                 type: SPECIFICATION_FIELD_TYPE.INPUT,
@@ -120,7 +110,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                     if (!updating) {
                         return !accounts.find(
                             (account) =>
-                                account.type === PORTFOLIO_SOURCE.QTUM_WALLET &&
+                                account.type === PORTFOLIO_SOURCE.QTUM &&
                                 account.fields.address === value
                         );
                     }
@@ -129,7 +119,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
             },
         ],
     },
-    [PORTFOLIO_SOURCE.XLM_WALLET]: {
+    [PORTFOLIO_SOURCE.XLM]: {
         fields: [
             {
                 type: SPECIFICATION_FIELD_TYPE.INPUT,
@@ -146,7 +136,7 @@ export const PORTFOLIO_SOURCE_SPECIFICATION = Object.freeze({
                     if (!updating) {
                         return !accounts.find(
                             (account) =>
-                                account.type === PORTFOLIO_SOURCE.XLM_WALLET &&
+                                account.type === PORTFOLIO_SOURCE.XLM &&
                                 account.fields.address === value
                         );
                     }

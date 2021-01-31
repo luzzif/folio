@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { ThemeContext } from "../../../contexts/theme";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faSadCry } from "@fortawesome/free-solid-svg-icons";
+import { useTheme } from "@react-navigation/native";
+import EmptyIllustration from "../../../../assets/svg/empty-illustration.svg";
 
 export const Empty = () => {
-    const theme = useContext(ThemeContext);
+    const { colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {
@@ -14,27 +13,26 @@ export const Empty = () => {
             alignItems: "center",
             flex: 1,
         },
-        icon: {
-            color: theme.text,
-            marginBottom: 28,
-        },
         centeredTextContainer: {
             width: "50%",
-            marginBottom: 36,
+            marginBottom: 80,
         },
         contentText: {
-            fontFamily: "Nunito-Regular",
+            fontFamily: "Poppins-Regular",
             textAlignVertical: "center",
             textAlign: "center",
             color: theme.text,
+            marginTop: 16,
         },
     });
 
     return (
         <View style={styles.root}>
-            <FontAwesomeIcon icon={faSadCry} style={styles.icon} size={68} />
+            <EmptyIllustration width={150} height={150} />
             <View style={styles.centeredTextContainer}>
-                <Text style={styles.contentText}>There's nothing here.</Text>
+                <Text style={styles.contentText}>
+                    There's nothing here... yet.
+                </Text>
             </View>
         </View>
     );

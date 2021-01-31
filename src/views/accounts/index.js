@@ -1,19 +1,21 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { List } from "../../components/list";
-import { View, StyleSheet, Image, Text } from "react-native";
-import { ThemeContext } from "../../contexts/theme";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faTrash, faPlus, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { View, StyleSheet, Text } from "react-native";
+import { useTheme } from "@react-navigation/native";
 import { removeAccount } from "../../actions/accounts";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Fab } from "../../components/fab";
 import { Button } from "../../components/button";
-import { PORTFOLIO_SOURCE, PORTFOLIO_SOURCE_ICON } from "../../commons";
 import { Modal } from "../../components/modal";
+import { AppTitle } from "../../components/app-title";
+import { CryptoIcon } from "../../components/crypto-icon";
+import DeleteBlackIcon from "../../../assets/svg/delete-black.svg";
+import DeleteWhiteIcon from "../../../assets/svg/delete-white.svg";
+import EditBlackIcon from "../../../assets/svg/edit-black.svg";
+import EditWhiteIcon from "../../../assets/svg/edit-white.svg";
 
 export const Accounts = ({ navigation }) => {
-    const theme = useContext(ThemeContext);
+    const { dark, colors: theme } = useTheme();
     const dispatch = useDispatch();
     const { accounts } = useSelector((state) => ({ accounts: state.accounts }));
 
@@ -22,17 +24,6 @@ export const Accounts = ({ navigation }) => {
             width: "100%",
             height: "100%",
             backgroundColor: theme.background,
-            paddingTop: 12,
-        },
-        icon: {
-            width: 36,
-            height: 36,
-            borderRadius: 36,
-        },
-        newAccountButtonContainer: {
-            position: "absolute",
-            bottom: 24,
-            right: 24,
         },
         rightSpacer: {
             marginRight: 16,
@@ -44,7 +35,7 @@ export const Accounts = ({ navigation }) => {
         modalText: {
             color: theme.text,
             textAlignVertical: "center",
-            fontFamily: "Nunito-Regular",
+            fontFamily: "Poppins-Regular",
             marginBottom: 24,
         },
         accountTypeListContainer: {
@@ -57,26 +48,18 @@ export const Accounts = ({ navigation }) => {
     });
 
     const [toBeDeletedAccount, setToBeDeletedAccount] = useState(null);
-    const [addingAccount, setAddingAccount] = useState(false);
-
-    const handleAddAccountPress = useCallback(() => {
-        setAddingAccount(true);
-    }, []);
-
-    const getAccountTypeSelectionPressHandler = (type) => (source) => {
-        navigation.navigate("Account", { type });
-        handleModalClose();
-    };
 
     const handleModalClose = useCallback(() => {
         setToBeDeletedAccount(null);
-        setAddingAccount(false);
     }, []);
 
-    const handleAccountRemoval = useCallback(() => {
-        dispatch(removeAccount(toBeDeletedAccount));
-        handleModalClose();
-    }, [dispatch, handleModalClose, toBeDeletedAccount]);
+    const handleAccountRemoval = useCallback(
+        (event) => {
+            dispatch(removeAccount(toBeDeletedAccount));
+            handleModalClose();
+        },
+        [dispatch, handleModalClose, toBeDeletedAccount]
+    );
 
     const getAccountRemoveHandler = (account) => () => {
         setToBeDeletedAccount(account);
@@ -86,44 +69,41 @@ export const Accounts = ({ navigation }) => {
         navigation.navigate("Account", account);
     };
 
+    const handleClose = useCallback(() => {
+        navigation.pop();
+    }, [navigation]);
+
     return (
-        <View style={styles.root}>
-            <List
-                bottomSpacing={100}
-                header="Your accounts"
-                items={accounts.map((account) => ({
-                    key: account.id,
-                    primary: account.name || "Unnamed account",
-                    icon: (
-                        <Image
-                            source={PORTFOLIO_SOURCE_ICON[account.type]}
-                            style={styles.icon}
-                        />
-                    ),
-                    actions: [
-                        <TouchableOpacity
-                            onPress={getAccountEditHandler(account)}
-                        >
-                            <FontAwesomeIcon
-                                size={20}
-                                color={theme.text}
-                                icon={faEdit}
-                            />
-                        </TouchableOpacity>,
-                        <TouchableOpacity
-                            onPress={getAccountRemoveHandler(account)}
-                        >
-                            <FontAwesomeIcon
-                                size={20}
-                                color={theme.error}
-                                icon={faTrash}
-                            />
-                        </TouchableOpacity>,
-                    ],
-                }))}
-            />
-            <View style={styles.newAccountButtonContainer}>
-                <Fab faIcon={faPlus} onPress={handleAddAccountPress} />
+        <>
+            <View style={styles.root}>
+                <AppTitle title="Accounts" closeable onClose={handleClose} />
+                <List
+                    items={accounts.map((account) => ({
+                        key: account.id,
+                        primary: account.name || "Unnamed account",
+                        icon: <CryptoIcon icon={account.type} size={36} />,
+                        actions: [
+                            <TouchableOpacity
+                                onPress={getAccountEditHandler(account)}
+                            >
+                                {dark ? (
+                                    <DeleteWhiteIcon width={20} height={20} />
+                                ) : (
+                                    <DeleteBlackIcon width={20} height={20} />
+                                )}
+                            </TouchableOpacity>,
+                            <TouchableOpacity
+                                onPress={getAccountRemoveHandler(account)}
+                            >
+                                {dark ? (
+                                    <EditWhiteIcon width={20} height={20} />
+                                ) : (
+                                    <EditBlackIcon width={20} height={20} />
+                                )}
+                            </TouchableOpacity>,
+                        ],
+                    }))}
+                />
             </View>
             <Modal
                 title="Delete account"
@@ -146,31 +126,6 @@ export const Accounts = ({ navigation }) => {
                     </View>
                 </View>
             </Modal>
-            <Modal
-                title="Pick an option"
-                open={!!addingAccount}
-                onClose={handleModalClose}
-            >
-                <View style={styles.accountTypeListContainer}>
-                    <List
-                        items={Object.values(PORTFOLIO_SOURCE)
-                            .sort()
-                            .map((source) => ({
-                                icon: (
-                                    <Image
-                                        source={PORTFOLIO_SOURCE_ICON[source]}
-                                        style={styles.icon}
-                                    />
-                                ),
-                                key: source,
-                                primary: source,
-                                onPress: getAccountTypeSelectionPressHandler(
-                                    source
-                                ),
-                            }))}
-                    />
-                </View>
-            </Modal>
-        </View>
+        </>
     );
 };

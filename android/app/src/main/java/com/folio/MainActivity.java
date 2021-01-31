@@ -21,9 +21,8 @@ public class MainActivity extends ReactActivity {
     SplashScreen.show(this, R.style.SplashScreenTheme);
     super.onCreate(savedInstanceState);
 
-    getWindow().setFlags(
+    /* getWindow().setFlags(
       WindowManager.LayoutParams.FLAG_SECURE,
-      WindowManager.LayoutParams.FLAG_SECURE
-    );
+    ); */
   }
 }

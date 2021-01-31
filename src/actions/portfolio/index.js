@@ -77,8 +77,8 @@ export const getPortfolio = (
                     }
                     return {
                         ...asset,
+                        name: relatedMarketData.name,
                         info: {
-                            icon: relatedMarketData.image,
                             currentPrice: relatedMarketData.current_price,
                             priceChangePercentages: {
                                 "1d":

@@ -1,24 +1,23 @@
-import React, { useCallback, useContext, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { List } from "../../components/list";
 import { View, StyleSheet, Text } from "react-native";
-import { ThemeContext } from "../../contexts/theme";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-    faTrash,
-    faPlus,
-    faEdit,
-    faMinus,
-} from "@fortawesome/free-solid-svg-icons";
+import { useTheme } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Button } from "../../components/button";
 import { Modal } from "../../components/modal";
 import { removeManualTransaction } from "../../actions/manual-transaction";
 import { formatDecimal } from "../../utils";
 import Decimal from "decimal.js";
+import { AppTitle } from "../../components/app-title";
+import PlusIcon from "../../../assets/svg/plus.svg";
+import EditWhiteIcon from "../../../assets/svg/edit-white.svg";
+import EditBlackIcon from "../../../assets/svg/edit-black.svg";
+import DeleteWhiteIcon from "../../../assets/svg/delete-white.svg";
+import DeleteBlackIcon from "../../../assets/svg/delete-black.svg";
 
 export const ManualTransactions = ({ navigation, route }) => {
-    const theme = useContext(ThemeContext);
+    const { dark, colors: theme } = useTheme();
     const dispatch = useDispatch();
     const { manualTransactions } = useSelector((state) => ({
         manualTransactions: state.manualTransactions,
@@ -37,7 +36,6 @@ export const ManualTransactions = ({ navigation, route }) => {
             width: "100%",
             height: "100%",
             backgroundColor: theme.background,
-            paddingTop: 12,
         },
         rightSpacer: {
             marginRight: 16,
@@ -48,7 +46,7 @@ export const ManualTransactions = ({ navigation, route }) => {
         },
         modalText: {
             color: theme.text,
-            fontFamily: "Nunito-Regular",
+            fontFamily: "Poppins-Regular",
             marginBottom: 24,
         },
         modalButtonsContainer: {
@@ -100,10 +98,18 @@ export const ManualTransactions = ({ navigation, route }) => {
         navigation.navigate("Manual transaction", transaction);
     };
 
+    const handleClose = useCallback(() => {
+        navigation.pop();
+    }, [navigation]);
+
     return (
         <View style={styles.root}>
+            <AppTitle
+                title={`Manual txs (${route.params.symbol.toUpperCase()})`}
+                closeable
+                onClose={handleClose}
+            />
             <List
-                header={`Registered transactions (${route.params.symbol})`}
                 items={filteredManualTransactions.map((transaction) => ({
                     key: transaction.timestamp,
                     primary: transaction.buy ? "Buy" : "Sell",
@@ -116,32 +122,27 @@ export const ManualTransactions = ({ navigation, route }) => {
                                     : styles.errorIconContainer
                             }
                         >
-                            <FontAwesomeIcon
-                                icon={transaction.buy ? faPlus : faMinus}
-                                style={styles.icon}
-                                color={theme.background}
-                                size={20}
-                            />
+                            <PlusIcon width={16} height={16} />
                         </View>
                     ),
                     actions: [
                         <TouchableOpacity
                             onPress={getTransactionEditHandler(transaction)}
                         >
-                            <FontAwesomeIcon
-                                size={20}
-                                color={theme.text}
-                                icon={faEdit}
-                            />
+                            {dark ? (
+                                <EditWhiteIcon width={20} height={20} />
+                            ) : (
+                                <EditBlackIcon width={20} height={20} />
+                            )}
                         </TouchableOpacity>,
                         <TouchableOpacity
                             onPress={getTransactionRemoveHandler(transaction)}
                         >
-                            <FontAwesomeIcon
-                                size={20}
-                                color={theme.error}
-                                icon={faTrash}
-                            />
+                            {dark ? (
+                                <DeleteWhiteIcon width={20} height={20} />
+                            ) : (
+                                <DeleteBlackIcon width={20} height={20} />
+                            )}
                         </TouchableOpacity>,
                     ],
                 }))}

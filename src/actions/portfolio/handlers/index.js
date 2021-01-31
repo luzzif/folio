@@ -9,22 +9,22 @@ import { getBinancePortfolio } from "./binance";
 
 export const getPortfolioByAccountType = async (account, coinGeckoIds) => {
     switch (account.type) {
-        case PORTFOLIO_SOURCE.ETH_WALLET: {
+        case PORTFOLIO_SOURCE.ETH: {
             return await getEthPortfolio(account.fields.address, coinGeckoIds);
         }
-        case PORTFOLIO_SOURCE.BTC_WALLET: {
+        case PORTFOLIO_SOURCE.BTC: {
             return await getBitcoinPortfolio(
                 account.fields.address,
                 coinGeckoIds
             );
         }
-        case PORTFOLIO_SOURCE.QTUM_WALLET: {
+        case PORTFOLIO_SOURCE.QTUM: {
             return await getQtumPortfolio(account.fields.address, coinGeckoIds);
         }
-        case PORTFOLIO_SOURCE.NEO_WALLET: {
+        case PORTFOLIO_SOURCE.NEO: {
             return await getNeoPortfolio(account.fields.address, coinGeckoIds);
         }
-        case PORTFOLIO_SOURCE.XLM_WALLET: {
+        case PORTFOLIO_SOURCE.XLM: {
             return await getXlmPortfolio(account.fields.address, coinGeckoIds);
         }
         case PORTFOLIO_SOURCE.LOOPRING: {

@@ -4,9 +4,19 @@ import { Input } from "../input";
 import { TouchableOpacity, View, StyleSheet } from "react-native";
 import { Modal } from "../modal";
 import { List } from "../list";
-import { faCaretDown, faSearch } from "@fortawesome/free-solid-svg-icons";
 
-export const Select = ({ value, options, onChange, label, searchable }) => {
+export const Select = ({
+    small,
+    hidden,
+    naked,
+    value,
+    options,
+    onChange,
+    label,
+    searchable,
+    open,
+    onClose,
+}) => {
     const styles = StyleSheet.create({
         searchbarContainer: {
             paddingHorizontal: 16,
@@ -17,7 +27,7 @@ export const Select = ({ value, options, onChange, label, searchable }) => {
         },
     });
 
-    const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(!!open);
     const [inputValue, setInputValue] = useState("");
     const [orderedOptions, setOrderedOptions] = useState([]);
     const [filteredOptions, setFilteredOptions] = useState(options);
@@ -72,38 +82,44 @@ export const Select = ({ value, options, onChange, label, searchable }) => {
     }, []);
 
     const handleModalClose = useCallback(() => {
+        if (onClose) {
+            onClose();
+            return;
+        }
         setModalOpen(false);
         setTimeout(() => {
             // wait for the modal to close in order to avoid unpleasant ui effect
             setSearchQuery("");
         }, 500);
-    }, []);
+    }, [onClose]);
 
     const getOptionPressHandler = (newValue) => () => {
         onChange(newValue);
-        handleModalClose(false);
+        handleModalClose();
     };
 
     return (
         <>
-            <TouchableOpacity onPress={handleInputPress}>
-                <Input
-                    disabled
-                    label={label}
-                    value={inputValue}
-                    faIcon={faCaretDown}
-                />
-            </TouchableOpacity>
+            {!hidden && (
+                <TouchableOpacity onPress={handleInputPress}>
+                    <Input
+                        small={small}
+                        naked={naked}
+                        disabled
+                        label={label}
+                        value={inputValue}
+                    />
+                </TouchableOpacity>
+            )}
             <Modal
                 title="Pick an option"
-                open={!!modalOpen}
+                open={open || modalOpen}
                 onClose={handleModalClose}
             >
                 {searchable && (
                     <View style={styles.searchbarContainer}>
                         <Input
                             placeholder="Search..."
-                            faIcon={faSearch}
                             onChangeText={setSearchQuery}
                         />
                     </View>

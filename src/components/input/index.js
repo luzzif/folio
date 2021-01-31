@@ -1,65 +1,51 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { TextInput, View, Text, StyleSheet } from "react-native";
-import { ThemeContext } from "../../contexts/theme";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { useTheme } from "@react-navigation/native";
 
 export const Input = ({
     label,
     required,
     disabled,
     value,
-    faIcon,
     validate,
     valid,
+    small,
+    naked,
     ...rest
 }) => {
-    const theme = useContext(ThemeContext);
+    const { colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {
-            justifyContent: "space-between",
-            paddingHorizontal: 12,
-            height: 40,
-            borderWidth: 1,
-            borderColor: validate ? (valid ? "green" : "red") : theme.border,
-            borderRadius: 12,
+            paddingHorizontal: naked ? 0 : 24,
+            height: small ? 20 : 40,
+            backgroundColor: naked ? "rgba(0, 0, 0, 0)" : theme.inputBackground,
+            borderRadius: 16,
             flexDirection: "row",
-            alignItems: "center",
         },
         text: {
-            fontFamily: "Nunito-Regular",
+            fontFamily: "Poppins-Regular",
             fontSize: 16,
             color: theme.text,
         },
         textInput: {
-            fontFamily: "Nunito-Regular",
+            fontFamily: "Poppins-Regular",
+            paddingTop: 4,
             fontSize: 16,
-            height: 48,
+            padding: 0,
             color: theme.text,
             flex: 1,
         },
         label: {
-            fontFamily: "Nunito-Bold",
-            fontSize: 12,
+            fontFamily: "Poppins-Bold",
+            fontSize: 16,
             color: theme.text,
-            marginBottom: 8,
-            marginLeft: 16,
-        },
-        iconContainer: {
-            height: "100%",
-            justifyContent: "center",
-            paddingLeft: 16,
         },
     });
 
     return (
         <>
-            {label && (
-                <Text style={styles.label}>
-                    {label} {required ? "*" : ""}
-                </Text>
-            )}
             <View style={styles.root}>
                 {disabled ? (
                     <Text style={styles.text}>{value}</Text>
@@ -71,15 +57,6 @@ export const Input = ({
                         placeholderTextColor={theme.placeholder}
                     />
                 )}
-                {faIcon && (
-                    <View style={styles.iconContainer}>
-                        <FontAwesomeIcon
-                            icon={faIcon}
-                            color={theme.text}
-                            size={20}
-                        />
-                    </View>
-                )}
             </View>
         </>
     );
@@ -90,5 +67,4 @@ Input.propTypes = {
     required: PropTypes.bool,
     disabled: PropTypes.bool,
     value: PropTypes.string,
-    faIcon: PropTypes.object,
 };

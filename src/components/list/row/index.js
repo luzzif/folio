@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { ThemeContext } from "../../../contexts/theme";
+import { useTheme } from "@react-navigation/native";
 
 export const Row = ({
     icon,
@@ -10,16 +10,17 @@ export const Row = ({
     quaternary,
     actions,
     onPress,
+    height,
 }) => {
-    const theme = useContext(ThemeContext);
+    const { colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {
-            height: 56,
+            height: height || 62,
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            paddingHorizontal: 12,
+            paddingHorizontal: 16,
         },
         leftBlock: {
             flexDirection: "row",
@@ -36,17 +37,18 @@ export const Row = ({
             marginRight: 16,
         },
         mainText: {
-            fontFamily: "Nunito-Regular",
+            fontFamily: "Poppins-Bold",
             fontSize: 16,
             color: theme.text,
         },
         lightText: {
-            fontFamily: "Nunito-Regular",
+            fontFamily: "Poppins-Regular",
             fontSize: 12,
             color: theme.textLight,
         },
         actionsContainer: {
             flexDirection: "row",
+            alignItems: "center",
         },
         rightSpacer: {
             marginRight: 12,

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { Decimal } from "decimal.js";
@@ -7,20 +7,21 @@ import { StyleSheet, View, Text } from "react-native";
 import { getPortfolio, resetPortfolio } from "../../actions/portfolio";
 import { List } from "../../components/list";
 import { CryptoIcon } from "../../components/crypto-icon";
-import { ThemeContext } from "../../contexts/theme";
+import { useTheme } from "@react-navigation/native";
 import { getCoinGeckoBaseData } from "../../actions/coingecko";
 import { CURRENCY_SYMBOLS } from "../../commons";
 import { formatDecimal } from "../../utils";
+import CogWhiteIcon from "../../../assets/svg/cog-white.svg";
+import CogBlackIcon from "../../../assets/svg/cog-black.svg";
+import PlusIcon from "../../../assets/svg/plus.svg";
 import { Fab } from "../../components/fab";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Chip } from "../../components/chip";
-import { changePercentageChangeTimeframe } from "../../actions/settings";
+import { AppTitle } from "../../components/app-title";
 
 export const Portfolio = ({ navigation }) => {
-    const theme = useContext(ThemeContext);
+    const { dark, colors: theme } = useTheme();
 
     const commonPercentageChangeTextStyle = {
-        fontFamily: "Nunito-Bold",
+        fontFamily: "Poppins-Bold",
         fontSize: 12,
     };
 
@@ -31,12 +32,12 @@ export const Portfolio = ({ navigation }) => {
         },
         headerContainer: {
             paddingHorizontal: 16,
-            marginVertical: 12,
+            marginBottom: 16,
         },
         manualTransactionButtonContainer: {
             position: "absolute",
-            bottom: 24,
-            right: 24,
+            bottom: 16,
+            right: 16,
         },
         timeframeChooserContainer: {
             flexDirection: "row",
@@ -53,6 +54,23 @@ export const Portfolio = ({ navigation }) => {
         negativeText: {
             ...commonPercentageChangeTextStyle,
             color: theme.error,
+        },
+        listItemPrimaryContainer: {
+            flexDirection: "row",
+        },
+        listItemAssetSymbolText: {
+            fontFamily: "Poppins-Bold",
+            fontSize: 16,
+            lineHeight: 18,
+            letterSpacing: 0.25,
+            color: theme.text,
+        },
+        listItemAssetNameText: {
+            fontFamily: "Poppins-Regular",
+            fontSize: 10,
+            lineHeight: 20,
+            letterSpacing: 0.25,
+            color: theme.text,
         },
     });
 
@@ -145,6 +163,7 @@ export const Portfolio = ({ navigation }) => {
                         const value = totalBalance.times(currentPrice);
                         finalPortfolio.push({
                             symbol,
+                            name: assetsBySymbol[0].name,
                             balance: totalBalance,
                             price: currentPrice,
                             value,
@@ -171,20 +190,29 @@ export const Portfolio = ({ navigation }) => {
         }
     }, [accounts, coinGeckoIds, dispatch, fiatCurrency, manualTransactions]);
 
-    const handleAddManualTransactionPress = useCallback(() => {
-        navigation.navigate("Manual transaction");
+    const handleAddPress = useCallback(() => {
+        navigation.navigate("Add chooser");
+    }, [navigation]);
+
+    const handleCogPress = useCallback(() => {
+        navigation.navigate("Settings");
     }, [navigation]);
 
     const getAssetPressHandler = (symbol) => () => {
         navigation.navigate("Manual transactions", { symbol });
     };
 
-    const getPercentageChangeTimeframeHandler = (timeframe) => () => {
-        dispatch(changePercentageChangeTimeframe(timeframe));
-    };
-
     return (
         <View style={styles.root}>
+            <AppTitle
+                title="Portfolio"
+                actions={[
+                    {
+                        icon: dark ? CogWhiteIcon : CogBlackIcon,
+                        onPress: handleCogPress,
+                    },
+                ]}
+            />
             <View style={styles.headerContainer}>
                 <Header
                     portfolio={aggregatedPortfolio}
@@ -193,36 +221,9 @@ export const Portfolio = ({ navigation }) => {
                     navigation={navigation}
                 />
             </View>
-            <View style={styles.timeframeChooserContainer}>
-                <View style={styles.rightSpacedContainer}>
-                    <Chip
-                        label="1d"
-                        active={percentageChangeTimeframe === "1d"}
-                        onPress={getPercentageChangeTimeframeHandler("1d")}
-                    />
-                </View>
-                <View style={styles.rightSpacedContainer}>
-                    <Chip
-                        label="1w"
-                        active={percentageChangeTimeframe === "1w"}
-                        onPress={getPercentageChangeTimeframeHandler("1w")}
-                    />
-                </View>
-                <View style={styles.rightSpacedContainer}>
-                    <Chip
-                        label="2w"
-                        active={percentageChangeTimeframe === "2w"}
-                        onPress={getPercentageChangeTimeframeHandler("2w")}
-                    />
-                </View>
-                <Chip
-                    label="1m"
-                    active={percentageChangeTimeframe === "1m"}
-                    onPress={getPercentageChangeTimeframeHandler("1m")}
-                />
-            </View>
             <List
                 bottomSpacing={100}
+                header="Highest holding"
                 items={aggregatedPortfolio.map((asset) => {
                     const percentage =
                         asset.priceChangePercentages[percentageChangeTimeframe];
@@ -231,9 +232,29 @@ export const Portfolio = ({ navigation }) => {
                     );
                     return {
                         key: asset.symbol,
-                        icon: <CryptoIcon icon={asset.icon} size={32} />,
-                        primary: asset.symbol,
-                        secondary: formatDecimal(asset.balance, 3),
+                        icon: <CryptoIcon icon={asset.symbol} size={36} />,
+                        primary: (
+                            <View style={styles.listItemPrimaryContainer}>
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                    style={styles.listItemAssetSymbolText}
+                                >
+                                    {asset.symbol}
+                                </Text>
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                    style={styles.listItemAssetNameText}
+                                >
+                                    {"  "}
+                                    {asset.name}
+                                </Text>
+                            </View>
+                        ),
+                        secondary: `${formatDecimal(asset.balance, 3)} | ${
+                            CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
+                        }${formatDecimal(new Decimal(asset.price), 2)}`,
                         tertiary: `${
                             CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
                         }${
@@ -254,7 +275,7 @@ export const Portfolio = ({ navigation }) => {
                                     ? `${formatDecimal(
                                           decimalPercentageChange
                                       )}%`
-                                    : "-"}
+                                    : "0%"}
                             </Text>
                         ),
                         onPress: getAssetPressHandler(asset.symbol),
@@ -265,8 +286,8 @@ export const Portfolio = ({ navigation }) => {
             />
             <View style={styles.manualTransactionButtonContainer}>
                 <Fab
-                    faIcon={faPlus}
-                    onPress={handleAddManualTransactionPress}
+                    icon={<PlusIcon width={20} height={20} />}
+                    onPress={handleAddPress}
                 />
             </View>
         </View>

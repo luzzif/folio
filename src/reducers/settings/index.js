@@ -7,7 +7,7 @@ import {
 
 export const initialState = {
     darkMode: false,
-    fiatCurrency: "eur",
+    fiatCurrency: "usd",
     percentageChangeTimeframe: "1d",
 };
 

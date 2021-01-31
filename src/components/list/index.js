@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, View, Text, FlatList } from "react-native";
 import { Row } from "./row";
-import { ThemeContext } from "../../contexts/theme";
+import { useTheme } from "@react-navigation/native";
 import { Empty } from "./empty";
 
 export const List = ({
@@ -11,16 +11,21 @@ export const List = ({
     onRefresh,
     refreshing,
     bottomSpacing,
+    height,
 }) => {
-    const theme = useContext(ThemeContext);
+    const { dark, colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {
             width: "100%",
-            flex: 1,
+            flex: height ? 0 : 1,
+            height: height || "auto",
+        },
+        gradient: {
+            width: "100%",
+            height: 80,
         },
         list: {
-            paddingHorizontal: 16,
             flex: 1,
         },
         listContentContainerStyle: {
@@ -33,14 +38,17 @@ export const List = ({
             marginBottom: 8,
             marginLeft: 16,
             alignItems: "center",
+            height: 16,
         },
         headerText: {
-            fontFamily: "Nunito-Bold",
-            marginLeft: 8,
-            color: theme.text,
+            fontFamily: "Poppins-Regular",
+            fontSize: 13,
+            lineHeight: 22,
+            color: dark ? theme.primaryDarkMode : theme.primary,
+            letterSpacing: 0.25,
         },
         orderingText: {
-            fontFamily: "Nunito-Regular",
+            fontFamily: "Poppins-Regular",
             fontSize: 12,
             marginRight: 8,
             color: theme.text,
@@ -86,6 +94,7 @@ List.propTypes = {
             tertiary: PropTypes.node,
             quaternary: PropTypes.node,
             onPress: PropTypes.func,
+            height: PropTypes.number,
         }).isRequired
     ).isRequired,
     onRefresh: PropTypes.func,

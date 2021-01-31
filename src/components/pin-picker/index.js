@@ -1,19 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { faLock } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
 import { createPin, verifyPin, disablePin } from "../../actions/pin";
 import { sha256 } from "../../utils";
-import { ThemeContext } from "../../contexts/theme";
+import { useTheme } from "@react-navigation/native";
 import { Button } from "../button";
 import { ActionButton } from "./action-button";
 import { PinDisplayer } from "./pin-displayer";
 
 export const PinPicker = ({ status, maximumLength, onCapture }) => {
-    const theme = useContext(ThemeContext);
+    const { colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {
@@ -128,12 +126,6 @@ export const PinPicker = ({ status, maximumLength, onCapture }) => {
 
     return (
         <View style={styles.root}>
-            <FontAwesomeIcon
-                size={24}
-                icon={faLock}
-                color={theme.text}
-                style={styles.dot}
-            />
             <Text style={styles.title}>{getTitle()}</Text>
             <View style={styles.pickerContainer}>
                 <>

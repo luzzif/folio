@@ -230,6 +230,7 @@ export const Portfolio = ({ navigation }) => {
                     const decimalPercentageChange = new Decimal(
                         percentage || 0
                     );
+
                     return {
                         key: asset.symbol,
                         icon: <CryptoIcon icon={asset.symbol} size={36} />,

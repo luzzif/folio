@@ -45,10 +45,10 @@ export const AddChooser = ({ navigation }) => {
                 const { id, symbol } = wrappedId;
                 const upperCaseSymbol = symbol.toUpperCase();
                 return {
-                    key: id,
                     label: upperCaseSymbol,
                     value: upperCaseSymbol,
                     listItemSpecification: {
+                        key: id,
                         icon: <CryptoIcon size={36} icon={symbol} />,
                         primary: upperCaseSymbol,
                     },
@@ -59,10 +59,10 @@ export const AddChooser = ({ navigation }) => {
             Object.keys(EXCHANGE_PORFOLIO_SOURCE)
                 .sort()
                 .map((key) => ({
-                    key: key,
                     label: EXCHANGE_PORFOLIO_SOURCE[key],
                     value: EXCHANGE_PORFOLIO_SOURCE[key],
                     listItemSpecification: {
+                        key: key,
                         icon: <CryptoIcon icon={key} size={36} />,
                         primary: EXCHANGE_PORFOLIO_SOURCE[key],
                     },
@@ -72,10 +72,10 @@ export const AddChooser = ({ navigation }) => {
             Object.keys(WALLET_PORFOLIO_SOURCE)
                 .sort()
                 .map((key) => ({
-                    key: key,
                     label: WALLET_PORFOLIO_SOURCE[key],
                     value: WALLET_PORFOLIO_SOURCE[key],
                     listItemSpecification: {
+                        key: key,
                         icon: <CryptoIcon icon={key.toLowerCase()} size={36} />,
                         onPress: () => {
                             handleModalClose();

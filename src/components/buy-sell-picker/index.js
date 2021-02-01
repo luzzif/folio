@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import LinearGradient from "react-native-linear-gradient";
 
-export const BuySellPiacker = ({ buy, onChange }) => {
+export const BuySellPicker = ({ buy, onChange }) => {
     const { colors: theme } = useTheme();
 
     const commonContainerStyle = {
@@ -64,10 +64,9 @@ export const BuySellPiacker = ({ buy, onChange }) => {
                         : [theme.disabled, theme.disabled]
                 }
                 style={styles.buyCointainer}
+                onTouchStart={handleBuyPress}
             >
-                <TouchableOpacity onPress={handleBuyPress}>
-                    <Text style={styles.label}>Buy</Text>
-                </TouchableOpacity>
+                <Text style={styles.label}>Buy</Text>
             </LinearGradient>
             <LinearGradient
                 start={{ x: 0, y: 0 }}
@@ -78,10 +77,9 @@ export const BuySellPiacker = ({ buy, onChange }) => {
                         : [theme.errorDark, theme.errorDarkMode]
                 }
                 style={styles.sellCointainer}
+                onTouchStart={handleSellPress}
             >
-                <TouchableOpacity onPress={handleSellPress}>
-                    <Text style={styles.label}>Sell</Text>
-                </TouchableOpacity>
+                <Text style={styles.label}>Sell</Text>
             </LinearGradient>
         </View>
     );

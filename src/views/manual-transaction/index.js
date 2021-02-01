@@ -9,7 +9,7 @@ import {
     updateManualTransaction,
 } from "../../actions/manual-transaction";
 import { AppTitle } from "../../components/app-title";
-import { BuySellPiacker } from "../../components/buy-sell-picker";
+import { BuySellPicker } from "../../components/buy-sell-picker";
 
 export const ManualTransaction = ({ navigation, route }) => {
     const { colors: theme } = useTheme();
@@ -99,7 +99,7 @@ export const ManualTransaction = ({ navigation, route }) => {
             />
             <View style={styles.content}>
                 <View style={styles.bottomSpacedContainer}>
-                    <BuySellPiacker buy={buy} onChange={handleBuyChange} />
+                    <BuySellPicker buy={buy} onChange={handleBuyChange} />
                 </View>
                 <View style={styles.bottomSpacedContainer}>
                     <Input

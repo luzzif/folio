@@ -111,7 +111,7 @@ export const ManualTransactions = ({ navigation, route }) => {
             />
             <List
                 items={filteredManualTransactions.map((transaction) => ({
-                    key: transaction.timestamp,
+                    key: transaction.timestamp.toString(),
                     primary: transaction.buy ? "Buy" : "Sell",
                     secondary: formatDecimal(new Decimal(transaction.balance)),
                     icon: (

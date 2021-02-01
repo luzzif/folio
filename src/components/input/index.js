@@ -66,5 +66,5 @@ Input.propTypes = {
     label: PropTypes.string,
     required: PropTypes.bool,
     disabled: PropTypes.bool,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

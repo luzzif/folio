@@ -173,21 +173,27 @@ export const Header = ({
                     pieData: [],
                 }
             );
+
             setTotalBalance(newTotalBalance);
+
             if (newTotalBalance.isZero()) {
                 setPieData([emptyPieDataItem]);
             } else {
                 setPieData(newPieData);
             }
+
             const portfolioPercentageChange = portfolio.reduce(
                 (accumulator, asset) => {
                     const percentage =
                         asset.priceChangePercentages[percentageChangeTimeframe];
+
                     if (!percentage) {
                         return accumulator;
                     }
+
                     const decimalPercentageChange = new Decimal(percentage);
                     const decimalValue = new Decimal(asset.value);
+
                     return accumulator.plus(
                         new Decimal(decimalPercentageChange).times(
                             decimalValue.dividedBy(newTotalBalance)
@@ -196,10 +202,15 @@ export const Header = ({
                 },
                 new Decimal("0")
             );
+
             setPortfolioPercentageChange(portfolioPercentageChange);
             setAbsoluteChange(
                 new Decimal(newTotalBalance)
-                    .div(portfolioPercentageChange.add(1))
+                    .minus(
+                        newTotalBalance.div(
+                            portfolioPercentageChange.dividedBy(100).plus(1)
+                        )
+                    )
                     .absoluteValue()
             );
         } else {

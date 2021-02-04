@@ -3,9 +3,14 @@ import PropTypes from "prop-types";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import LinearGradient from "react-native-linear-gradient";
+import { useSelector } from "react-redux";
 
 export const Fab = ({ icon, onPress }) => {
     const { colors: theme } = useTheme();
+
+    const { darkMode } = useSelector((state) => ({
+        darkMode: state.settings.darkMode,
+    }));
 
     const styles = StyleSheet.create({
         root: {
@@ -25,7 +30,10 @@ export const Fab = ({ icon, onPress }) => {
             <LinearGradient
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                colors={[theme.primary, theme.primaryDark]}
+                colors={[
+                    theme.primary,
+                    darkMode ? theme.primaryDarkMode : theme.primary,
+                ]}
                 style={styles.root}
             >
                 {icon}

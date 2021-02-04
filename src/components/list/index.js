@@ -41,7 +41,7 @@ export const List = ({
             height: 16,
         },
         headerText: {
-            fontFamily: "Poppins-Regular",
+            fontFamily: "Poppins-Bold",
             fontSize: 13,
             lineHeight: 22,
             color: dark ? theme.primaryDarkMode : theme.primary,

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { useSelector } from "react-redux";
 import { useTheme } from "@react-navigation/native";
 import LinearGradient from "react-native-linear-gradient";
 
@@ -18,6 +19,10 @@ const commonTextStyles = {
 export const Button = ({ title, onPress, disabled, secondary, small }) => {
     const { colors: theme } = useTheme();
 
+    const { darkMode } = useSelector((state) => ({
+        darkMode: state.settings.darkMode,
+    }));
+
     const styles = StyleSheet.create({
         primaryContainer: {
             ...commonContainerStyles,
@@ -27,7 +32,7 @@ export const Button = ({ title, onPress, disabled, secondary, small }) => {
             ...commonContainerStyles,
             borderWidth: 1,
             height: 40,
-            borderColor: theme.primary,
+            borderColor: darkMode ? theme.primaryDarkMode : theme.primary,
         },
         primaryText: {
             ...commonTextStyles,
@@ -37,7 +42,7 @@ export const Button = ({ title, onPress, disabled, secondary, small }) => {
         },
         secondaryText: {
             ...commonTextStyles,
-            color: theme.primary,
+            color: darkMode ? theme.primaryDarkMode : theme.primary,
         },
     });
 
@@ -48,7 +53,7 @@ export const Button = ({ title, onPress, disabled, secondary, small }) => {
         if (secondary) {
             return [theme.background, theme.background];
         }
-        return [theme.primary, theme.primaryDark];
+        return [theme.primary, theme.primaryDarkMode];
     };
 
     return (

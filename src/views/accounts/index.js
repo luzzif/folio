@@ -87,18 +87,18 @@ export const Accounts = ({ navigation }) => {
                                 onPress={getAccountEditHandler(account)}
                             >
                                 {dark ? (
-                                    <DeleteWhiteIcon width={20} height={20} />
+                                    <EditWhiteIcon width={20} height={20} />
                                 ) : (
-                                    <DeleteBlackIcon width={20} height={20} />
+                                    <EditBlackIcon width={20} height={20} />
                                 )}
                             </TouchableOpacity>,
                             <TouchableOpacity
                                 onPress={getAccountRemoveHandler(account)}
                             >
                                 {dark ? (
-                                    <EditWhiteIcon width={20} height={20} />
+                                    <DeleteWhiteIcon width={20} height={20} />
                                 ) : (
-                                    <EditBlackIcon width={20} height={20} />
+                                    <DeleteBlackIcon width={20} height={20} />
                                 )}
                             </TouchableOpacity>,
                         ],

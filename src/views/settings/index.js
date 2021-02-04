@@ -135,6 +135,8 @@ export const Settings = ({ navigation }) => {
         dispatch(importSettings(portfolio.settings));
         dispatch(importManualTransactions(portfolio.manualTransactions));
 
+        handleConfirmationModalClose();
+
         ToastAndroid.show("Portfolio imported", ToastAndroid.SHORT);
     };
 
@@ -142,6 +144,9 @@ export const Settings = ({ navigation }) => {
         Clipboard.setString(
             JSON.stringify({ accounts, manualTransactions, settings })
         );
+
+        handleConfirmationModalClose();
+
         ToastAndroid.show(
             "Portfolio state copied to clipboard",
             ToastAndroid.SHORT

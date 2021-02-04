@@ -117,7 +117,7 @@ export const AddChooser = ({ navigation }) => {
             navigation.pop();
             navigation.navigate("Manual transaction", {
                 symbol: asset.label,
-                coinGeckoId: asset.key,
+                coinGeckoId: asset.listItemSpecification.key,
             });
         },
         [navigation]
@@ -127,7 +127,10 @@ export const AddChooser = ({ navigation }) => {
         (exchange) => {
             navigation.pop();
             navigation.navigate("Account", {
-                type: EXCHANGE_PORFOLIO_SOURCE[exchange.key],
+                type:
+                    EXCHANGE_PORFOLIO_SOURCE[
+                        exchange.listItemSpecification.key
+                    ],
             });
         },
         [navigation]
@@ -137,7 +140,7 @@ export const AddChooser = ({ navigation }) => {
         (wallet) => {
             navigation.pop();
             navigation.navigate("Account", {
-                type: WALLET_PORFOLIO_SOURCE[wallet.key],
+                type: WALLET_PORFOLIO_SOURCE[wallet.listItemSpecification.key],
             });
         },
         [navigation]

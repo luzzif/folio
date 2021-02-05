@@ -12,7 +12,8 @@
         "lint:commit-message": "commitlint -e",
         "lint:ci": "yarn lint:code && yarn lint:prettier",
         "format": "prettier --write \"src/**/*.{js,jsx,json,md}\" && prettier --write package.json",
-        "update-crypto-icons-exporter": "node ./scripts/update-crypto-icons-exporter"
+        "update-crypto-icons-exporter": "node ./scripts/update-crypto-icons-exporter",
+        "update-ethereum-tokens-coingecko-ids-precache": "node ./scripts/update-ethereum-tokens-coingecko-ids-precache"
     },
     "dependencies": {
         "@react-native-community/async-storage": "^1.12.1",
@@ -49,6 +50,8 @@
         "@react-native-community/eslint-config": "^1.1.0",
         "eslint": "^6.5.1",
         "metro-react-native-babel-preset": "^0.59.0",
+        "node-fetch": "^2.6.1",
+        "react-native-cache": "^2.0.1",
         "react-native-linear-gradient": "^2.5.6",
         "react-native-svg-transformer": "^0.14.3"
     }

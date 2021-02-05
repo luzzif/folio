@@ -748,7 +748,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@react-native-community/async-storage@^1.12.1":
+"@react-native-community/async-storage@^1.12.1", "@react-native-community/async-storage@^1.8.1":
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.12.1.tgz#25f821b4f6b13abe005ad67e47c6f1cee9f27b24"
   integrity sha512-70WGaH3PKYASi4BThuEEKMkyAgE9k7VytBqmgPRx3MzJx9/MkspwqJGmn3QLCgHLIFUgF1pit2mWICbRJ3T3lg==
@@ -4174,7 +4174,7 @@ nocache@^2.1.0:
   resolved "https://registry.yarnpkg.com/nocache/-/nocache-2.1.0.tgz#120c9ffec43b5729b1d5de88cd71aa75a0ba491f"
   integrity sha512-0L9FvHG3nfnnmaEQPjT9xhfN4ISk0A8/2j4M37Np4mcDesJjHgEUfgPhdCyZuFI954tjokaIj/A3NdpFNdEh4Q==
 
-node-fetch@2.6.1, node-fetch@^2.2.0, node-fetch@^2.6.0:
+node-fetch@2.6.1, node-fetch@^2.2.0, node-fetch@^2.6.0, node-fetch@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
@@ -4670,6 +4670,13 @@ react-native-blockchain-address-validator@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/react-native-blockchain-address-validator/-/react-native-blockchain-address-validator-0.1.0.tgz#b169bd17e9120993516bef1fd91ffc742a44d414"
   integrity sha512-VQGEvBcMDr0kOxry6Y5XEqqA5U8guqulMRfTms72f78RVfa2/1S67OoBT8pomBGluCBXJxGlz9mC5W0LhBAszg==
+
+react-native-cache@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-cache/-/react-native-cache-2.0.1.tgz#a90227672ca3b32e1288910fc149df95f4f2f007"
+  integrity sha512-nA/4xz71B/rPy/9s9gJd11XbMh3NYo8g6uO+KAbt7Lbr/9AdLsEgWpmyAMEWj4GVOU37JH5ds7wzowYqpfy2ew==
+  dependencies:
+    "@react-native-community/async-storage" "^1.8.1"
 
 react-native-gesture-handler@^1.7.0:
   version "1.9.0"

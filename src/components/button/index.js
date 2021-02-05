@@ -16,7 +16,7 @@ const commonTextStyles = {
     fontFamily: "Poppins-Bold",
 };
 
-export const Button = ({ title, onPress, disabled, secondary, small }) => {
+export const Button = ({ title, onPress, disabled, secondary }) => {
     const { colors: theme } = useTheme();
 
     const { darkMode } = useSelector((state) => ({

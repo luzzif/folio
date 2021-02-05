@@ -1,17 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { useTheme } from "@react-navigation/native";
+import CheckWhiteIcon from "../../../../assets/svg/check-white.svg";
+import BackArrowWhiteIcon from "../../../../assets/svg/back-arrow-white.svg";
 
 export const ActionButton = ({ onPress, disabled, role }) => {
+    const { colors: theme } = useTheme();
+
     const styles = StyleSheet.create({
         container: {
             alignItems: "center",
             justifyContent: "center",
-            borderRadius: 12,
-            paddingVertical: 11,
-            paddingHorizontal: 13,
-            borderWidth: 1,
-            borderColor: role === "confirm" ? "green" : "red",
+            borderRadius: 24,
+            padding: 12,
+            backgroundColor: role === "confirm" ? theme.success : theme.error,
         },
     });
 
@@ -21,8 +24,8 @@ export const ActionButton = ({ onPress, disabled, role }) => {
             onPress={onPress}
             style={styles.container}
         >
-            {role === "confirm" && <Text>Confirm</Text>}
-            {role === "delete" && <Text>Delete</Text>}
+            {role === "confirm" && <CheckWhiteIcon />}
+            {role === "delete" && <BackArrowWhiteIcon />}
         </TouchableOpacity>
     );
 };

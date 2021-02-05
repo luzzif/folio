@@ -3,6 +3,8 @@ import {
     getEthereumTokenDisambiguatedCoingeckoId,
 } from "../../../../utils";
 import Decimal from "decimal.js";
+import staticEthereumTokensCoingeckoIdsCache from "../../../../../assets/json/ethereum-tokens-coingecko-ids-precache.json";
+import { ethereumTokensCoinGeckoIdsCache } from "../../../../../cache";
 
 export const getEthPortfolio = async (address, coinGeckoIds) => {
     const response = await fetch(
@@ -20,9 +22,15 @@ export const getEthPortfolio = async (address, coinGeckoIds) => {
             if (!symbol) {
                 continue;
             }
-            const coinGeckoId = await getEthereumTokenDisambiguatedCoingeckoId(
-                tokenAddress
-            );
+            let coinGeckoId =
+                staticEthereumTokensCoingeckoIdsCache[tokenAddress] ||
+                ethereumTokensCoinGeckoIdsCache.get(tokenAddress);
+            if (!coinGeckoIds) {
+                coinGeckoId = await getEthereumTokenDisambiguatedCoingeckoId(
+                    tokenAddress
+                );
+                ethereumTokensCoinGeckoIdsCache.set(tokenAddress, coinGeckoId);
+            }
             if (!coinGeckoId) {
                 continue;
             }

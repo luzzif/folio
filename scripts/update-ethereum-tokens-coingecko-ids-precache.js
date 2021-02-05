@@ -9,10 +9,10 @@ const main = async () => {
         throw new Error("Invalid Ethplorer API response");
     }
     const { tokens } = await ethplorerResponse.json();
-    const first150TokenAddresses = tokens.map((token) => token.address);
+    const first50TokenAddresses = tokens.map((token) => token.address);
     const coingeckoIds = {};
     let i = 1;
-    for (const tokenAddress of first150TokenAddresses) {
+    for (const tokenAddress of first50TokenAddresses) {
         console.log(`${i}/50`);
         const coingeckoResponse = await fetch(
             `https://api.coingecko.com/api/v3/coins/ethereum/contract/${tokenAddress}`

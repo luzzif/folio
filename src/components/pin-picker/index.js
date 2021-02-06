@@ -6,12 +6,21 @@ import { useSelector, useDispatch } from "react-redux";
 import { createPin, verifyPin, disablePin } from "../../actions/pin";
 import { sha256 } from "../../utils";
 import { useTheme } from "@react-navigation/native";
-import { Button } from "../button";
 import { ActionButton } from "./action-button";
 import { PinDisplayer } from "./pin-displayer";
+import LockWhiteIcon from "../../../assets/svg/lock-white.svg";
+import LockBlackIcon from "../../../assets/svg/lock-black.svg";
+
+const commonTextStyles = {
+    fontFamily: "Poppins",
+};
 
 export const PinPicker = ({ status, maximumLength, onCapture }) => {
     const { colors: theme } = useTheme();
+
+    const { darkMode } = useSelector((state) => ({
+        darkMode: state.settings.darkMode,
+    }));
 
     const styles = StyleSheet.create({
         root: {
@@ -22,8 +31,13 @@ export const PinPicker = ({ status, maximumLength, onCapture }) => {
             padding: 25,
             backgroundColor: theme.background,
         },
+        header: {
+            alignItems: "center",
+        },
         title: {
-            fontSize: 24,
+            ...commonTextStyles,
+            marginTop: 10,
+            fontSize: 18,
             textAlign: "center",
             color: theme.text,
         },
@@ -37,9 +51,17 @@ export const PinPicker = ({ status, maximumLength, onCapture }) => {
             color: "green",
         },
         numberButton: {
+            ...commonTextStyles,
+            fontSize: 18,
+            padding: 16,
+            color: theme.text,
             borderRadius: 15,
         },
-        pickerContainer: {
+        pinContainer: {
+            alignItems: "center",
+        },
+        pinNumbersContainer: {
+            marginTop: 10,
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -57,13 +79,13 @@ export const PinPicker = ({ status, maximumLength, onCapture }) => {
     const getTitle = () => {
         switch (status) {
             case "capture": {
-                return "Create the passcode";
+                return "Choose a pin";
             }
             case "disable": {
                 return "Confirm to disable";
             }
             case "verify": {
-                return "Verify the passcode";
+                return "Verify the pin";
             }
         }
     };
@@ -126,42 +148,52 @@ export const PinPicker = ({ status, maximumLength, onCapture }) => {
 
     return (
         <View style={styles.root}>
-            <Text style={styles.title}>{getTitle()}</Text>
-            <View style={styles.pickerContainer}>
-                <>
-                    {Array.from({ length: 9 }, (_, number) => (
-                        <View key={number} style={styles.numberContainer}>
-                            <Button
-                                style={styles.numberButton}
-                                secondary={true}
-                                title={number + 1}
-                                onPress={() => handlePinNumberPress(number + 1)}
+            <View style={styles.header}>
+                {darkMode ? <LockWhiteIcon /> : <LockBlackIcon />}
+                <Text style={styles.title}>{getTitle()}</Text>
+            </View>
+            <View style={styles.pinContainer}>
+                <PinDisplayer
+                    length={pin.length}
+                    maximumLength={maximumLength}
+                />
+                <View style={styles.pinNumbersContainer}>
+                    <>
+                        {Array.from({ length: 9 }, (_, number) => (
+                            <View key={number} style={styles.numberContainer}>
+                                <Text
+                                    style={styles.numberButton}
+                                    onPress={() =>
+                                        handlePinNumberPress(number + 1)
+                                    }
+                                >
+                                    {number + 1}
+                                </Text>
+                            </View>
+                        ))}
+                        <View style={styles.numberContainer}>
+                            <ActionButton
+                                role={"delete"}
+                                onPress={() => setPin(pin.slice(0, -1))}
                             />
                         </View>
-                    ))}
-                    <View style={styles.numberContainer}>
-                        <ActionButton
-                            role={"confirm"}
-                            onPress={handlePinConfirmation}
-                        />
-                    </View>
-                    <View style={styles.numberContainer}>
-                        <Button
-                            style={styles.numberButton}
-                            secondary={true}
-                            title={0}
-                            onPress={() => handlePinNumberPress(0)}
-                        />
-                    </View>
-                    <View style={styles.numberContainer}>
-                        <ActionButton
-                            role={"delete"}
-                            onPress={() => setPin(pin.slice(0, -1))}
-                        />
-                    </View>
-                </>
+                        <View style={styles.numberContainer}>
+                            <Text
+                                style={styles.numberButton}
+                                onPress={() => handlePinNumberPress(0)}
+                            >
+                                0
+                            </Text>
+                        </View>
+                        <View style={styles.numberContainer}>
+                            <ActionButton
+                                role={"confirm"}
+                                onPress={handlePinConfirmation}
+                            />
+                        </View>
+                    </>
+                </View>
             </View>
-            <PinDisplayer length={pin.length} maximumLength={maximumLength} />
         </View>
     );
 };

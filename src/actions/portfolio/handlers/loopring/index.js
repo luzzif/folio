@@ -3,11 +3,11 @@ import { decimalFromWei } from "../../../../utils";
 
 export const getLoopringPortfolio = async (accountId, apiKey, coinGeckoIds) => {
     let response = await fetch(
-        "https://api.loopring.io/api/v2/exchange/tokens"
+        "https://api3.loopring.io/api/v2/exchange/tokens"
     );
     const { data: tokens } = await response.json();
     response = await fetch(
-        `https://api.loopring.io/api/v2/user/balances?accountId=${accountId}`,
+        `https://api3.loopring.io/api/v2/user/balances?accountId=${accountId}`,
         { headers: { "X-API-KEY": apiKey } }
     );
     if (!response.ok) {

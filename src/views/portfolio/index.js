@@ -223,7 +223,6 @@ export const Portfolio = ({ navigation }) => {
             </View>
             <List
                 bottomSpacing={100}
-                header="Highest holding"
                 items={aggregatedPortfolio.map((asset) => {
                     const percentage =
                         asset.priceChangePercentages[percentageChangeTimeframe];

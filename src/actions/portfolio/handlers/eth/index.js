@@ -24,12 +24,18 @@ export const getEthPortfolio = async (address, coinGeckoIds) => {
             }
             let coinGeckoId =
                 staticEthereumTokensCoingeckoIdsCache[tokenAddress] ||
-                ethereumTokensCoinGeckoIdsCache.get(tokenAddress);
-            if (!coinGeckoIds) {
+                (await ethereumTokensCoinGeckoIdsCache.get(tokenAddress));
+            if (typeof coinGeckoId !== "string") {
                 coinGeckoId = await getEthereumTokenDisambiguatedCoingeckoId(
                     tokenAddress
                 );
-                ethereumTokensCoinGeckoIdsCache.set(tokenAddress, coinGeckoId);
+                if (!coinGeckoId) {
+                    continue;
+                }
+                await ethereumTokensCoinGeckoIdsCache.set(
+                    tokenAddress,
+                    coinGeckoId
+                );
             }
             if (!coinGeckoId) {
                 continue;

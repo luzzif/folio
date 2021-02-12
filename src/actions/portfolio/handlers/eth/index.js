@@ -3,7 +3,7 @@ import {
     getEthereumTokenDisambiguatedCoingeckoId,
 } from "../../../../utils";
 import Decimal from "decimal.js";
-import staticEthereumTokensCoingeckoIdsCache from "../../../../../assets/json/ethereum-tokens-coingecko-ids-precache.json";
+import staticEthereumTokensCoingeckoIdsIndexedByAddress from "../../../../../assets/json/ethereum-tokens-coingecko-ids-indexed-by-address.json";
 import { ethereumTokensCoinGeckoIdsCache } from "../../../../../cache";
 
 export const getEthPortfolio = async (address, coinGeckoIds) => {
@@ -23,8 +23,9 @@ export const getEthPortfolio = async (address, coinGeckoIds) => {
                 continue;
             }
             let coinGeckoId =
-                staticEthereumTokensCoingeckoIdsCache[tokenAddress] ||
-                (await ethereumTokensCoinGeckoIdsCache.get(tokenAddress));
+                staticEthereumTokensCoingeckoIdsIndexedByAddress[
+                    tokenAddress
+                ] || (await ethereumTokensCoinGeckoIdsCache.get(tokenAddress));
             if (typeof coinGeckoId !== "string") {
                 coinGeckoId = await getEthereumTokenDisambiguatedCoingeckoId(
                     tokenAddress

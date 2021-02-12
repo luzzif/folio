@@ -1,5 +1,7 @@
 import Decimal from "decimal.js";
 import { decimalFromWei } from "../../../../utils";
+import staticEthereumTokensCoingeckoIdsCache from "../../../../../assets/json/ethereum-tokens-coingecko-ids-indexed-by-address.json";
+import { ethereumTokensCoinGeckoIdsCache } from "../../../../../cache";
 
 export const getLoopringPortfolio = async (accountId, apiKey, coinGeckoIds) => {
     let response = await fetch(
@@ -17,16 +19,20 @@ export const getLoopringPortfolio = async (accountId, apiKey, coinGeckoIds) => {
     const portfolio = [];
     for (const balance of balances) {
         const { tokenId, totalAmount } = balance;
-        const { symbol: tokenSymbol, decimals: tokenDecimals } = tokens.find(
-            (token) => token.tokenId === tokenId
-        );
+        const {
+            symbol: tokenSymbol,
+            decimals: tokenDecimals,
+            address: tokenAddress,
+        } = tokens.find((token) => token.tokenId === tokenId);
         if (!tokenSymbol) {
             continue;
         }
-        const coinGeckoId = coinGeckoIds[tokenSymbol.toLowerCase()];
-        if (!coinGeckoId) {
-            continue;
-        }
+        let coinGeckoId =
+            tokenAddress === "0x0000000000000000000000000000000000000000"
+                ? "ethereum"
+                : staticEthereumTokensCoingeckoIdsCache[tokenAddress] ||
+                  (await ethereumTokensCoinGeckoIdsCache.get(tokenAddress)) ||
+                  coinGeckoIds[tokenSymbol.toLowerCase()];
         portfolio.push({
             symbol: tokenSymbol,
             balance: decimalFromWei(

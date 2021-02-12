@@ -9,24 +9,38 @@ const main = async () => {
         throw new Error("Invalid Ethplorer API response");
     }
     const { tokens } = await ethplorerResponse.json();
-    const first50TokenAddresses = tokens.map((token) => token.address);
-    const coingeckoIds = {};
+    const first50TokensData = tokens.map((token) => ({
+        address: token.address,
+        symbol: token.symbol,
+    }));
+    const coingeckoIdsByAddress = {};
+    const coingeckoIdsBySymbol = {};
     let i = 1;
-    for (const tokenAddress of first50TokenAddresses) {
+    for (const { address, symbol } of first50TokensData) {
         console.log(`${i}/50`);
         const coingeckoResponse = await fetch(
-            `https://api.coingecko.com/api/v3/coins/ethereum/contract/${tokenAddress}`
+            `https://api.coingecko.com/api/v3/coins/ethereum/contract/${address}`
         );
         const { id } = await coingeckoResponse.json();
         if (!id) {
             continue;
         }
-        coingeckoIds[tokenAddress] = id;
+        coingeckoIdsByAddress[address] = id;
+        coingeckoIdsBySymbol[symbol.toLowerCase()] = id;
         i++;
     }
     fs.writeFile(
-        `${__dirname}/../assets/json/ethereum-tokens-coingecko-ids-precache.json`,
-        JSON.stringify(coingeckoIds, null, 4),
+        `${__dirname}/../assets/json/ethereum-tokens-coingecko-ids-indexed-by-address.json`,
+        JSON.stringify(coingeckoIdsByAddress, null, 4),
+        (error) => {
+            if (error) {
+                throw error;
+            }
+        }
+    );
+    fs.writeFile(
+        `${__dirname}/../assets/json/ethereum-tokens-coingecko-ids-indexed-by-symbol.json`,
+        JSON.stringify(coingeckoIdsBySymbol, null, 4),
         (error) => {
             if (error) {
                 throw error;

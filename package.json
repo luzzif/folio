@@ -13,7 +13,7 @@
         "lint:ci": "yarn lint:code && yarn lint:prettier",
         "format": "prettier --write \"src/**/*.{js,jsx,json,md}\" && prettier --write package.json",
         "update-crypto-icons-exporter": "node ./scripts/update-crypto-icons-exporter",
-        "update-ethereum-tokens-coingecko-ids-precache": "node ./scripts/update-ethereum-tokens-coingecko-ids-precache"
+        "update-ethereum-tokens-coingecko-ids-indexes": "node ./scripts/update-ethereum-tokens-coingecko-ids-indexes"
     },
     "dependencies": {
         "@react-native-community/async-storage": "^1.12.1",

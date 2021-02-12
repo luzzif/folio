@@ -7,7 +7,7 @@ import { reducers } from "./src/reducers";
 const rootPersistConfig = {
     key: "root",
     storage: AsyncStorage,
-    blacklist: ["portfolio", "coinGecko", "existingPin"],
+    blacklist: ["coinGecko", "existingPin"],
 };
 
 const pinLockPersistConfig = {

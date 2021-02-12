@@ -107,12 +107,6 @@ export const Portfolio = ({ navigation }) => {
     }, [accounts, dispatch]);
 
     useEffect(() => {
-        if (!manualTransactions || manualTransactions.length === 0) {
-            setAggregatedPortfolio([]);
-        }
-    }, [dispatch, manualTransactions]);
-
-    useEffect(() => {
         if (coinGeckoIds) {
             dispatch(
                 getPortfolio(

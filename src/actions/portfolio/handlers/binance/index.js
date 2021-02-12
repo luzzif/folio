@@ -1,5 +1,7 @@
 import Decimal from "decimal.js";
 import hash from "hash.js";
+import staticEthereumTokensCoingeckoIdsIndexedByAddress from "../../../../../assets/json/ethereum-tokens-coingecko-ids-indexed-by-symbol.json";
+import { ethereumTokensCoinGeckoIdsCache } from "../../../../../cache";
 
 export const getBinancePortfolio = async (apiKey, apiSecret, coinGeckoIds) => {
     const params = `timestamp=${Date.now()}`;
@@ -30,7 +32,14 @@ export const getBinancePortfolio = async (apiKey, apiSecret, coinGeckoIds) => {
         if (!asset) {
             continue;
         }
-        const coinGeckoId = coinGeckoIds[asset.toLowerCase()];
+        // ethereum tokens are favored in this case
+        const lowercaseAssetSymbol = asset.toLowerCase();
+        let coinGeckoId =
+            staticEthereumTokensCoingeckoIdsIndexedByAddress[
+                lowercaseAssetSymbol
+            ] ||
+            (await ethereumTokensCoinGeckoIdsCache.get(lowercaseAssetSymbol)) ||
+            coinGeckoIds[lowercaseAssetSymbol];
         if (!coinGeckoId) {
             continue;
         }

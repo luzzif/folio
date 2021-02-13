@@ -2,14 +2,9 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import LinearGradient from "react-native-linear-gradient";
-import { useSelector } from "react-redux";
 
 export const AddOption = ({ title, subtitle, onPress }) => {
     const { colors: theme } = useTheme();
-
-    const { darkMode } = useSelector((state) => ({
-        darkMode: state.settings.darkMode,
-    }));
 
     const styles = StyleSheet.create({
         root: {
@@ -43,11 +38,8 @@ export const AddOption = ({ title, subtitle, onPress }) => {
         <View style={styles.elevatedContainer}>
             <LinearGradient
                 start={{ x: 0, y: 0 }}
-                end={{ x: 1.9, y: 1.9 }}
-                colors={[
-                    theme.primary,
-                    darkMode ? theme.primaryDarkMode : theme.primary,
-                ]}
+                end={{ x: 1, y: 1 }}
+                colors={[theme.primary, theme.primaryDarkMode]}
                 style={styles.root}
             >
                 <TouchableOpacity onPress={onPress}>

@@ -13,7 +13,7 @@ export const List = ({
     bottomSpacing,
     height,
 }) => {
-    const { dark, colors: theme } = useTheme();
+    const { colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {
@@ -44,7 +44,7 @@ export const List = ({
             fontFamily: "Poppins-Bold",
             fontSize: 13,
             lineHeight: 22,
-            color: dark ? theme.primaryDarkMode : theme.primary,
+            color: theme.primary,
             letterSpacing: 0.25,
         },
         orderingText: {

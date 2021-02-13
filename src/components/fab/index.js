@@ -30,10 +30,7 @@ export const Fab = ({ icon, onPress }) => {
             <LinearGradient
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
-                colors={[
-                    theme.primary,
-                    darkMode ? theme.primaryDarkMode : theme.primary,
-                ]}
+                colors={[theme.primary, theme.primaryDarkMode]}
                 style={styles.root}
             >
                 {icon}

@@ -26,10 +26,10 @@ const commonColors = {
     errorDarkMode: "#FF84B7",
     disabled: "rgb(202, 209, 213)",
     textButton: "#d6e0ff",
-    primary: "#5F2EEA",
+    primary: "#7B61FF",
     primaryLight: "#E4DAFF",
     primaryDark: "#2A00A2",
-    primaryDarkMode: "#BCA4FF",
+    primaryDarkMode: "#0D0B85",
     white: "#fff",
     placeholder: "#A0A3BD",
 };
@@ -56,7 +56,7 @@ const themes = {
         dark: true,
         colors: {
             ...commonColors,
-            background: "#000",
+            background: "#14142B",
             card: "#212121",
             foreground: "#333",
             textDisabled: "#808080",

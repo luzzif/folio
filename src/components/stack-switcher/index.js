@@ -12,7 +12,7 @@ export const StackSwitcher = ({ items }) => {
         <Stack.Navigator
             screenOptions={{
                 headerShown: false,
-                ...TransitionPresets.FadeFromBottomAndroid,
+                ...TransitionPresets.SlideFromRightIOS,
             }}
         >
             {items.map((item) => (

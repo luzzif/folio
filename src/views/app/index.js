@@ -21,7 +21,7 @@ const commonColors = {
     success: "#00BA88",
     successDark: "#00966D",
     successDarkMode: "#34EAB9",
-    error: "#C30052",
+    error: "#EB5757",
     errorDark: "#C30052",
     errorDarkMode: "#FF84B7",
     disabled: "rgb(202, 209, 213)",

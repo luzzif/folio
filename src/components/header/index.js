@@ -14,6 +14,30 @@ import { useDispatch } from "react-redux";
 import { changePercentageChangeTimeframe } from "../../actions/settings";
 import { CryptoIcon } from "../crypto-icon";
 
+const commonPercentageChangeTextStyle = {
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    lineHeight: 18,
+    letterSpacing: 0.75,
+};
+
+const commonAbsoluteChangeTextStyle = {
+    fontFamily: "Poppins-Bold",
+    fontSize: 16,
+    lineHeight: 18,
+    letterSpacing: 0.75,
+    marginRight: 6,
+    paddingTop: 2,
+};
+
+const commonPercentageChangeTextContainerStyle = {
+    height: 18,
+    borderRadius: 6,
+    paddingHorizontal: 2,
+    paddingTop: 2,
+    alignSelf: "baseline",
+};
+
 export const Header = ({
     portfolio,
     fiatCurrency,
@@ -23,30 +47,6 @@ export const Header = ({
     const { colors: theme } = useTheme();
     const dispatch = useDispatch();
     const [openTimeframeModal, setOpenTimeframeModal] = useState(false);
-
-    const commonPercentageChangeTextStyle = {
-        fontFamily: "Poppins-Regular",
-        fontSize: 16,
-        lineHeight: 18,
-        letterSpacing: 0.75,
-    };
-
-    const commonAbsoluteChangeTextStyle = {
-        fontFamily: "Poppins-Bold",
-        fontSize: 16,
-        lineHeight: 18,
-        letterSpacing: 0.75,
-        marginRight: 6,
-        paddingTop: 2,
-    };
-
-    const commonPercentageChangeTextContainerStyle = {
-        height: 18,
-        borderRadius: 6,
-        paddingHorizontal: 2,
-        paddingTop: 2,
-        alignSelf: "baseline",
-    };
 
     const styles = StyleSheet.create({
         root: {
@@ -60,9 +60,9 @@ export const Header = ({
             elevation: 8,
             borderRadius: 16,
             backgroundColor: theme.foreground,
-            paddingTop: 20,
-            paddingBottom: 16,
-            paddingHorizontal: 20,
+            paddingTop: 16,
+            paddingBottom: 10,
+            paddingHorizontal: 16,
         },
         leftBlock: {
             flex: 1,
@@ -76,17 +76,16 @@ export const Header = ({
             fontFamily: "Poppins-Regular",
             color: theme.white,
             opacity: 1,
-            fontSize: 14,
-            lineHeight: 16,
-            marginBottom: 8,
+            fontSize: 13,
+            lineHeight: 14,
+            marginBottom: 6,
             letterSpacing: 0.25,
         },
         totalBalance: {
             fontFamily: "Poppins-Bold",
             color: theme.white,
-            fontSize: 32,
-            lineHeight: 36,
-            marginBottom: 2,
+            fontSize: 30,
+            lineHeight: 34,
             letterSpacing: 1,
         },
         pieChart: {
@@ -95,15 +94,15 @@ export const Header = ({
         },
         positivePercentageChangeText: {
             ...commonPercentageChangeTextStyle,
-            color: theme.successDark,
+            color: theme.successDarkMode,
         },
         negativePercentageChangeText: {
             ...commonPercentageChangeTextStyle,
-            color: theme.errorDark,
+            color: theme.errorDarkMode,
         },
         positiveAbsoluteChangeText: {
             ...commonAbsoluteChangeTextStyle,
-            color: theme.successDark,
+            color: theme.success,
         },
         negativeAbsoluteChangeText: {
             ...commonAbsoluteChangeTextStyle,
@@ -114,11 +113,11 @@ export const Header = ({
         },
         positivePercentageChangeBackground: {
             ...commonPercentageChangeTextContainerStyle,
-            backgroundColor: theme.successDarkMode,
+            backgroundColor: theme.successDark,
         },
         negativePercentageChangeBackground: {
             ...commonPercentageChangeTextContainerStyle,
-            backgroundColor: theme.errorDarkMode,
+            backgroundColor: theme.errorDark,
         },
         timeframeText: {
             fontFamily: "Poppins-Bold",

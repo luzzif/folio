@@ -3,14 +3,9 @@ import PropTypes from "prop-types";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import LinearGradient from "react-native-linear-gradient";
-import { useSelector } from "react-redux";
 
 export const Fab = ({ icon, onPress }) => {
     const { colors: theme } = useTheme();
-
-    const { darkMode } = useSelector((state) => ({
-        darkMode: state.settings.darkMode,
-    }));
 
     const styles = StyleSheet.create({
         root: {

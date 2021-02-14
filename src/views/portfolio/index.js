@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Decimal } from "decimal.js";
 import { Header } from "../../components/header";
 import { StyleSheet, View, Text } from "react-native";
@@ -16,14 +16,26 @@ import CogBlackIcon from "../../../assets/svg/cog-black.svg";
 import PlusIcon from "../../../assets/svg/plus.svg";
 import { Fab } from "../../components/fab";
 import { AppTitle } from "../../components/app-title";
+import { useAggregatedPortfolio } from "../../hooks/useAggregatedPortfolio";
+import { transparentize } from "polished";
+
+const commonPercentageChangeTextStyle = {
+    fontFamily: "Poppins-Bold",
+    fontSize: 12,
+    lineHeight: 14,
+    letterSpacing: 0.75,
+};
+
+const commonTextContainerStyle = {
+    height: 14,
+    borderRadius: 4,
+    paddingHorizontal: 2,
+    paddingTop: 1,
+    alignSelf: "baseline",
+};
 
 export const Portfolio = ({ navigation }) => {
     const { dark, colors: theme } = useTheme();
-
-    const commonPercentageChangeTextStyle = {
-        fontFamily: "Poppins-Bold",
-        fontSize: 12,
-    };
 
     const styles = StyleSheet.create({
         root: {
@@ -46,6 +58,14 @@ export const Portfolio = ({ navigation }) => {
         },
         rightSpacedContainer: {
             marginRight: 12,
+        },
+        positiveTextBackground: {
+            ...commonTextContainerStyle,
+            backgroundColor: transparentize(0.7, theme.successDarkMode),
+        },
+        negativeTextBackground: {
+            ...commonTextContainerStyle,
+            backgroundColor: transparentize(0.8, theme.errorDarkMode),
         },
         positiveText: {
             ...commonPercentageChangeTextStyle,
@@ -76,7 +96,6 @@ export const Portfolio = ({ navigation }) => {
 
     const dispatch = useDispatch();
     const {
-        portfolio,
         loadingPortfolio,
         accounts,
         fiatCurrency,
@@ -93,8 +112,7 @@ export const Portfolio = ({ navigation }) => {
         percentageChangeTimeframe: state.settings.percentageChangeTimeframe,
     }));
 
-    const [aggregatedPortfolio, setAggregatedPortfolio] = useState([]);
-    const [symbols, setSymbols] = useState([]);
+    const aggregatedPortfolio = useAggregatedPortfolio();
 
     useEffect(() => {
         dispatch(getCoinGeckoBaseData(fiatCurrency));
@@ -118,58 +136,6 @@ export const Portfolio = ({ navigation }) => {
             );
         }
     }, [accounts, coinGeckoIds, dispatch, fiatCurrency, manualTransactions]);
-
-    useEffect(() => {
-        if (portfolio && portfolio.length > 0) {
-            setSymbols(
-                portfolio.reduce((uniqueSymbols, asset) => {
-                    if (uniqueSymbols.indexOf(asset.symbol) < 0) {
-                        uniqueSymbols.push(asset.symbol);
-                    }
-                    return uniqueSymbols;
-                }, [])
-            );
-        }
-    }, [portfolio]);
-
-    useEffect(() => {
-        if (!loadingPortfolio && portfolio && portfolio.length > 0) {
-            setAggregatedPortfolio(
-                symbols
-                    // sum the balance of every entry with the same symbol to
-                    // get the aggregated balance
-                    .reduce((finalPortfolio, symbol) => {
-                        const assetsBySymbol = portfolio.filter(
-                            (asset) =>
-                                asset.symbol.toLowerCase() ===
-                                symbol.toLowerCase()
-                        );
-                        const totalBalance = assetsBySymbol.reduce(
-                            (totalBalanceForSymbol, asset) =>
-                                totalBalanceForSymbol.plus(asset.balance),
-                            new Decimal("0")
-                        );
-                        const {
-                            currentPrice,
-                            icon,
-                            priceChangePercentages,
-                        } = assetsBySymbol[0].info;
-                        const value = totalBalance.times(currentPrice);
-                        finalPortfolio.push({
-                            symbol,
-                            name: assetsBySymbol[0].name,
-                            balance: totalBalance,
-                            price: currentPrice,
-                            value,
-                            priceChangePercentages,
-                            icon: icon,
-                        });
-                        return finalPortfolio;
-                    }, [])
-                    .sort((a, b) => b.value.minus(a.value).toNumber())
-            );
-        }
-    }, [portfolio, symbols, loadingPortfolio]);
 
     const handleRefresh = useCallback(() => {
         if (coinGeckoIds) {
@@ -257,20 +223,29 @@ export const Portfolio = ({ navigation }) => {
                                 : formatDecimal(asset.value)
                         }`,
                         quaternary: (
-                            <Text
+                            <View
                                 style={
                                     percentage &&
                                     decimalPercentageChange.isPositive()
-                                        ? styles.positiveText
-                                        : styles.negativeText
+                                        ? styles.positiveTextBackground
+                                        : styles.negativeTextBackground
                                 }
                             >
-                                {percentage
-                                    ? `${formatDecimal(
-                                          decimalPercentageChange
-                                      )}%`
-                                    : "0%"}
-                            </Text>
+                                <Text
+                                    style={
+                                        percentage &&
+                                        decimalPercentageChange.isPositive()
+                                            ? styles.positiveText
+                                            : styles.negativeText
+                                    }
+                                >
+                                    {percentage
+                                        ? `${formatDecimal(
+                                              decimalPercentageChange
+                                          )}%`
+                                        : "0%"}
+                                </Text>
+                            </View>
                         ),
                         onPress: getAssetPressHandler(asset.symbol),
                     };

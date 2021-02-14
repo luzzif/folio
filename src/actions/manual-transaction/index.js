@@ -6,6 +6,7 @@ export const addManualTransaction = (
     symbol,
     buy,
     balance,
+    notes,
     coinGeckoId
 ) => async (dispatch) => {
     try {
@@ -16,6 +17,7 @@ export const addManualTransaction = (
                 symbol,
                 balance: balance,
                 buy,
+                notes,
                 coinGeckoId,
             },
         });
@@ -35,6 +37,7 @@ export const updateManualTransaction = (
     symbol,
     balance,
     buy,
+    notes,
     coinGeckoId
 ) => ({
     type: UPDATE_MANUAL_TRANSACTION,
@@ -43,6 +46,7 @@ export const updateManualTransaction = (
         symbol,
         balance,
         buy,
+        notes,
         coinGeckoId,
     },
 });

@@ -55,9 +55,9 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Nunito-Bold.ttf</string>
-		<string>Nunito-Regular.ttf</string>
-		<string>Nunito-SemiBold.ttf</string>
+		<string>Poppins-Bold.ttf</string>
+		<string>Poppins-Regular.ttf</string>
+		<string>Poppins-SemiBold.ttf</string>
 	</array>
 </dict>
 </plist>

@@ -1,6 +1,6 @@
-import React, { useContext, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, View } from "react-native";
-import { ThemeContext } from "../../../contexts/theme";
+import { useTheme } from "@react-navigation/native";
 import { Input } from "../../../components/input";
 import { Button } from "../../../components/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,9 +11,10 @@ import {
     PORTFOLIO_SOURCE,
     PORTFOLIO_SOURCE_SPECIFICATION,
 } from "../../../commons";
+import { AppTitle } from "../../../components/app-title";
 
 export const Account = ({ navigation, route }) => {
-    const theme = useContext(ThemeContext);
+    const { colors: theme } = useTheme();
     const dispatch = useDispatch();
     const { accounts } = useSelector((state) => ({
         accounts: state.accounts,
@@ -25,10 +26,16 @@ export const Account = ({ navigation, route }) => {
             backgroundColor: theme.background,
         },
         content: {
-            padding: 16,
+            paddingHorizontal: 16,
         },
         bottomSpacedContainer: {
             marginBottom: 24,
+        },
+        saveButtonContainer: {
+            position: "absolute",
+            width: "100%",
+            bottom: 16,
+            paddingHorizontal: 16,
         },
     });
 
@@ -102,7 +109,7 @@ export const Account = ({ navigation, route }) => {
             case SPECIFICATION_FIELD_TYPE.INPUT: {
                 return (
                     <Input
-                        label={field.label}
+                        placeholder={field.label}
                         value={fields[field.name].value}
                         onChangeText={getFieldUpdateHandler(field)}
                         onBlur={() => validateField(field)}
@@ -134,12 +141,21 @@ export const Account = ({ navigation, route }) => {
         navigation.pop();
     }, [accountType, dispatch, fields, name, navigation, updatingId]);
 
+    const handleClose = useCallback(() => {
+        navigation.pop();
+    }, [navigation]);
+
     return (
         <View style={styles.root}>
+            <AppTitle
+                title={`Account (${accountType})`}
+                closeable
+                onClose={handleClose}
+            />
             <View style={styles.content}>
                 <View style={styles.bottomSpacedContainer}>
                     <Input
-                        label="Name"
+                        placeholder="Name"
                         value={name}
                         validate={false}
                         onChangeText={setName}
@@ -150,6 +166,8 @@ export const Account = ({ navigation, route }) => {
                         {getFieldComponent(field)}
                     </View>
                 ))}
+            </View>
+            <View style={styles.saveButtonContainer}>
                 <Button
                     title="Save"
                     onPress={handleSavePress}

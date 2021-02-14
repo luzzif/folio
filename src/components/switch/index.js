@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import ToggleSwitch from "toggle-switch-react-native";
-import { ThemeContext } from "../../contexts/theme";
+import { useTheme } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 
 export const Switch = ({ value, onChange }) => {
-    const theme = useContext(ThemeContext);
+    const { colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         thumb: {

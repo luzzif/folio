@@ -77,8 +77,8 @@ export const getPortfolio = (
                     }
                     return {
                         ...asset,
+                        name: relatedMarketData.name,
                         info: {
-                            icon: relatedMarketData.image,
                             currentPrice: relatedMarketData.current_price,
                             priceChangePercentages: {
                                 "1d":
@@ -98,7 +98,7 @@ export const getPortfolio = (
     } catch (error) {
         console.error("error while getting the portfolio", error);
         ToastAndroid.show(
-            "There was an error fetching the updated portfolio.",
+            "There was an error fetching the updated portfolio. Please try again in a few minutes.",
             5000
         );
     } finally {

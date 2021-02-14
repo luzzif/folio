@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { ThemeContext } from "../../contexts/theme";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { useTheme } from "@react-navigation/native";
+import LinearGradient from "react-native-linear-gradient";
 
-export const Fab = ({ faIcon, onPress }) => {
-    const theme = useContext(ThemeContext);
+export const Fab = ({ icon, onPress }) => {
+    const { colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {
@@ -22,16 +22,19 @@ export const Fab = ({ faIcon, onPress }) => {
 
     return (
         <TouchableOpacity onPress={onPress} style={styles.root}>
-            <FontAwesomeIcon
-                color={theme.textInverted}
-                icon={faIcon}
-                size={24}
-            />
+            <LinearGradient
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                colors={[theme.primary, theme.primaryDarkMode]}
+                style={styles.root}
+            >
+                {icon}
+            </LinearGradient>
         </TouchableOpacity>
     );
 };
 
 Fab.propTypes = {
-    faIcon: PropTypes.object.isRequired,
+    icon: PropTypes.object.isRequired,
     onPress: PropTypes.func,
 };

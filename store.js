@@ -7,24 +7,28 @@ import { reducers } from "./src/reducers";
 const rootPersistConfig = {
     key: "root",
     storage: AsyncStorage,
-    blacklist: ["portfolio", "coinGecko", "existingPin"]
-}
+    blacklist: ["coinGecko", "existingPin", "portfolio"],
+};
+
+const portfolioPersistConfig = {
+    key: "portfolio",
+    storage: AsyncStorage,
+    blacklist: ["loadings"],
+};
 
 const pinLockPersistConfig = {
     key: "existingPin",
     storage: AsyncStorage,
-    blacklist: ["isVerified", "isVerifying"]
-}
+    blacklist: ["isVerified", "isVerifying"],
+};
 
 const rootReducer = combineReducers({
     ...reducers,
-    pinConfig: persistReducer(pinLockPersistConfig, reducers.pinConfig)
-})
+    pinConfig: persistReducer(pinLockPersistConfig, reducers.pinConfig),
+    portfolio: persistReducer(portfolioPersistConfig, reducers.portfolio),
+});
 
-const persistedReducer = persistReducer(
-    rootPersistConfig,
-    rootReducer
-);
+const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

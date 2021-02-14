@@ -1,88 +1,48 @@
-import React, { useContext, useState, useCallback, useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
-import { ThemeContext } from "../../contexts/theme";
-import { Select } from "../../components/select";
-import { useSelector, useDispatch } from "react-redux";
-import { Switch } from "../../components/switch";
+import React, { useState, useCallback } from "react";
+import { View, StyleSheet } from "react-native";
+import { useTheme } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import { Input } from "../../components/input";
 import { Button } from "../../components/button";
 import {
     addManualTransaction,
     updateManualTransaction,
 } from "../../actions/manual-transaction";
+import { AppTitle } from "../../components/app-title";
+import { BuySellPicker } from "../../components/buy-sell-picker";
 
 export const ManualTransaction = ({ navigation, route }) => {
-    const theme = useContext(ThemeContext);
+    const { colors: theme } = useTheme();
     const dispatch = useDispatch();
-    const { wrappedIds } = useSelector((state) => ({
-        wrappedIds: state.coinGecko.wrappedIds,
-    }));
 
     const styles = StyleSheet.create({
         root: {
             width: "100%",
             height: "100%",
             backgroundColor: theme.background,
-            paddingTop: 16,
-            paddingHorizontal: 12,
+        },
+        content: {
+            paddingHorizontal: 16,
         },
         bottomSpacedContainer: {
-            marginBottom: 24,
+            marginBottom: 20,
         },
-        buyCointainer: {
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            paddingHorizontal: 4,
-        },
-        buyLabel: {
-            flex: 1,
-            paddingRight: 16,
-            fontFamily: "Nunito-Regular",
-            color: theme.text,
+        buttonContainer: {
+            position: "absolute",
+            bottom: 16,
+            left: 16,
+            right: 16,
         },
     });
 
-    const [assetOptions, setAssetOptions] = useState([]);
-    const [asset, setAsset] = useState(null);
     const [buy, setBuy] = useState(
-        route.params &&
-            route.params.buy !== null &&
-            route.params.buy !== undefined
+        route.params.buy !== null && route.params.buy !== undefined
             ? route.params.buy
             : true
     );
-    const [amount, setAmount] = useState(
-        route.params && route.params.balance ? route.params.balance : 0
-    );
+    const [notes, setNotes] = useState(route.params.notes || "");
+    const [amount, setAmount] = useState(route.params.balance || 0);
     const [amountError, setAmountError] = useState(false);
-
-    useEffect(() => {
-        const options = wrappedIds.map((wrappedId) => {
-            const { id, symbol } = wrappedId;
-            const upperCaseSymbol = symbol.toUpperCase();
-            return {
-                value: id,
-                label: upperCaseSymbol,
-                listItemSpecification: {
-                    key: id,
-                    primary: upperCaseSymbol,
-                },
-            };
-        });
-        setAssetOptions(options);
-        if (route.params) {
-            setAsset(
-                options.find(
-                    (option) =>
-                        option.label.toLowerCase() ===
-                        route.params.symbol.toLowerCase()
-                )
-            );
-        } else {
-            setAsset(options[0]);
-        }
-    }, [wrappedIds, route]);
 
     const handleBuyChange = useCallback(() => {
         setBuy(!buy);
@@ -99,54 +59,71 @@ export const ManualTransaction = ({ navigation, route }) => {
     }, []);
 
     const handleSavePress = useCallback(() => {
-        if (route.params) {
+        if (route.params && route.params.timestamp) {
             dispatch(
                 updateManualTransaction(
                     route.params.timestamp,
                     route.params.symbol,
                     amount,
                     buy,
+                    notes,
                     route.params.coinGeckoId
                 )
             );
         } else {
             dispatch(
-                addManualTransaction(asset.label, buy, amount, asset.value)
+                addManualTransaction(
+                    route.params.symbol,
+                    buy,
+                    amount,
+                    notes,
+                    route.params.coinGeckoId
+                )
             );
         }
         navigation.pop();
-    }, [amount, asset, buy, dispatch, navigation, route]);
+    }, [amount, buy, dispatch, navigation, notes, route.params]);
+
+    const handleClose = useCallback(() => {
+        navigation.pop();
+    }, [navigation]);
 
     return (
         <View style={styles.root}>
-            <View style={styles.bottomSpacedContainer}>
-                <Select
-                    label="Asset"
-                    value={asset}
-                    onChange={setAsset}
-                    options={assetOptions}
-                    searchable
-                />
-            </View>
-            <View style={styles.bottomSpacedContainer}>
-                <Input
-                    label="Amount"
-                    value={amount}
-                    onChangeText={handleAmountChange}
-                    keyboardType="decimal-pad"
-                />
-            </View>
-            <View style={styles.bottomSpacedContainer}>
-                <View style={styles.buyCointainer}>
-                    <Text style={styles.buyLabel}>Buy</Text>
-                    <Switch value={buy} onChange={handleBuyChange} />
+            <AppTitle
+                title={`${
+                    route.params.timestamp ? "Edit" : "Add"
+                } tx (${route.params.symbol.toUpperCase()})`}
+                closeable
+                onClose={handleClose}
+            />
+            <View style={styles.content}>
+                <View style={styles.bottomSpacedContainer}>
+                    <BuySellPicker buy={buy} onChange={handleBuyChange} />
+                </View>
+                <View style={styles.bottomSpacedContainer}>
+                    <Input
+                        placeholder="Amount"
+                        value={amount}
+                        onChangeText={handleAmountChange}
+                        keyboardType="decimal-pad"
+                    />
+                </View>
+                <View style={styles.bottomSpacedContainer}>
+                    <Input
+                        placeholder="Notes"
+                        value={notes}
+                        onChangeText={setNotes}
+                    />
                 </View>
             </View>
-            <Button
-                title="Save"
-                onPress={handleSavePress}
-                disabled={!amount || amountError}
-            />
+            <View style={styles.buttonContainer}>
+                <Button
+                    title="Save"
+                    onPress={handleSavePress}
+                    disabled={!amount || amountError}
+                />
+            </View>
         </View>
     );
 };

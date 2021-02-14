@@ -1,28 +1,41 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Decimal } from "decimal.js";
 import { Header } from "../../components/header";
 import { StyleSheet, View, Text } from "react-native";
 import { getPortfolio, resetPortfolio } from "../../actions/portfolio";
 import { List } from "../../components/list";
 import { CryptoIcon } from "../../components/crypto-icon";
-import { ThemeContext } from "../../contexts/theme";
+import { useTheme } from "@react-navigation/native";
 import { getCoinGeckoBaseData } from "../../actions/coingecko";
 import { CURRENCY_SYMBOLS } from "../../commons";
 import { formatDecimal } from "../../utils";
+import CogWhiteIcon from "../../../assets/svg/cog-white.svg";
+import CogBlackIcon from "../../../assets/svg/cog-black.svg";
+import PlusIcon from "../../../assets/svg/plus.svg";
 import { Fab } from "../../components/fab";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Chip } from "../../components/chip";
-import { changePercentageChangeTimeframe } from "../../actions/settings";
+import { AppTitle } from "../../components/app-title";
+import { useAggregatedPortfolio } from "../../hooks/useAggregatedPortfolio";
+import { transparentize } from "polished";
+
+const commonPercentageChangeTextStyle = {
+    fontFamily: "Poppins-Bold",
+    fontSize: 12,
+    lineHeight: 14,
+    letterSpacing: 0.75,
+};
+
+const commonTextContainerStyle = {
+    height: 14,
+    borderRadius: 4,
+    paddingHorizontal: 2,
+    paddingTop: 1,
+    alignSelf: "baseline",
+};
 
 export const Portfolio = ({ navigation }) => {
-    const theme = useContext(ThemeContext);
-
-    const commonPercentageChangeTextStyle = {
-        fontFamily: "Nunito-Bold",
-        fontSize: 12,
-    };
+    const { dark, colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {
@@ -31,12 +44,12 @@ export const Portfolio = ({ navigation }) => {
         },
         headerContainer: {
             paddingHorizontal: 16,
-            marginVertical: 12,
+            marginBottom: 16,
         },
         manualTransactionButtonContainer: {
             position: "absolute",
-            bottom: 24,
-            right: 24,
+            bottom: 16,
+            right: 16,
         },
         timeframeChooserContainer: {
             flexDirection: "row",
@@ -46,6 +59,14 @@ export const Portfolio = ({ navigation }) => {
         rightSpacedContainer: {
             marginRight: 12,
         },
+        positiveTextBackground: {
+            ...commonTextContainerStyle,
+            backgroundColor: transparentize(0.7, theme.successDarkMode),
+        },
+        negativeTextBackground: {
+            ...commonTextContainerStyle,
+            backgroundColor: transparentize(0.8, theme.errorDarkMode),
+        },
         positiveText: {
             ...commonPercentageChangeTextStyle,
             color: theme.success,
@@ -54,11 +75,27 @@ export const Portfolio = ({ navigation }) => {
             ...commonPercentageChangeTextStyle,
             color: theme.error,
         },
+        listItemPrimaryContainer: {
+            flexDirection: "row",
+        },
+        listItemAssetSymbolText: {
+            fontFamily: "Poppins-Bold",
+            fontSize: 16,
+            lineHeight: 18,
+            letterSpacing: 0.25,
+            color: theme.text,
+        },
+        listItemAssetNameText: {
+            fontFamily: "Poppins-Regular",
+            fontSize: 10,
+            lineHeight: 20,
+            letterSpacing: 0.25,
+            color: theme.text,
+        },
     });
 
     const dispatch = useDispatch();
     const {
-        portfolio,
         loadingPortfolio,
         accounts,
         fiatCurrency,
@@ -75,8 +112,7 @@ export const Portfolio = ({ navigation }) => {
         percentageChangeTimeframe: state.settings.percentageChangeTimeframe,
     }));
 
-    const [aggregatedPortfolio, setAggregatedPortfolio] = useState([]);
-    const [symbols, setSymbols] = useState([]);
+    const aggregatedPortfolio = useAggregatedPortfolio();
 
     useEffect(() => {
         dispatch(getCoinGeckoBaseData(fiatCurrency));
@@ -87,76 +123,6 @@ export const Portfolio = ({ navigation }) => {
             dispatch(resetPortfolio());
         }
     }, [accounts, dispatch]);
-
-    useEffect(() => {
-        if (!manualTransactions || manualTransactions.length === 0) {
-            setAggregatedPortfolio([]);
-        }
-    }, [dispatch, manualTransactions]);
-
-    useEffect(() => {
-        if (coinGeckoIds) {
-            dispatch(
-                getPortfolio(
-                    accounts,
-                    manualTransactions,
-                    fiatCurrency,
-                    coinGeckoIds
-                )
-            );
-        }
-    }, [accounts, coinGeckoIds, dispatch, fiatCurrency, manualTransactions]);
-
-    useEffect(() => {
-        if (portfolio && portfolio.length > 0) {
-            setSymbols(
-                portfolio.reduce((uniqueSymbols, asset) => {
-                    if (uniqueSymbols.indexOf(asset.symbol) < 0) {
-                        uniqueSymbols.push(asset.symbol);
-                    }
-                    return uniqueSymbols;
-                }, [])
-            );
-        }
-    }, [portfolio]);
-
-    useEffect(() => {
-        if (!loadingPortfolio && portfolio && portfolio.length > 0) {
-            setAggregatedPortfolio(
-                symbols
-                    // sum the balance of every entry with the same symbol to
-                    // get the aggregated balance
-                    .reduce((finalPortfolio, symbol) => {
-                        const assetsBySymbol = portfolio.filter(
-                            (asset) =>
-                                asset.symbol.toLowerCase() ===
-                                symbol.toLowerCase()
-                        );
-                        const totalBalance = assetsBySymbol.reduce(
-                            (totalBalanceForSymbol, asset) =>
-                                totalBalanceForSymbol.plus(asset.balance),
-                            new Decimal("0")
-                        );
-                        const {
-                            currentPrice,
-                            icon,
-                            priceChangePercentages,
-                        } = assetsBySymbol[0].info;
-                        const value = totalBalance.times(currentPrice);
-                        finalPortfolio.push({
-                            symbol,
-                            balance: totalBalance,
-                            price: currentPrice,
-                            value,
-                            priceChangePercentages,
-                            icon: icon,
-                        });
-                        return finalPortfolio;
-                    }, [])
-                    .sort((a, b) => b.value.minus(a.value).toNumber())
-            );
-        }
-    }, [portfolio, symbols, loadingPortfolio]);
 
     const handleRefresh = useCallback(() => {
         if (coinGeckoIds) {
@@ -171,54 +137,35 @@ export const Portfolio = ({ navigation }) => {
         }
     }, [accounts, coinGeckoIds, dispatch, fiatCurrency, manualTransactions]);
 
-    const handleAddManualTransactionPress = useCallback(() => {
-        navigation.navigate("Manual transaction");
+    const handleAddPress = useCallback(() => {
+        navigation.navigate("Add chooser");
+    }, [navigation]);
+
+    const handleCogPress = useCallback(() => {
+        navigation.navigate("Settings");
     }, [navigation]);
 
     const getAssetPressHandler = (symbol) => () => {
         navigation.navigate("Manual transactions", { symbol });
     };
 
-    const getPercentageChangeTimeframeHandler = (timeframe) => () => {
-        dispatch(changePercentageChangeTimeframe(timeframe));
-    };
-
     return (
         <View style={styles.root}>
+            <AppTitle
+                title="Portfolio"
+                actions={[
+                    {
+                        icon: dark ? CogWhiteIcon : CogBlackIcon,
+                        onPress: handleCogPress,
+                    },
+                ]}
+            />
             <View style={styles.headerContainer}>
                 <Header
                     portfolio={aggregatedPortfolio}
                     fiatCurrency={fiatCurrency}
                     percentageChangeTimeframe={percentageChangeTimeframe}
                     navigation={navigation}
-                />
-            </View>
-            <View style={styles.timeframeChooserContainer}>
-                <View style={styles.rightSpacedContainer}>
-                    <Chip
-                        label="1d"
-                        active={percentageChangeTimeframe === "1d"}
-                        onPress={getPercentageChangeTimeframeHandler("1d")}
-                    />
-                </View>
-                <View style={styles.rightSpacedContainer}>
-                    <Chip
-                        label="1w"
-                        active={percentageChangeTimeframe === "1w"}
-                        onPress={getPercentageChangeTimeframeHandler("1w")}
-                    />
-                </View>
-                <View style={styles.rightSpacedContainer}>
-                    <Chip
-                        label="2w"
-                        active={percentageChangeTimeframe === "2w"}
-                        onPress={getPercentageChangeTimeframeHandler("2w")}
-                    />
-                </View>
-                <Chip
-                    label="1m"
-                    active={percentageChangeTimeframe === "1m"}
-                    onPress={getPercentageChangeTimeframeHandler("1m")}
                 />
             </View>
             <List
@@ -229,11 +176,32 @@ export const Portfolio = ({ navigation }) => {
                     const decimalPercentageChange = new Decimal(
                         percentage || 0
                     );
+
                     return {
                         key: asset.symbol,
-                        icon: <CryptoIcon icon={asset.icon} size={32} />,
-                        primary: asset.symbol,
-                        secondary: formatDecimal(asset.balance, 3),
+                        icon: <CryptoIcon icon={asset.symbol} size={36} />,
+                        primary: (
+                            <View style={styles.listItemPrimaryContainer}>
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                    style={styles.listItemAssetSymbolText}
+                                >
+                                    {asset.symbol}
+                                </Text>
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                    style={styles.listItemAssetNameText}
+                                >
+                                    {"  "}
+                                    {asset.name}
+                                </Text>
+                            </View>
+                        ),
+                        secondary: `${formatDecimal(asset.balance, 3)} | ${
+                            CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
+                        }${formatDecimal(new Decimal(asset.price), 2)}`,
                         tertiary: `${
                             CURRENCY_SYMBOLS[fiatCurrency.toUpperCase()]
                         }${
@@ -242,20 +210,29 @@ export const Portfolio = ({ navigation }) => {
                                 : formatDecimal(asset.value)
                         }`,
                         quaternary: (
-                            <Text
+                            <View
                                 style={
                                     percentage &&
                                     decimalPercentageChange.isPositive()
-                                        ? styles.positiveText
-                                        : styles.negativeText
+                                        ? styles.positiveTextBackground
+                                        : styles.negativeTextBackground
                                 }
                             >
-                                {percentage
-                                    ? `${formatDecimal(
-                                          decimalPercentageChange
-                                      )}%`
-                                    : "-"}
-                            </Text>
+                                <Text
+                                    style={
+                                        percentage &&
+                                        decimalPercentageChange.isPositive()
+                                            ? styles.positiveText
+                                            : styles.negativeText
+                                    }
+                                >
+                                    {percentage
+                                        ? `${formatDecimal(
+                                              decimalPercentageChange
+                                          )}%`
+                                        : "0%"}
+                                </Text>
+                            </View>
                         ),
                         onPress: getAssetPressHandler(asset.symbol),
                     };
@@ -265,8 +242,8 @@ export const Portfolio = ({ navigation }) => {
             />
             <View style={styles.manualTransactionButtonContainer}>
                 <Fab
-                    faIcon={faPlus}
-                    onPress={handleAddManualTransactionPress}
+                    icon={<PlusIcon width={20} height={20} />}
+                    onPress={handleAddPress}
                 />
             </View>
         </View>

@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, {  useState } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { ThemeContext } from "../../contexts/theme";
+import { useTheme } from "@react-navigation/native";
 import { PinPicker } from "../../components/pin-picker";
 
 export const PinLock = ({ navigation, route }) => {
-    const theme = useContext(ThemeContext);
+    const { colors: theme } = useTheme();
 
     const styles = StyleSheet.create({
         root: {

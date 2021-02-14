@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { createStackNavigator } from "@react-navigation/stack";
-
-import { Header } from "./header";
+import {
+    createStackNavigator,
+    TransitionPresets,
+} from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
 
@@ -10,21 +11,8 @@ export const StackSwitcher = ({ items }) => {
     return (
         <Stack.Navigator
             screenOptions={{
-                header: (props) => <Header {...props} />,
-                transitionSpec: {
-                    open: {
-                        animation: "timing",
-                        config: {
-                            duration: 300,
-                        },
-                    },
-                    close: {
-                        animation: "timing",
-                        config: {
-                            duration: 300,
-                        },
-                    },
-                },
+                headerShown: false,
+                ...TransitionPresets.SlideFromRightIOS,
             }}
         >
             {items.map((item) => (

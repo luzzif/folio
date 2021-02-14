@@ -80,7 +80,7 @@ export const Settings = ({ navigation }) => {
         },
         versionText: {
             fontFamily: "Poppins-Bold",
-            color: darkMode ? theme.primaryDarkMode : theme.primary,
+            color: theme.primary,
             fontSize: 13,
             letterSpacing: 0.75,
         },

@@ -91,6 +91,7 @@ export const Header = ({
         pieChart: {
             color: theme.white,
             borderRadius: 10,
+            marginBottom: 3,
         },
         positivePercentageChangeText: {
             ...commonPercentageChangeTextStyle,

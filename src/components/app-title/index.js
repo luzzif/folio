@@ -13,8 +13,8 @@ export const AppTitle = ({ title, actions = [], closeable, onClose }) => {
             flexDirection: "row",
             justifyContent: "space-between",
             paddingHorizontal: 16,
-            marginTop: 24,
-            marginBottom: 16,
+            marginTop: 16,
+            marginBottom: 12,
         },
         titleText: {
             fontFamily: "Poppins-Bold",

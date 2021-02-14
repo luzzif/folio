@@ -7,7 +7,13 @@ import { reducers } from "./src/reducers";
 const rootPersistConfig = {
     key: "root",
     storage: AsyncStorage,
-    blacklist: ["coinGecko", "existingPin"],
+    blacklist: ["coinGecko", "existingPin", "portfolio"],
+};
+
+const portfolioPersistConfig = {
+    key: "portfolio",
+    storage: AsyncStorage,
+    blacklist: ["loadings"],
 };
 
 const pinLockPersistConfig = {
@@ -19,6 +25,7 @@ const pinLockPersistConfig = {
 const rootReducer = combineReducers({
     ...reducers,
     pinConfig: persistReducer(pinLockPersistConfig, reducers.pinConfig),
+    portfolio: persistReducer(portfolioPersistConfig, reducers.portfolio),
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

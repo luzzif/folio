@@ -124,19 +124,6 @@ export const Portfolio = ({ navigation }) => {
         }
     }, [accounts, dispatch]);
 
-    useEffect(() => {
-        if (coinGeckoIds) {
-            dispatch(
-                getPortfolio(
-                    accounts,
-                    manualTransactions,
-                    fiatCurrency,
-                    coinGeckoIds
-                )
-            );
-        }
-    }, [accounts, coinGeckoIds, dispatch, fiatCurrency, manualTransactions]);
-
     const handleRefresh = useCallback(() => {
         if (coinGeckoIds) {
             dispatch(

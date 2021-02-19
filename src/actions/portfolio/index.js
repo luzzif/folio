@@ -12,9 +12,17 @@ export const getPortfolio = (
     manualTransactions,
     fiatCurrency,
     coinGeckoIds
-) => async (dispatch) => {
+) => async (dispatch, getState) => {
     dispatch({ type: GET_PORTFOLIO_START });
     try {
+        const {
+            timestamp: previousPortfolioTimestamp,
+            portfolio: previousPortfolio,
+        } = getState().portfolio;
+        if (Date.now() - previousPortfolioTimestamp < 60000) {
+            // portfolio is cached for 60 seconds
+            return previousPortfolio;
+        }
         const portfolio = [];
         for (const account of accounts) {
             const portfolioPiece = await getPortfolioByAccountType(
@@ -65,6 +73,7 @@ export const getPortfolio = (
         }, {});
         dispatch({
             type: GET_PORTFOLIO_SUCCESS,
+            timestamp: Date.now(),
             portfolio: portfolio
                 .map((asset) => {
                     const relatedMarketData =

@@ -7,6 +7,7 @@ import {
 
 export const initialState = {
     loadings: 0,
+    timestamp: Date.now(),
     data: [],
 };
 
@@ -24,6 +25,7 @@ export const portfolioReducer = (state = initialState, action) => {
         case GET_PORTFOLIO_SUCCESS: {
             return {
                 ...state,
+                timestamp: action.timestamp,
                 data: action.portfolio,
             };
         }
